@@ -1,14 +1,13 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Page } from './pages/Pages';
-import BrandingProvider from './BrandingProvider';
+import { Home } from './pages/Home';
 
 function App() {
   return (
-    <BrandingProvider>
-      <Page />
-    </BrandingProvider>
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <Home />
+    </div>
   );
 }
 
