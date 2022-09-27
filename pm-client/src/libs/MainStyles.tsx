@@ -18,7 +18,7 @@ export const mainStyles = makeStyles({
     minWidth: '920px',
     position: 'relative',
   },
-  homeContentWrapper: {
+  ContentWrapper: {
     alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
@@ -27,7 +27,7 @@ export const mainStyles = makeStyles({
     paddingLeft: '32px',
     width: '100%',
   },
-  homeContent: {
+  Content: {
     alignItems: 'stretch',
     display: 'flex',
     flexDirection: 'column',
