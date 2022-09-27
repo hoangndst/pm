@@ -1,6 +1,7 @@
 import { makeStyles, mergeClasses, shorthands, tokens, Tab, TabList, Image, Tooltip, CompoundButton, Button } from "@fluentui/react-components";
 import * as React from 'react';
 import { HomeRegular, TaskListSquareLtrRegular, AlertRegular, ChevronLeftRegular, ChevronCircleRightRegular } from '@fluentui/react-icons';
+import { NavLink } from "react-router-dom";
 
 type ExampleTab = {
   id: string;
@@ -67,7 +68,12 @@ const VerticalExample = () => {
       style={{minHeight: 32}}
     >
       {tabs.map(tab => {
-        return <Tab key={tab.id} value={tab.id} icon={<span>{tab.icon}</span>} 
+        return <NavLink
+          to={`/${tab.id}`}
+          key={tab.id}
+          style={{ textDecoration: 'none' }}
+        >
+        <Tab key={tab.id} value={tab.id} icon={<span>{tab.icon}</span>} 
           style={{
             alignItems: 'center',
             display: 'flex',
@@ -75,9 +81,10 @@ const VerticalExample = () => {
             lineHeight: '32px',
             padding: '0 24px 0 24px',
           }}
-        >
+          >
           {tab.name}
         </Tab>
+          </NavLink>
       })}
     </TabList>
   </div>;
