@@ -33,5 +33,17 @@ export const mainStyles = makeStyles({
     flexDirection: 'column',
     maxWidth: '1200px',
     width: '100%',
+  },
+  buttonHideWrapper: {
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    display: 'inline-flex',
+    flexShrink: 0,
+    justifyContent: 'center',
+    overflowX: 'hidden',
+    overflowY: 'hidden',
+    transitionDuration: '0.2s',
+    transitionProperty: 'background, border, color, fill',
+    userSelect: 'none',
   }
 });
