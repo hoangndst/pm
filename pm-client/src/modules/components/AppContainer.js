@@ -11,6 +11,7 @@ const StyledAppContainer = styled(Container)(({ theme }) => {
       paddingLeft: theme.spacing(8),
       paddingRight: theme.spacing(8),
     },
+    minHeight: '100vh',
   };
 });
 
