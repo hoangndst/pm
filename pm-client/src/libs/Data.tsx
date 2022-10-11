@@ -80,3 +80,42 @@ export function createData() {
   }
   return data;
 }
+
+export function createTeams() {
+  let data = [];
+  for (let i = 1; i <= 3; i++) {
+    data.push({
+      id: i,
+      name: `Team ${i}`,
+      about: `Team ${i} description`,
+      teamMember: [
+        {
+          id: "1",
+          firstName: "Nguyen Dinh",
+          lastName: "Hoang",
+        },
+        {
+          id: "2",
+          firstName: "Nguyen Dinh",
+          lastName: "Hoang",
+        },
+        {
+          id: "3",
+          firstName: "Nguyen Dinh",
+          lastName: "Hoang",
+        },
+        {
+          id: "4",
+          firstName: "Nguyen Dinh",
+          lastName: "Hoang",
+        },
+        {
+          id: "5",
+          firstName: "Nguyen Dinh",
+          lastName: "Hoang",
+        },
+      ]
+    })
+  }
+  return data;
+}

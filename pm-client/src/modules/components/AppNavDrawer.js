@@ -15,6 +15,19 @@ import { SideBarData } from '../../libs/SideBar';
 import { Link, useLocation } from 'react-router-dom';
 import ListItemText from '@mui/material/ListItemText';
 import clsx from 'clsx';
+import { Divider } from '@mui/material';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Collapse from '@mui/material/Collapse';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import TreeView from '@mui/lab/TreeView';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import TreeItem from '@mui/lab/TreeItem';
+import AddIcon from '@mui/icons-material/Add';
+import { CollapseTeamList } from './CollapseTeamList';
+import { createTeams } from '../../libs/Data';
 
 const savedScrollTop = {};
 
@@ -170,7 +183,7 @@ ProductIdentifier.propTypes = {
   versionSelector: PropTypes.element,
 };
 
-const Item = styled(
+export const Item = styled(
   function Item({ component: Component = 'div', ...props }) {
     return <Component {...props} />;
   },
@@ -268,16 +281,27 @@ const Item = styled(
         color: theme.palette.primary.main,
       },
     },
+    height: 32,
   };
 });
 
 const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
+
 export default function AppNavDrawer(props) {
   const { className, disablePermanent, mobileOpen, onClose, onOpen } = props;
   const mobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
-
+  
   let location = useLocation();
+  const teams = createTeams();
+
+  
+  const [openTeams, setOpenTeams] = React.useState(true);
+
+  const handleClickTeams = () => {
+    setOpenTeams(!openTeams);
+    console.log(teams[0].name)
+  };
 
   const drawer = (
     <React.Fragment>
@@ -293,7 +317,7 @@ export default function AppNavDrawer(props) {
               pr: '12px',
               marginTop: '12px',
               marginBottom: '12px',
-              borderRight: '1px solid',
+              // borderRight: '1px solid',
               borderColor: (theme) =>
                 theme.palette.mode === 'dark'
                   ? alpha(theme.palette.primary[100], 0.08)
@@ -321,6 +345,38 @@ export default function AppNavDrawer(props) {
             </Item>
           </Link>
         ))}
+      </List>
+      <Divider
+        sx={{
+          borderColor: (theme) =>
+            theme.palette.mode === 'dark'
+              ? alpha(theme.palette.primary[100], 0.08)
+              : theme.palette.grey[100],
+          margin: '20px 0',
+        }}
+      />
+      <List sx={{ my: 0.5 }}>
+        <ListItemButton onClick={handleClickTeams}
+          sx={{
+            height: '32px',
+          }}
+        >
+          <ListItemText primary="Teams"
+            sx={{ marginLeft: '25px' }}
+          />
+          {openTeams ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={openTeams} timeout="auto" unmountOnExit>
+          {teams.map((team) => (
+            <CollapseTeamList
+              key={team.name + '-key'}  
+              id={team.id}
+              name={team.name}
+              teamMember={team.teamMember}
+              about={team.about}
+            />
+          ))}
+        </Collapse>
       </List>
     </React.Fragment>
   )
