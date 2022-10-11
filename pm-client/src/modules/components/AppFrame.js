@@ -150,11 +150,11 @@ export default function AppFrame(props) {
       <CssBaseline />
       <StyledAppBar disablePermanent={disablePermanent}>
         <GlobalStyles
-        // styles={{
-        //   ':root': {
-        //     '--MuiDocs-header-height': '64px',
-        //   },
-        // }}
+        styles={{
+          ':root': {
+            '--MuiDocs-header-height': '64px',
+          },
+        }}
         />
         <Toolbar variant="dense" disableGutters>
           <NavIconButton
