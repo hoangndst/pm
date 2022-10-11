@@ -7,15 +7,23 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Task } from '../../libs/Type';
 import { tasks } from '../../libs/Data';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Checkbox from '@mui/material/Checkbox';
+import { createData } from '../../libs/Data';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 interface Column {
   id: 'id' | 'taskName' | 'taskDescription' | 'project' | 'dueDate' | 'createdBy' | 'assignedTo' | 'createdOn' | 'lastModifiedOn' | 'completedOn' | 'description';
   label: string;
@@ -77,7 +85,7 @@ function stringAvatar(name: string) {
 }
 
 
-const rows = tasks;
+const rows = createData();
 
 
 
@@ -94,9 +102,31 @@ export default function StickyHeadTable() {
     setPage(0);
   };
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = (completedOn?: string) => {
+    if (completedOn) {
+      // setOpen(true);
+      return;
+    }
+    setOpen(true);
+  };
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Task completed!
+        </Alert>
+      </Snackbar>
+      <TableContainer sx={{ maxHeight: 500 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -113,13 +143,14 @@ export default function StickyHeadTable() {
           </TableHead>
           <TableBody>
             {rows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     <TableCell>
                       <Stack direction="row" spacing={2}
-                        sx={{ 
-                          alignItems: 'center', 
+                        sx={{
+                          alignItems: 'center',
                           '& > :first-child': { m: 0 },
                           justifyContent: 'space-between',
                         }}
@@ -127,6 +158,7 @@ export default function StickyHeadTable() {
                         <Stack direction="row" spacing={0} alignItems="center">
                           <Checkbox
                             defaultChecked={row.completedOn ? true : false}
+                            onChange={() => handleClick(row.completedOn)}
                           />
                           <span>
                             {row.taskName}
@@ -143,7 +175,7 @@ export default function StickyHeadTable() {
                           alignItems: 'center',
                         }}
                       >
-                        <Avatar {...stringAvatar(`${row.assignedTo.firstName} ${row.assignedTo.lastName}`)} 
+                        <Avatar {...stringAvatar(`${row.assignedTo.firstName} ${row.assignedTo.lastName}`)}
                           sx={{ width: 24, height: 24, fontSize: 12 }}
                         />
                         <span>{`${row.assignedTo.firstName} ${row.assignedTo.lastName}`}</span>
@@ -156,7 +188,7 @@ export default function StickyHeadTable() {
                           alignItems: 'center',
                         }}
                       >
-                        <Avatar {...stringAvatar(`${row.createdBy.firstName} ${row.createdBy.lastName}`)} 
+                        <Avatar {...stringAvatar(`${row.createdBy.firstName} ${row.createdBy.lastName}`)}
                           sx={{ width: 24, height: 24, fontSize: 12 }}
                         />
                         <span>{`${row.createdBy.firstName} ${row.createdBy.lastName}`}</span>
