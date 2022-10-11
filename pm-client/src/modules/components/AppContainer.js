@@ -6,11 +6,12 @@ const StyledAppContainer = styled(Container)(({ theme }) => {
   return {
     paddingTop: 'calc(var(--MuiDocs-header-height) + 36px)',
     fontFamily: 'Arial',
-    maxWidth: '105ch',
+    maxWidth: '100%',
     [theme.breakpoints.up('lg')]: {
       paddingLeft: theme.spacing(8),
       paddingRight: theme.spacing(8),
     },
+    minHeight: '100vh',
   };
 });
 

@@ -12,8 +12,9 @@ import Box from '@mui/material/Box';
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import { SideBarData } from '../../libs/SideBar';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ListItemText from '@mui/material/ListItemText';
+import clsx from 'clsx';
 
 const savedScrollTop = {};
 
@@ -276,6 +277,8 @@ export default function AppNavDrawer(props) {
   const { className, disablePermanent, mobileOpen, onClose, onOpen } = props;
   const mobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
+  let location = useLocation();
+
   const drawer = (
     <React.Fragment>
       <ToolbarDiv>
@@ -297,22 +300,26 @@ export default function AppNavDrawer(props) {
                   : theme.palette.grey[200],
             }}
           >
-            <img src="https://upload.wikimedia.org/wikipedia/vi/b/bf/Logo_HUET.svg" alt="logo" style={{ width: '30px' }} />
+            <img src="https://upload.wikimedia.org/wikipedia/vi/b/bf/Logo_HUET.svg" alt="logo" style={{ width: '50px' }} />
           </Box>
         </Link>
       </ToolbarDiv>
       <List sx={{ my: 0.5 }}>
         {SideBarData.map((item) => (
-            <Link
-              to={item.href}
-              style={{ textDecoration: 'none' }}
-              key={item.title + '-key'}
+          <Link
+            to={item.href}
+            style={{ textDecoration: 'none' }}
+            key={item.title + '-key'}
+          >
+            <Item
+              className={clsx({
+                'app-drawer-active': location.pathname === item.href,
+              })}
             >
-          <Item>
               {item.icon}
-              <ListItemText primary={item.title} sx={{marginLeft: '10px'}} />
-          </Item>
-            </Link>
+              <ListItemText primary={item.title} sx={{ marginLeft: '10px' }} />
+            </Item>
+          </Link>
         ))}
       </List>
     </React.Fragment>
