@@ -30,11 +30,11 @@ export const MyTasks = () => {
           justifyContent: 'space-between',
         }}
       >
-        <Button variant="outlined" startIcon={<AddIcon />}>
+        <Button variant="outlined" startIcon={<AddIcon fontSize='small' />} size="small">
           Add Task
         </Button>
         <div>
-          <Button onClick={handleOpenUserMenu} variant="text" startIcon={<CheckCircleIcon fontSize='small' />}>
+          <Button onClick={handleOpenUserMenu} variant="text" size='small' startIcon={<CheckCircleIcon fontSize='small' />}>
             {option}
           </Button>
           <Menu
@@ -58,7 +58,7 @@ export const MyTasks = () => {
               </MenuItem>
             ))}
           </Menu>
-          <Button variant="text" startIcon={<TuneIcon fontSize='small' />}>
+          <Button variant="text" size='small' startIcon={<TuneIcon fontSize='small' />}>
             Filter
           </Button>
         </div>
