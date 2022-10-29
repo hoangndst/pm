@@ -10,7 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
-import { Team } from '../../libs/Type';
+import { Team } from '../../libs/type';
 import { Item } from './AppNavDrawer';
 
 export function CollapseTeamList(props: Team) {

@@ -7,13 +7,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { tasks } from '../../libs/Data';
+import { tasks } from '../../libs/data';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
-import { createData } from '../../libs/Data';
+import { createData } from '../../libs/data';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 

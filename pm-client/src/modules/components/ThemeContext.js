@@ -101,7 +101,7 @@ if (process.env.NODE_ENV !== 'production') {
 export function ThemeProvider(props) {
   const { children } = props;
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const preferredMode = prefersDarkMode ? 'dark' : 'light';
+  const preferredMode = prefersDarkMode ? 'light' : 'dark';
 
   const [themeOptions, dispatch] = React.useReducer(
     (state, action) => {

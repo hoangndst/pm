@@ -21,6 +21,8 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+
+
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const StyledAppNavDrawer = styled(AppNavDrawer)(({ disablePermanent, theme }) => {
   if (disablePermanent) {
@@ -33,7 +35,6 @@ const StyledAppNavDrawer = styled(AppNavDrawer)(({ disablePermanent, theme }) =>
     },
   };
 });
-
 
 const StyledAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== 'disablePermanent',

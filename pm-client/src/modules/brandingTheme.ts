@@ -813,5 +813,6 @@ export function getThemedComponents(theme: Theme): { components: Theme['componen
   };
 }
 
-const darkTheme = createTheme(getDesignTokens('dark'));
+const darkTheme = createTheme(getDesignTokens('dark'))
+const lightTheme = createTheme(getDesignTokens('light'))
 export const brandingDarkTheme = deepmerge(darkTheme, getThemedComponents(darkTheme));

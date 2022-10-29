@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from "../App";
-import { Home } from "../pages/Home";
 import { MyTasks } from "../pages/MyTasks";
+import Login from "../pages/Login";
+import Main from "../pages/Main";
 
-export const route = createBrowserRouter([
+const route = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Main />,
     children: [
       {
         path: "/",
@@ -21,5 +21,11 @@ export const route = createBrowserRouter([
         element: <div>Inbox</div>,
       }
     ]
+  },
+  {
+    path: "/login",
+    element: <Login />,
   }
 ]);
+
+export default route
