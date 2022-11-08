@@ -4,6 +4,7 @@ const app = express()
 import bodyParser from 'body-parser'
 import env from 'dotenv'
 import database from './models/index.js'
+import userRoutes from './routes/user.routes.js'
 
 env.config()
 app.use(cors())
@@ -20,6 +21,8 @@ database.sequelize.sync({ force: true }).then(() => {
 }).catch((err) => {
   console.log('Error syncing with database', err)
 })
+
+userRoutes(app)
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`)

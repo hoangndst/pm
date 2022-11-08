@@ -1,1 +1,3 @@
-GET http://localhost:5001
+GET http://localhost:5000/api/test/user
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjY3ODkzNTI2LCJleHAiOjE2Njc5MzY3MjZ9.TdFN0DoCOHbJRPu-65VKthalJOXMQ6E5ZKDskIbfEKY

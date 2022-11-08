@@ -7,6 +7,8 @@ const databaseConfig = {
   PASSWORD: process.env.DB_PASSWORD || 'postgres',
   DB: process.env.DB_NAME || 'postgres',
   dialect: 'postgres',
+  PM_SECRET: process.env.PM_SECRET || 'pm-secret-key',
+  PM_REFRESH_SECRET: process.env.PM_REFRESH_SECRET || 'pm-refresh-secret',
   pool: {
     max: 5,
     min: 0,

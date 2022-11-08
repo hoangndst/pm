@@ -4,8 +4,8 @@ POST http://localhost:5001/signup
 Content-Type: application/json
 
 {
-    "username": "hoangndst",
-    "email": "hoangndst@gmail.com",
+    "username": "test",
+    "email": "test@gmail.com",
     "password": "Hoang2002"
 }
 
@@ -15,6 +15,6 @@ POST http://localhost:5001/signin
 Content-Type: application/json
 
 {
-    "username": "hoangndst",
+    "username": "test",
     "password": "Hoang2002"
 }
