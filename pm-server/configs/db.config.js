@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 // PostGres DB connection
 const databaseConfig = {
   HOST: process.env.DB_HOST || 'localhost',

@@ -1,13 +1,14 @@
-import database from "../models"
-import config from "../configs/auth.config"
+import database from "../models/index.js"
 import jwt from "jsonwebtoken"
 import bycrypt from "bcryptjs"
 import dotenv from "dotenv"
+import { Op } from "sequelize"
 
 dotenv.config()
 
 const User = database.users
 const Role = database.roles
+const RefreshTokens = database.refreshTokens
 const secret = process.env.PM_SECRET
 const refreshSecret = process.env.PM_REFRESH_SECRET
 
@@ -31,19 +32,33 @@ const SignIn = (req, res) => {
       })
     }
     const token = jwt.sign({ id: user.id }, secret, {
-      expiresIn: 86400
+      // 12 hours
+      expiresIn: 43200
     })
 
     const refreshToken = jwt.sign({ id: user.id }, refreshSecret, {
+      // 24 hours
       expiresIn: 86400
     })
-    // save toke and refresh token to database
-    res.status(200).send({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      accessToken: token,
-      refreshToken: refreshToken
+    
+    /**
+     * Save refresh token to database.
+     */
+    
+    RefreshTokens.create({
+      userId: user.id,
+      token: refreshToken
+    }).then(() => {
+      res.status(200).send({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        roles: user.roles,
+        accessToken: token,
+        refreshToken: refreshToken
+      })
+    }).catch((err) => {
+      res.status(500).send({ message: err.message })
     })
   }).catch((err) => {
     res.status(500).send({ message: err.message })
@@ -51,11 +66,53 @@ const SignIn = (req, res) => {
 }
 
 const SignUp = (req, res) => {
-  User.findOne({
+  console.log(req.body)
+  User.findAll({
     where: {
-      username: req.body.username
+      [Op.or]: [
+        { username: req.body.username },
+        { email: req.body.email }
+      ]
     }
+  }).then((users) => {
+    if (users.length) {
+      if (users.length > 1) {
+        return res.status(400).send({ message: "Username and email already in use" })
+      } else if (users[0].username === req.body.username) {
+        return res.status(400).send({ message: "Username already in use" })
+      } else if (users[0].email === req.body.email) {
+        return res.status(400).send({ message: "Email already in use" })
+      }
+    } else {
+      User.create({
+        username: req.body.username,
+        email: req.body.email,
+        password: bycrypt.hashSync(req.body.password, 8)
+      }).then((user) => {
+        user.setRoles([1]).then(() => {
+          res.send({ message: "User was registered successfully!" })
+        }).catch((err) => {
+          res.status(500).send({ message: err.message })
+        })
+      }).catch((err) => {
+        res.status(500).send({ message: err.message })
+      })
+    }
+  }).catch((err) => {
+    res.status(500).send({ message: err.message })
   })
 }
 
-export { SignIn }
+const SignOut = (req, res) => {
+  RefreshTokens.destroy({
+    where: {
+      user_id: req.body.userId,
+    }
+  }).then(() => {
+    res.status(200).send({ message: "User signed out successfully" })
+  }).catch((err) => {
+    res.status(500).send({ message: err.message })
+  })
+}
+
+export { SignIn, SignUp, SignOut }

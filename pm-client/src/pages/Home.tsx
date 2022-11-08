@@ -14,7 +14,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export const Home = () => {
+const Home = () => {
 
   const date = new Date();
 
@@ -33,16 +33,8 @@ export const Home = () => {
             Good Morning, John
           </Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Item>xs=4</Item>
-        </Grid>
-        <Grid item xs={6}>
-          <Item>xs=4</Item>
-        </Grid>
-        <Grid item xs={12}>
-          <Item>xs=8</Item>
-        </Grid>
       </Grid>
     </Box>
   );
 }
+export default Home

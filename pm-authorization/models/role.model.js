@@ -1,4 +1,4 @@
-const roleMole = (sequelize, Sequelize) => {
+const roleModel = (sequelize, Sequelize) => {
   const Role = sequelize.define("roles", {
     id: {
       type: Sequelize.INTEGER,
@@ -10,4 +10,4 @@ const roleMole = (sequelize, Sequelize) => {
   })
   return Role
 }
-export default roleMole
+export default roleModel

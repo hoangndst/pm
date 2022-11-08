@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { MyTasks } from "../pages/MyTasks";
 import Login from "../pages/Login";
 import Main from "../pages/Main";
+import Home from "../pages/Home";
 
 const route = createBrowserRouter([
   {

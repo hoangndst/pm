@@ -1,7 +1,8 @@
-import databaseConfig from "../configs/db.config";
+import databaseConfig from "../configs/db.config.js";
 import { Sequelize } from "sequelize";
-import roleMole from "./role.model";
-import userModel from "./user.model";
+import roleModel from "./role.model.js";
+import userModel from "./user.model.js";
+import refreshTokensModel from "./refreshTokens.model.js";
 
 const sequelize = new Sequelize(
   databaseConfig.DB,
@@ -26,18 +27,24 @@ database.Sequelize = Sequelize
 database.sequelize = sequelize
 
 database.users = userModel(sequelize, Sequelize)
-database.roles = roleMole(sequelize, Sequelize)
+database.roles = roleModel(sequelize, Sequelize)
+database.refreshTokens = refreshTokensModel(sequelize, Sequelize)
 
 database.roles.belongsToMany(database.users, {
   through: "user_roles",
-  foreignKey: "roleId",
-  otherKey: "userId"
+  foreignKey: "role_id",
+  otherKey: "user_id"
 })
 
 database.users.belongsToMany(database.roles, {
   through: "user_roles",
-  foreignKey: "userId",
-  otherKey: "roleId"
+  foreignKey: "user_id",
+  otherKey: "role_id"
+})
+
+database.users.hasOne(database.refreshTokens, {
+  foreignKey: "user_id",
+  as: "refreshToken"
 })
 
 database.ROLES = ["user", "admin", "moderator"]
