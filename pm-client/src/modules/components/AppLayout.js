@@ -44,6 +44,7 @@ const StyledAppContainer = styled(AppContainer, {
 });
 
 export function AppLayout(props) {
+  
   const {
     children,
     disableAd = true,

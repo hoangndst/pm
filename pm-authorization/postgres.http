@@ -1,20 +1,20 @@
 GET http://localhost:5001/
 ###
-POST http://localhost:5001/signup
+POST http://localhost:5001/auth/signup
 Content-Type: application/json
 
 {
     "username": "test",
-    "email": "test@gmail.com",
+    "email": "hoangndst@gmail.com",
     "password": "Hoang2002"
 }
 
 ###
 
-POST http://localhost:5001/signin
+POST http://localhost:5001/auth/signin
 Content-Type: application/json
 
 {
-    "username": "test",
+    "username": "hoangndst",
     "password": "Hoang2002"
 }

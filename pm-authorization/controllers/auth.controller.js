@@ -2,6 +2,7 @@ import database from "../models/index.js"
 import jwt from "jsonwebtoken"
 import bycrypt from "bcryptjs"
 import dotenv from "dotenv"
+import EmailService from "../services/email.service.js"
 import { Op } from "sequelize"
 
 dotenv.config()
@@ -19,21 +20,18 @@ const SignIn = (req, res) => {
     }
   }).then((user) => {
     if (!user) {
-      return res.status(404).send({ message: "User Not Found" })
+      return res.status(401).send({ message: "User and/or password is incorrect" })
     }
     const passwordIsValid = bycrypt.compareSync(
       req.body.password,
       user.password
     )
     if (!passwordIsValid) {
-      return res.status(401).send({
-        accessToken: null,
-        message: "Invalid Password"
-      })
+      return res.status(401).send({ message: "User and/or password is incorrect" })
     }
     const token = jwt.sign({ id: user.id }, secret, {
-      // 12 hours
-      expiresIn: 43200
+      // 1 hour
+      expiresIn: 3600
     })
 
     const refreshToken = jwt.sign({ id: user.id }, refreshSecret, {
@@ -89,6 +87,7 @@ const SignUp = (req, res) => {
         email: req.body.email,
         password: bycrypt.hashSync(req.body.password, 8)
       }).then((user) => {
+        EmailService.sendVerificationEmail(user.email, user.username)
         user.setRoles([1]).then(() => {
           res.send({ message: "User was registered successfully!" })
         }).catch((err) => {

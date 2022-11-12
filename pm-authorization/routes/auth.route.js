@@ -8,9 +8,9 @@ const route = (app) => {
     )
     next()
   })
-  app.post("/signin", SignIn)
-  app.post("/signup", SignUp)
-  app.post("/signout", SignOut)
+  app.post("/auth/signin", SignIn)
+  app.post("/auth/signup", SignUp)
+  app.post("/auth/signout", SignOut)
 }
 
 export default route

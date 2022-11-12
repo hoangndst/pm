@@ -151,7 +151,7 @@ export default function StickyHeadTable() {
                       <Stack direction="row" spacing={2}
                         sx={{
                           alignItems: 'center',
-                          '& > :first-child': { m: 0 },
+                          '& > :first-of-type': { m: 0 },
                           justifyContent: 'space-between',
                         }}
                       >

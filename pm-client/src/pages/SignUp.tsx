@@ -9,51 +9,65 @@ import {
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { SignIn } from '../auth/userAuth'
-import { clearMessage } from '../auth/messageSlice'
+import { SignUp as SignUpF } from '../auth/userAuth'
+import { clearMessage, setMessage } from '../auth/messageSlice'
 import { useAppDispatch, useAppSelector } from '../app/hook'
-const user = JSON.parse( localStorage.getItem( "user" ) as string );
-const Login = () => {
+
+const SignUp = () => {
   const [username, setUsername] = React.useState('')
+  const [email, setEmail] = React.useState('')
+  const [confirmEmail, setConfirmEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
+  const [confirmPassword, setConfirmPassword] = React.useState('')
   const [loading, setLoading] = React.useState(false)
   const [open, setOpen] = React.useState(false)
   const [alertStatus, setAlertStatus] = React.useState<'success' | 'error'>('success')
 
   const dispath = useAppDispatch()
   const navigate = useNavigate()
-  const { isLoggedIn } = useAppSelector((state) => state.auth)
   const { message } = useAppSelector((state) => state.message)
 
   useEffect(() => {
     dispath(clearMessage())
   }, [dispath])
 
-  // useEffect(() => {
-  //   console.log('loggedIn', isLoggedIn)
-  //   if (user) {
-  //     console.log('user', true)
-  //   } else {
-  //     console.log('user', false)
-  //   }
-  // },[])
-
   const handleClose = () => {
     setOpen(false)
   }
 
+
   const handleSubmit = () => {
     setLoading(true)
-    dispath(SignIn({ username, password }))
+
+    if (email === '' || password === '' || username === '' || confirmPassword === '' || confirmEmail === '') {
+      setLoading(false)
+      dispath(setMessage('Please fill in all fields'))
+      setAlertStatus('error')
+      setOpen(true)
+      return
+    } else if (email !== confirmEmail) {
+      setLoading(false)
+      dispath(setMessage('Emails do not match'))
+      setAlertStatus('error')
+      setOpen(true)
+      return
+    } else if (password !== confirmPassword) {
+      setLoading(false)
+      dispath(setMessage('Passwords do not match'))
+      setAlertStatus('error')
+      setOpen(true)
+      return
+    }
+    dispath(SignUpF({ username, email, password }))
       .unwrap()
       .then(() => {
         setLoading(false)
         setAlertStatus('success')
         setOpen(true)
-        navigate('/')
-        console.log('Login success')
+        navigate('/welcome')
+        console.log('SignUp success')
       }).catch(() => {
-        console.log('Login failed')
+        console.log('SignUp failed')
         setLoading(false)
         setAlertStatus('error')
         setOpen(true)
@@ -102,6 +116,7 @@ const Login = () => {
         margin: '20px auto'
       }}
       >
+
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -111,7 +126,33 @@ const Login = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               InputProps={{
+                'aria-label': 'username',
+              }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required
+              type='email'
+              label='Email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              InputProps={{
                 'aria-label': 'email',
+              }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required
+              type='email'
+              label='Confirm Email'
+              value={confirmEmail}
+              onChange={(e) => setConfirmEmail(e.target.value)}
+              InputProps={{
+                'aria-label': 'confirm email',
               }}
               fullWidth
             />
@@ -130,28 +171,34 @@ const Login = () => {
             />
           </Grid>
           <Grid item xs={12}>
+            <TextField
+              required
+              type='password'
+              label='Confirm Password'
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              InputProps={{
+                'aria-label': 'confirm password',
+              }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
             <LoadingButton
               onClick={handleSubmit}
               loading={loading}
               fullWidth
               variant='contained'
             >
-              Login
+              Sign Up
             </LoadingButton>
           </Grid>
           <Grid item xs={12}>
             <Button
               fullWidth
+              onClick={() => navigate('/login')}
             >
-              Forgot password?
-            </Button>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              fullWidth
-              onClick={() => navigate('/signup')}
-            >
-              Register
+              Have an account? Sign In
             </Button>
           </Grid>
         </Grid>
@@ -165,4 +212,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default SignUp

@@ -23,7 +23,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Account', 'Logout'];
 const StyledAppNavDrawer = styled(AppNavDrawer)(({ disablePermanent, theme }) => {
   if (disablePermanent) {
     return {};
@@ -168,12 +168,17 @@ export default function AppFrame(props) {
           >
             <MenuIcon />
           </NavIconButton>
-          <Link href="/" /* onClick={onClose} */>
+          <Link href="/">
             <Box
               aria-label={('goToHome')}
-              sx={{ display: { md: 'flex', lg: 'none' }, ml: 2 }}
+              sx={{ display: { md: 'flex', lg: 'none' }, ml: 2,
+                borderRadius: '100%',
+                backgroundColor: 'white',
+                width: '50px',
+                height: '50px',
+              }}
             >
-              <img src="https://upload.wikimedia.org/wikipedia/vi/b/bf/Logo_HUET.svg" alt="logo" style={{ width: '30%' }} />
+              <img src="https://upload.wikimedia.org/wikipedia/vi/b/bf/Logo_HUET.svg" alt="logo" style={{ width: '50px' }} />
             </Box>
           </Link>
           <GrowingDiv />

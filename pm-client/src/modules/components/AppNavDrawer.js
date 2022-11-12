@@ -117,9 +117,9 @@ PersistScroll.propTypes = {
 };
 
 const ToolbarDiv = styled('div')(({ theme }) => ({
-  padding: theme.spacing(1.45, 2),
+  padding: theme.spacing(2),
   paddingRight: 0,
-  height: 'var(--MuiDocs-header-height)',
+  height: '100px',
   display: 'flex',
   flexGrow: 1,
   flexDirection: 'row',
@@ -309,8 +309,8 @@ export default function AppNavDrawer(props) {
             aria-label={'goToHome'}
             sx={{
               pr: '12px',
-              marginTop: '12px',
-              marginBottom: '12px',
+              marginTop: '15px',
+              marginBottom: '15px',
               // borderRight: '1px solid',
               borderColor: (theme) =>
                 theme.palette.mode === 'dark'
@@ -318,7 +318,16 @@ export default function AppNavDrawer(props) {
                   : theme.palette.grey[200],
             }}
           >
-            <img src="https://upload.wikimedia.org/wikipedia/vi/b/bf/Logo_HUET.svg" alt="logo" style={{ width: '50px' }} />
+            <Box
+              sx={{
+                borderRadius: '100%',
+                backgroundColor: 'white',
+                width: 60,
+                height: 60,
+              }}
+            >
+              <img src="https://upload.wikimedia.org/wikipedia/vi/b/bf/Logo_HUET.svg" alt="logo" style={{ width: '60px' }} />
+            </Box>
           </Box>
         </Link>
       </ToolbarDiv>
@@ -326,6 +335,11 @@ export default function AppNavDrawer(props) {
         {SideBarData.map((item) => (
           <Link
             to={item.href}
+            onClick={() => {
+              if (mobile) {
+                onClose();
+              }
+            }}
             style={{ textDecoration: 'none' }}
             key={item.title + '-key'}
           >
