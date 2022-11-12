@@ -13,7 +13,8 @@ const userModel = (sequelize, Sequelize) => {
       type: Sequelize.STRING
     },
     avatar: {
-      type: Sequelize.B
+      type: Sequelize.STRING,
+      allowNull: true
     }
   })
   return User
