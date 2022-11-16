@@ -12,6 +12,9 @@ const userModel = (sequelize, Sequelize) => {
     last_name: {
       type: Sequelize.STRING
     },
+    birth_date: {
+      type: Sequelize.DATE
+    },
     avatar: {
       type: Sequelize.STRING,
       allowNull: true

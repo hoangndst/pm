@@ -119,3 +119,21 @@ export function createTeams() {
   }
   return data;
 }
+
+
+export function getMessages() {
+  let data = [];
+  for (let i = 1; i <= 100; i++) {
+    data.push({
+      conversationId: i,
+      conversationName: `Conversation ${i}`,
+      lastMessage: {
+        userId: "1",
+        userName: "Nguyen Dinh Hoang",
+        message: "This is a very long message that will be truncated by the UI component to fit in the UI component", 
+        time: "2021-10-10",
+      }
+    })
+  }
+  return data;
+}

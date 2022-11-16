@@ -43,6 +43,20 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const ProfilePic = () => {
 
+  const [profilePic, setProfilePic] = React.useState<string | null>(null)
+
+  const handleUploadProfilePic = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target && e.target.result) {
+          setProfilePic(e.target.result as string)
+        }
+      }
+      reader.readAsDataURL(e.target.files[0])
+    }
+  }
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -56,7 +70,7 @@ const ProfilePic = () => {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             variant="dot"
           >
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" 
+            <Avatar alt="Hoang Nguyen Dinh" src={profilePic ? profilePic : "https://images.unsplash.com/photo-1556740752-6a3a5d9b5d8a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"}
               sx={{
                 minWidth: 200,
                 minHeight: 200,
@@ -66,7 +80,7 @@ const ProfilePic = () => {
           </StyledBadge>
           <Button variant="contained" component="label">
             Upload
-            <input hidden accept="image/*" multiple type="file" />
+            <input hidden accept="image/*" multiple type="file" onChange={handleUploadProfilePic} />
           </Button>
         </Stack>
       </Grid>

@@ -12,7 +12,8 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { SignIn } from '../auth/userAuth'
 import { clearMessage } from '../auth/messageSlice'
 import { useAppDispatch, useAppSelector } from '../app/hook'
-const user = JSON.parse( localStorage.getItem( "user" ) as string );
+
+const user = JSON.parse( localStorage.getItem( "user" ) as string )
 const Login = () => {
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')

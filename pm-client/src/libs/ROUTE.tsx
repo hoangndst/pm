@@ -6,6 +6,7 @@ import Main from "../pages/Main";
 import Home from "../pages/Home";
 import Inbox from "../pages/Inbox";
 import SetupNewUser from "../pages/SetupNewUser";
+import ChatSpace from "../modules/components/ChatSpace";
 
 const route = createBrowserRouter([
   {
@@ -23,6 +24,12 @@ const route = createBrowserRouter([
       {
         path: "inbox",
         element: <Inbox />,
+        children: [
+          {
+            path: ":conversationId",
+            element: <ChatSpace />,
+          }
+        ]
       }
     ]
   },
