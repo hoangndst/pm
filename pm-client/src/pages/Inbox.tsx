@@ -31,7 +31,6 @@ const StyledAppNavDrawer = styled(ChatNavDrawer)(({ disablePermanent, theme }) =
 });
 
 const StyledMessageBar = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(1, 2),
   transition: theme.transitions.create('width'),
   boxShadow: 'none',
   backdropFilter: 'blur(20px)',
@@ -83,7 +82,7 @@ const Inbox = () => {
           outline: "0px",
           display: "flex",
           flexDirection: "column",
-          boxBizing: "border-box",
+          width: '100%'
         }}
       >
         <StyledMessageBar>
@@ -101,7 +100,7 @@ const Inbox = () => {
             <Avatar
               alt="Remy Sharp"
               src="https://material-ui.com/static/images/avatar/1.jpg"
-              sx={{ width: 32, height: 32, mr: 1 }}
+              sx={{ width: 32, height: 32, mr: 1, ml: 1 }}
             />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               {location.pathname}

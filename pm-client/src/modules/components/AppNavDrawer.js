@@ -345,7 +345,7 @@ export default function AppNavDrawer(props) {
           >
             <Item
               className={clsx({
-                'app-drawer-active': location.pathname.includes(item.href),
+                'app-drawer-active': location.pathname === item.href,
               })}
             >
               {item.icon}

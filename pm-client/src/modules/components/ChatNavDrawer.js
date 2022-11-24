@@ -21,8 +21,8 @@ import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import PropTypes from 'prop-types';
 
 const compactMessages = (messages) => {
-  if (messages.length > 35) {
-    return messages.slice(0, 35) + '...'
+  if (messages.length > 25) {
+    return messages.slice(0, 25) + '...'
   }
   return messages
 }
@@ -184,7 +184,7 @@ const ChatNavDrawer = (props) => {
           </Box>
         </Grid>
         <Grid item xs={12}
-          sx={{ flexGrow: 1, overflow: "auto", mt: 1, maxHeight: "calc(100vh - 220px)" }}
+          sx={{ flexGrow: 1, overflow: "auto", mt: 1, maxHeight: mobile ? "calc(100vh - 170px)" : "calc(100vh - 220px)" }}
         >
           <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             {listMessageDemo.map((item) => (
@@ -239,6 +239,7 @@ const ChatNavDrawer = (props) => {
             className: 'mess-drawer',
             component: AppNavPaperComponent,
           }}
+        
         >
           <PersistScroll slot="swipeable" enabled={mobileOpen}>
             {drawer}
