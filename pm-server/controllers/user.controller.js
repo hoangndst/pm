@@ -1,17 +1,17 @@
 import database from "../models/index.js"
 
-// get user info
-export const getUser = async (req, res) => {
-  try {
-    const user = await database.user.findOne({
-      where: { id: req.params.id },
-    })
-    if (user) {
-      res.status(200).json(user)
-    } else {
-      res.status(404).json({ message: "User not found" })
-    }
-  } catch (err) {
-    res.status(500).json({ message: err.message })
-  }
+// insert new user
+export const createUser = (req, res) => {
+  database.user.create({
+    username: req.body.username,
+    email: req.body.email,
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    birthday: req.body.birthday,
+    avatar: req.body.avatar,
+  }).then((user) => {
+    res.status(200).send(user)
+  }).catch((err) => {
+    res.status(500).send({ message: err.message })
+  })
 }

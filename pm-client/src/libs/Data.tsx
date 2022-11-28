@@ -137,3 +137,123 @@ export function getMessages() {
   }
   return data;
 }
+
+export function getMessages2() {
+  let data = {
+    conversationId: 1,
+    conversationName: `Conversation 1`,
+    messages: [
+      {
+        id: 1,
+        messageContent: "This is a very long message that will be truncated by the UI component to fit in the UI component",
+        sentDate: "2021-10-10",
+        fromUser: {
+          id: "1",
+          firstName: "Nguyen Dinh",
+          lastName: "Hoang",
+        }
+      },
+      {
+        id: 2,
+        messageContent: "This is a very long message that will be truncated by the UI component to fit in the UI component",
+        sentDate: "2021-10-10",
+        fromUser: {
+          id: "1",
+          firstName: "Nguyen Dinh",
+          lastName: "Hoang",
+        }
+      },
+      {
+        id: 3,
+        messageContent: "This is a very long message that will be truncated by the UI component to fit in the UI component",
+        sentDate: "2021-10-10",
+        fromUser: {
+          id: "2",
+          firstName: "Nguyen Dinh",
+          lastName: "Minh",
+        }
+      },
+      {
+        id: 4,
+        messageContent: "Đi chơi không?",
+        sentDate: "2021-10-10",
+        fromUser: {
+          id: "2",
+          firstName: "Nguyen Dinh",
+          lastName: "Minh",
+        }
+      },
+      {
+        id: 5,
+        messageContent: "Ok 👌👌👌👌👌👌👌",
+        sentDate: "2021-10-10",
+        fromUser: {
+          id: "1",
+          firstName: "Nguyen Dinh",
+          lastName: "Hoang",
+        }
+      },
+      {
+        id: 6,
+        messageContent: "Khoảng 5h nhé 🥱🥱🥱?",
+        sentDate: "2021-10-10",
+        fromUser: {
+          id: "2",
+          firstName: "Nguyen Dinh",
+          lastName: "Minh",
+        }
+      },
+      {
+        id: 7,
+        messageContent: "Muộn tí còn tắm 😎😎😎",
+        sentDate: "2021-10-10",
+        fromUser: {
+          id: "1",
+          firstName: "Nguyen Dinh",
+          lastName: "Hoang",
+        }
+      },
+      {
+        id: 8,
+        messageContent: "oke =)))",
+        sentDate: "2021-10-10",
+        fromUser: {
+          id: "2",
+          firstName: "Nguyen Dinh",
+          lastName: "Minh",
+        }
+      },
+      {
+        id: 6,
+        messageContent: "Khoảng 5h nhé 🥱🥱🥱?",
+        sentDate: "2021-10-10",
+        fromUser: {
+          id: "2",
+          firstName: "Nguyen Dinh",
+          lastName: "Minh",
+        }
+      },
+      {
+        id: 7,
+        messageContent: "Muộn tí còn tắm 😎😎😎",
+        sentDate: "2021-10-10",
+        fromUser: {
+          id: "1",
+          firstName: "Nguyen Dinh",
+          lastName: "Hoang",
+        }
+      },
+      {
+        id: 8,
+        messageContent: "oke =)))",
+        sentDate: "2021-10-10",
+        fromUser: {
+          id: "2",
+          firstName: "Nguyen Dinh",
+          lastName: "Minh",
+        }
+      },
+    ]
+  }
+  return data;
+}

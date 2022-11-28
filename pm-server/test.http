@@ -1,3 +1,12 @@
-GET http://localhost:5000/api/test/user
+POST http://localhost:5000/pm/create-user
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjY3ODkzNTI2LCJleHAiOjE2Njc5MzY3MjZ9.TdFN0DoCOHbJRPu-65VKthalJOXMQ6E5ZKDskIbfEKY
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY5NjA3NzEzLCJleHAiOjE2Njk2MTEzMTN9.O9yPprTT5RgdI4eJY1TrN6a60YkQJ_MpqDHeE5yKgNk
+
+{
+    "username": "test",
+    "email": "test@pm.com",
+    "first_name": "This",
+    "last_name": "Is Test",
+    "birthday": "1990-01-02",
+    "avatar": "/this/is/link/to/avatar.png"
+}

@@ -7,6 +7,7 @@ import Home from "../pages/Home";
 import Inbox from "../pages/Inbox";
 import SetupNewUser from "../pages/SetupNewUser";
 import ChatSpace from "../modules/components/ChatSpace";
+import InBoxContext from "src/contexts/InboxContext";
 
 const route = createBrowserRouter([
   {
@@ -23,7 +24,7 @@ const route = createBrowserRouter([
       },
       {
         path: "inbox",
-        element: <Inbox />,
+        element: <InBoxContext><Inbox /></InBoxContext>,
         children: [
           {
             path: ":conversationId",

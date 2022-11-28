@@ -1,13 +1,18 @@
 import * as React from 'react';
-import { Grid, Button, Menu, MenuItem, Typography } from "@mui/material";
+import { Grid, Button, Menu, MenuItem, Typography, Box } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import TuneIcon from '@mui/icons-material/Tune';
 import DataTable from '../modules/components/TableTask';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 const options = ['Incomplete tasks', 'Completed tasks', 'All tasks'];
 
 export const MyTasks = () => {
+
+  const theme = useTheme();
+  const mobile = useMediaQuery(theme.breakpoints.down('lg'));
 
   const [option, setOption] = React.useState<string | null>(options[0]);
 
@@ -23,14 +28,31 @@ export const MyTasks = () => {
   };
 
   return (
+    <Box
+      sx={{
+        position: "relative",
+        display: "flex",
+        minWidth: "0",
+        boxBizing: "border-box",
+        padding: "10px 0 0 5px",
+        width: mobile ? "100%" : "calc(100vw - 300px)",
+        height: 'calc(100vh - 120px)'
+      }}
+    >
+    
     <Grid container spacing={2}>
       <Grid item xs={12}
         sx={{
-          display: 'fixed',
+          position: 'sticky',
+          display: 'flex',
           justifyContent: 'space-between',
         }}
       >
-        <Button variant="outlined" startIcon={<AddIcon fontSize='small' />} size="small">
+        <Button variant="outlined" startIcon={<AddIcon fontSize='small' />} size="small"
+          sx={{
+            marginLeft: '5px',
+          }}
+        >
           Add Task
         </Button>
         <div>
@@ -71,5 +93,6 @@ export const MyTasks = () => {
         <DataTable />
       </Grid>
     </Grid>
+    </Box>
   );
 }

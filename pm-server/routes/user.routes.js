@@ -1,5 +1,6 @@
 import authJWT from "../middleware/authJWT.js"
-import userAccessTest from "../controllers/user.controller.js"
+import { createUser } from "../controllers/user.controller.js"
+
 
 const userRoutes = (app) => {
   app.use(function(req, res, next) {
@@ -9,7 +10,7 @@ const userRoutes = (app) => {
     )
     next()
   })
-  app.get("/api/test/user", [authJWT.verifyToken], userAccessTest)
+  app.post("/pm/create-user", [authJWT.verifyToken], createUser)
 }
 
 export default userRoutes

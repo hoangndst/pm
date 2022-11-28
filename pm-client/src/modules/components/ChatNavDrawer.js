@@ -132,7 +132,8 @@ const StyledDrawer = styled('div')(({ theme }) => ({
   flexGrow: 1,
   boxBizing: "border-box",
   padding: "0px",
-  maxWidth: "360px",
+  maxWidth: "280px",
+  borderRight: "1px solid #fffff",
 }));
 
 const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -184,9 +185,9 @@ const ChatNavDrawer = (props) => {
           </Box>
         </Grid>
         <Grid item xs={12}
-          sx={{ flexGrow: 1, overflow: "auto", mt: 1, maxHeight: mobile ? "calc(100vh - 170px)" : "calc(100vh - 220px)" }}
+          sx={{ flexGrow: 1, overflow: "auto", mt: 1, height: mobile ? "calc(100vh - 170px)" : "calc(100vh - 190px)" }}
         >
-          <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+          <List sx={{ width: '100%', maxWidth: 300, bgcolor: 'background.paper' }}>
             {listMessageDemo.map((item) => (
               <NavLink
                 to={`/inbox/${item.conversationId}`}
@@ -239,7 +240,6 @@ const ChatNavDrawer = (props) => {
             className: 'mess-drawer',
             component: AppNavPaperComponent,
           }}
-        
         >
           <PersistScroll slot="swipeable" enabled={mobileOpen}>
             {drawer}
@@ -253,6 +253,9 @@ const ChatNavDrawer = (props) => {
             component: AppNavPaperComponent,
           }}
           open
+          sx={{
+            mr: 1
+          }}
         >
           <PersistScroll slot="side" enabled>
             {drawer}
