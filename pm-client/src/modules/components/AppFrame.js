@@ -21,6 +21,7 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+import { useAppSelector } from 'src/app/hook';
 
 
 const settings = ['Profile', 'Account', 'Logout'];
@@ -146,6 +147,8 @@ export default function AppFrame(props) {
     setAnchorElUser(null);
   };
 
+  const { user } = useAppSelector(state => state.user);
+
   return (
     <RootDiv className={className}>
       <CssBaseline />
@@ -205,7 +208,7 @@ export default function AppFrame(props) {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="dc" />
+                  <Avatar alt=""  src={`https://github.com/identicons/${user.username}.png`} />
                 </IconButton>
               </Tooltip>
               <Menu

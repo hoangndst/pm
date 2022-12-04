@@ -1,7 +1,7 @@
 const AuthHeader = () => {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  if (user && user.accessToken) {
-    return { Authorization: "Bearer " + user.accessToken };
+  const userAuth = JSON.parse(localStorage.getItem("userAuth") || "{}");
+  if (userAuth && userAuth.accessToken) {
+    return { Authorization: userAuth.accessToken };
   } else {
     return {};
   }

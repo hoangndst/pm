@@ -64,7 +64,7 @@ const SignUp = () => {
         setLoading(false)
         setAlertStatus('success')
         setOpen(true)
-        navigate('/welcome')
+        navigate('/login')
         console.log('SignUp success')
       }).catch(() => {
         console.log('SignUp failed')

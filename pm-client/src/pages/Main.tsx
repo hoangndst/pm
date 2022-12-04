@@ -3,20 +3,18 @@ import { AppLayout } from "../modules/components/AppLayout"
 import { Outlet } from "react-router-dom"
 import { useAppSelector } from "../app/hook"
 import { Navigate } from "react-router-dom"
-import { SignOut } from '../auth/userAuth';
-import AuthVerify from '../auth/authVerify';
-import { useAppDispatch } from '../app/hook';
-import { useCallback } from "react"; 
+import { SignOut } from '../auth/userAuth'
+import AuthVerify from '../auth/authVerify'
+import { useAppDispatch } from '../app/hook'
+import { useCallback } from "react"
 
 const Main = () => {
-  const { user: currentUser } = useAppSelector((state) => state.auth)
-  
-  
+  const { userAuth: currentUser } = useAppSelector((state) => state.auth)
   const dispatch = useAppDispatch()
-  
+
   const signOut = useCallback(() => {
-    dispatch(SignOut());
-  }, [dispatch]);
+    dispatch(SignOut())
+  }, [dispatch])
   
   if (!currentUser) {
     return <Navigate to="/login" />

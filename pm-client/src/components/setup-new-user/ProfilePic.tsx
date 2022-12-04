@@ -7,6 +7,7 @@ import {
   Avatar,
 } from "@mui/material"
 import { styled } from '@mui/material/styles';
+import { useAppSelector } from "src/app/hook";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -41,7 +42,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 const ProfilePic = () => {
 
   const [profilePic, setProfilePic] = React.useState<string | null>(null)
-
+  const { userAuth } = useAppSelector(state => state.auth)
+ 
   const handleUploadProfilePic = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
@@ -67,7 +69,7 @@ const ProfilePic = () => {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             variant="dot"
           >
-            <Avatar alt="Hoang Nguyen Dinh" src={profilePic ? profilePic : "https://images.unsplash.com/photo-1556740752-6a3a5d9b5d8a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"}
+            <Avatar alt="Hoang Nguyen Dinh" src={profilePic ? profilePic : `https://github.com/identicons/${userAuth.username}.png`}
               sx={{
                 minWidth: 200,
                 minHeight: 200,

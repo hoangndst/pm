@@ -7,12 +7,15 @@ import Home from "../pages/Home";
 import Inbox from "../pages/Inbox";
 import SetupNewUser from "../pages/SetupNewUser";
 import ChatSpace from "../modules/components/ChatSpace";
+import ChatSpaceIndex from "src/modules/components/ChatSpaceIndex";
 import InBoxContext from "src/contexts/InboxContext";
+import SetupNewUserContext from "src/contexts/SetupNewUserContext";
+import UserContext from "src/contexts/UserContext";
 
 const route = createBrowserRouter([
   {
     path: "/",
-    element: <Main />,
+    element: <UserContext><Main /></UserContext>,
     children: [
       {
         path: "/",
@@ -29,6 +32,10 @@ const route = createBrowserRouter([
           {
             path: ":conversationId",
             element: <ChatSpace />,
+          },
+          {
+            index: true,
+            element: <ChatSpaceIndex />,
           }
         ]
       }
@@ -44,7 +51,7 @@ const route = createBrowserRouter([
   },
   {
     path: "/welcome",
-    element: <SetupNewUser />,
+    element:<SetupNewUserContext><SetupNewUser /></SetupNewUserContext> ,
   }
 ]);
 

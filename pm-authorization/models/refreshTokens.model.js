@@ -4,7 +4,7 @@ const refreshTokensModel = (sequelize, Sequelize) => {
       type: Sequelize.STRING
     },
     userId: {
-      type: Sequelize.INTEGER
+      type: Sequelize.STRING
     }
   })
   return RefreshTokens

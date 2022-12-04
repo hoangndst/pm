@@ -13,7 +13,7 @@ const AuthVerify = (props) => {
   let location = useLocation();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("userAuth"))
 
     if (user) {
       const decodedJwt = parseJwt(user.accessToken);

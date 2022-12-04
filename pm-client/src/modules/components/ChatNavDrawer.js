@@ -9,7 +9,7 @@ import {
   Avatar,
   Drawer
 } from "@mui/material"
-import React from "react"
+import React, { useEffect } from "react"
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -18,7 +18,10 @@ import { Outlet, Link, NavLink, useLocation } from "react-router-dom";
 import { getMessages } from "src/libs/data";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
+import { useInBox } from "src/contexts/InboxContext"
+import { useAppSelector } from "src/app/hook"
+import InboxService from "src/services/inbox.service";
 
 const compactMessages = (messages) => {
   if (messages.length > 25) {
@@ -139,10 +142,30 @@ const StyledDrawer = styled('div')(({ theme }) => ({
 const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 const ChatNavDrawer = (props) => {
-  const listMessageDemo = getMessages();
   const location = useLocation();
   const mobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
-  const { className, disablePermanent, mobileOpen, onClose, onOpen } = props;
+  const { disablePermanent, mobileOpen, onClose, onOpen } = props;
+  const { conversations, setConversations, setSelectedConversation, setMessages } = useInBox()
+  const { user } = useAppSelector(state => state.user)
+
+  // useEffect(() => {
+  //   InboxService.GetConversationsById(user.id)
+  //     .then((response) => {
+  //       setConversations(response.conversations)
+  //       InboxService.GetMessagesByConversationId(response.conversations[0].id)
+  //         .then((response) => {
+  //           setMessages(response)
+  //           console.log(response)
+  //         })
+  //         .catch((err) => {
+  //           console.log(err)
+  //         })
+  //       console.log(response)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //     })
+  // }, [])
 
   const drawer = (
     <React.Fragment>
@@ -188,28 +211,39 @@ const ChatNavDrawer = (props) => {
           sx={{ flexGrow: 1, overflow: "auto", mt: 1, height: mobile ? "calc(100vh - 170px)" : "calc(100vh - 190px)" }}
         >
           <List sx={{ width: '100%', maxWidth: 300, bgcolor: 'background.paper' }}>
-            {listMessageDemo.map((item) => (
+            {conversations.map((item) => (
               <NavLink
-                to={`/inbox/${item.conversationId}`}
+                to={`/inbox/${item.id}`}
                 style={{ textDecoration: 'none' }}
-                key={item.conversationId}
+                key={item.id}
                 onClick={() => {
+                  setSelectedConversation(item)
+                  InboxService.GetMessagesByConversationId(item.id)
+                    .then((response) => {
+                      setMessages(response)
+                      console.log(response)
+                    })
+                    .catch((err) => {
+                      console.log(err)
+                    })
+
+                  console.log(item)
                   if (mobile) {
                     onClose();
                   }
                 }}
               >
                 <ListItemLink alignItems="flex-start"
-                  className={location.pathname === `/inbox/${item.conversationId}` ? "app-drawer-active" : ""}
+                  className={location.pathname === `/inbox/${item.id}` ? "app-drawer-active" : ""}
                 >
                   <ListItemAvatar>
-                    <Avatar alt={item.lastMessage.userName} src="/static/images/avatar/1.jpg" />
+                    <Avatar alt={item.users[0].username} src={`https://github.com/identicons/${item.users[0].username}.png`} />
                   </ListItemAvatar>
                   <ListItemText
-                    primary={item.lastMessage.userName}
+                    primary={item.users[0].username}
                     secondary={
                       <React.Fragment>
-                        {compactMessages(item.lastMessage.message)}
+                        {compactMessages(item.message[0].message_content)}
                       </React.Fragment>
                     }
                   />

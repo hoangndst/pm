@@ -1,6 +1,7 @@
 import authJWT from "../middleware/authJWT.js"
-import { createUser } from "../controllers/user.controller.js"
-
+import { createUser, getUser, searchUsers } from "../controllers/user.controller.js"
+import { createConversation, getConversations } from "../controllers/conversation.controller.js"
+import { createMessage, getMessages } from "../controllers/message.controller.js"
 
 const userRoutes = (app) => {
   app.use(function(req, res, next) {
@@ -11,6 +12,12 @@ const userRoutes = (app) => {
     next()
   })
   app.post("/pm/create-user", [authJWT.verifyToken], createUser)
+  app.get("/pm/user", [authJWT.verifyToken], getUser)
+  app.post("/pm/create-conversation", [authJWT.verifyToken], createConversation)
+  app.get("/pm/get-conversations", [authJWT.verifyToken], getConversations)
+  app.post("/pm/create-message", [authJWT.verifyToken], createMessage)
+  app.get("/pm/get-messages", [authJWT.verifyToken], getMessages)
+  app.get("/pm/search-users", [authJWT.verifyToken], searchUsers)
 }
 
 export default userRoutes

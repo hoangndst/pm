@@ -1,23 +1,20 @@
 import pmAuthorization from "../api/pmAuthorization"
 
 const SignIn = async ( username: string, password: string ) => {
-  return pmAuthorization.post( "/auth/signin", { username, password } )
-    .then( response => {
-      if ( response.data.accessToken ) {
-        localStorage.setItem( "user", JSON.stringify( response.data ) )
-      }
-      return response.data
-    })
+  const response = await pmAuthorization.post("/auth/signin", { username, password })
+  if (response.data.accessToken) {
+    localStorage.setItem("userAuth", JSON.stringify(response.data))
+  }
+  return response.data
 }
 
 const SignUp = async ( username: string, email: string, password: string ) => {
-  return pmAuthorization.post( "/auth/signup", { username, email, password } )
-    .then( response => {
-      return response.data
-    })
+  const response = await pmAuthorization.post("/auth/signup", { username, email, password })
+  return response.data
 }
 
 const SignOut = () => {
+  localStorage.removeItem( "userAuth" )
   localStorage.removeItem( "user" )
 }
 

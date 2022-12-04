@@ -7,28 +7,31 @@ import {
   Toolbar,
   Grid
 } from "@mui/material"
-import { styled, alpha } from '@mui/material/styles';
-import { Outlet, Link, NavLink, useLocation } from "react-router-dom";
-import { getMessages } from "../libs/data";
-import CssBaseline from '@mui/material/CssBaseline';
-import ChatNavDrawer from "src/modules/components/ChatNavDrawer";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import InfoIcon from '@mui/icons-material/Info';
-import { useInBox } from "src/contexts/InboxContext";
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
+import { styled, alpha } from '@mui/material/styles'
+import { Outlet, Link, NavLink, useLocation } from "react-router-dom"
+import { getMessages } from "../libs/data"
+import CssBaseline from '@mui/material/CssBaseline'
+import ChatNavDrawer from "src/modules/components/ChatNavDrawer"
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import InfoIcon from '@mui/icons-material/Info'
+import { useInBox } from "src/contexts/InboxContext"
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
+import InboxService from "src/services/inbox.service"
+import { useAppSelector } from "src/app/hook"
+import { useNavigate } from "react-router-dom"
 
 const StyledAppNavDrawer = styled(ChatNavDrawer)(({ disablePermanent, theme }) => {
   if (disablePermanent) {
-    return {};
+    return {}
   }
   return {
     [theme.breakpoints.up('lg')]: {
       flexShrink: 0,
       width: '360px',
     },
-  };
-});
+  }
+})
 
 const StyledMessageBar = styled(Box)(({ theme }) => ({
   transition: theme.transitions.create('width'),
@@ -46,21 +49,34 @@ const StyledMessageBar = styled(Box)(({ theme }) => ({
       ? alpha(theme.palette.primaryDark[900], 0.7)
       : 'rgba(255,255,255,0.7)',
   color: theme.palette.mode === 'dark' ? theme.palette.grey[500] : theme.palette.grey[800],
-}));
+}))
 
 const NavIconButton = styled(IconButton)(({ theme }) => ({
   [theme.breakpoints.up('lg')]: {
     display: 'none',
   },
-}));
+}))
 
 const Inbox = () => {
-  const location = useLocation();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const disablePermanent = false;
-  const theme = useTheme();
-  const mobile = useMediaQuery(theme.breakpoints.down('lg'));
-  const { isDetailOpen, setIsDetailOpen } = useInBox()
+  const [mobileOpen, setMobileOpen] = React.useState(false)
+  const disablePermanent = false
+  const theme = useTheme()
+  const mobile = useMediaQuery(theme.breakpoints.down('lg'))
+  const [isDetailOpen, setIsDetailOpen] = React.useState(false)
+  const { selectedConversation, messages, setMessages, setConversations, conversations } = useInBox()
+  const { user } = useAppSelector(state => state.user)
+
+  React.useEffect(() => {
+    InboxService.GetConversationsById(user.id)
+      .then((response) => {
+        setConversations(response.conversations)
+        setMessages([])
+        console.log('message', messages[0])
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
 
   return (
     <Box
@@ -82,7 +98,6 @@ const Inbox = () => {
         onOpen={() => setMobileOpen(true)}
         mobileOpen={mobileOpen}
       />
-
       <Box
         sx={{
           position: "relative",
@@ -128,13 +143,18 @@ const Inbox = () => {
                   </NavIconButton>
 
                   <Avatar
-                    alt="Remy Sharp"
-                    src="https://material-ui.com/static/images/avatar/1.jpg"
+                    alt={selectedConversation?.conversation_name}
+                    src={`https://github.com/identicons/${selectedConversation?.users[0].username}.png`}
                     sx={{ width: 32, height: 32, mr: 1, ml: 1 }}
                   />
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    {location.pathname}
-                  </Typography>
+                  {selectedConversation ? (
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                      {selectedConversation?.conversation_name}
+                    </Typography>
+
+                  ) : (
+                    null
+                  )}
 
                   <IconButton
                     sx={{
@@ -152,8 +172,8 @@ const Inbox = () => {
           </Grid>
           <Grid item xs={isDetailOpen ? (mobile ? 12 : 4) : 0}>
             <Box
-              sx={{ 
-                display: isDetailOpen ? 'block' : 'none', 
+              sx={{
+                display: isDetailOpen ? 'block' : 'none',
                 borderStyle: 'solid',
                 borderColor:
                   theme.palette.mode === 'dark'
@@ -176,21 +196,21 @@ const Inbox = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <Avatar
-                    alt="Remy Sharp"
-                    src="https://material-ui.com/static/images/avatar/1.jpg"
-                    sx={{ width: 50, height: 50, m: '0 auto' }}
+                    alt={selectedConversation?.conversation_name}
+                    src={`https://github.com/identicons/${selectedConversation?.users[0].username}.png`}
+                    sx={{ width: 50, height: 50, m: '0 auto', mt: 2 }}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <Typography
                     sx={{ m: '10px auto', width: 'fit-content' }}
                   >
-                    Andrea Smith
+                    {selectedConversation?.conversation_name}
                   </Typography>
                   <Typography
                     sx={{ m: '10px auto', width: 'fit-content' }}
                   >
-                    adsmith@pm.com
+                    {selectedConversation?.users[0].email}
                   </Typography>
                 </Grid>
               </Grid>

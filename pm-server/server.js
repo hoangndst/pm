@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: process.env.DB_HOST })
 })
 
-database.sequelize.sync({ force: true }).then(() => {
+database.sequelize.sync({ }).then(() => {
   console.log('Synced with database')
 }).catch((err) => {
   console.log('Error syncing with database', err)

@@ -2,17 +2,22 @@ import { createCtx } from "./CreateCtx"
 import React from "react"
 
 interface InBoxContextType {
-  isDetailOpen: boolean,
-  setIsDetailOpen: React.Dispatch<React.SetStateAction<boolean>>
+  conversations: any[]
+  setConversations: React.Dispatch<React.SetStateAction<any[]>>,
+  selectedConversation: any
+  setSelectedConversation: React.Dispatch<React.SetStateAction<any>>,
+  messages: any[]
+  setMessages: React.Dispatch<React.SetStateAction<any[]>>,
 }
 
 export const [useInBox, InBoxProvider] = createCtx<InBoxContextType>()
 
-export default function InBoxContext({ children }: { children: React.ReactNode }) {
-  const [isDetailOpen, setIsDetailOpen] = React.useState(false)
-
+export default function InboxContext({ children }: { children: React.ReactNode }) {
+  const [conversations, setConversations] = React.useState<any[]>([])
+  const [selectedConversation, setSelectedConversation] = React.useState<any>(conversations[0])
+  const [messages, setMessages] = React.useState<any[]>([])
   return (
-    <InBoxProvider value={{ isDetailOpen, setIsDetailOpen }}>
+    <InBoxProvider value={{ conversations, setConversations, selectedConversation, setSelectedConversation, messages, setMessages }}>
       {children}
     </InBoxProvider>
   )

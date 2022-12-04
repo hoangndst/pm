@@ -12,27 +12,27 @@ const User = database.users
 app.use(cors())
 app.use(bodyParser.json())
 
-database.sequelize.sync({ force: true }).then(() => {
+database.sequelize.sync({ }).then(() => {
   console.log('Synced with database')
-  initial()
+  // initial()
 }).catch((err) => {
   console.log('Error syncing with database', err)
 })
 
-const initial = () => {
-  Role.create({
-    id: 1,
-    name: 'user'
-  })
-  Role.create({
-    id: 2,
-    name: 'moderator'
-  })
-  Role.create({
-    id: 3,
-    name: 'admin'
-  })
-}
+// const initial = () => {
+//   Role.create({
+//     id: 1,
+//     name: 'user'
+//   })
+//   Role.create({
+//     id: 2,
+//     name: 'moderator'
+//   })
+//   Role.create({
+//     id: 3,
+//     name: 'admin'
+//   })
+// }
 
 
 route(app)

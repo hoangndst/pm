@@ -21,18 +21,17 @@ export const SignIn = createAsyncThunk<
     rejectValue: string
   }
 >('auth/signin', async ( { username, password }, thunkAPI ) => {
-  return AuthService.SignIn( username, password )
-    .then(( response ) => {
-      return response
-    }).catch((error: any | AxiosError) => {
-      if ( error.response ) {
-        thunkAPI.dispatch( setMessage( error.response.data.message ) )
-      } else {
-        thunkAPI.dispatch( setMessage( error.message ) )
-      }
-      return thunkAPI.rejectWithValue( error.response.data.message )
-    })
-
+  try {
+    const response = await AuthService.SignIn( username, password )
+    return response
+  } catch ( error: any | AxiosError ) {
+    if ( error.response ) {
+      thunkAPI.dispatch( setMessage( error.response.data.message ) )
+    } else {
+      thunkAPI.dispatch( setMessage( error.message ) )
+    }
+    return thunkAPI.rejectWithValue( error.response.data.message )
+  }
 })
 
 interface SignUpRequest {
@@ -45,33 +44,34 @@ interface SignUpResponse {
 }
 export const SignUp = createAsyncThunk<
   SignUpResponse,
-  SignUpRequest
+  SignUpRequest,
+  {
+    rejectValue: string
+  }
 >('auth/signup', async ( { username, email, password }, thunkAPI ) => {
-  return AuthService.SignUp( username, email, password )
-    .then(( response ) => {
-      return response
-    }).catch((error: any | AxiosError) => {
-      if ( error.response ) {
-        thunkAPI.dispatch( setMessage( error.response.data.message ) )
-      } else {
-        thunkAPI.dispatch( setMessage( error.message ) )
-      }
-      return thunkAPI.rejectWithValue( error.response.data.message )
-    })
+  try {
+    const response = await AuthService.SignUp( username, email, password )
+    return response
+  } catch ( error: any | AxiosError ) {
+    if ( error.response ) {
+      thunkAPI.dispatch( setMessage( error.response.data.message ) )
+    } else {
+      thunkAPI.dispatch( setMessage( error.message ) )
+    }
+    return thunkAPI.rejectWithValue( error.response.data.message )
+  }
 })
 
 export const SignOut = createAsyncThunk(
   "auth/signout",
   async() => {
-    await AuthService.SignOut()
+    AuthService.SignOut()
   }
 )
 
+const userAuth = JSON.parse( localStorage.getItem( "userAuth" ) as string )
 
-
-const user = JSON.parse( localStorage.getItem( "user" ) as string )
-
-const initialState = user === null ? { isLoggedIn: false, user: null } : { isLoggedIn: true, user: user }
+const initialState = userAuth === null ? { isLoggedIn: false, userAuth: null } : { isLoggedIn: true, userAuth: userAuth }
 
 const authSlice = createSlice({
   name: "auth",
@@ -80,23 +80,23 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(SignUp.fulfilled, (state, action) => {
       state.isLoggedIn = false
-      state.user = null
+      state.userAuth = null
     })
     builder.addCase(SignUp.rejected, (state, action) => {
       state.isLoggedIn = false
-      state.user = null
+      state.userAuth = null
     })
     builder.addCase(SignIn.fulfilled, (state, action) => {
       state.isLoggedIn = true
-      state.user = action.payload
+      state.userAuth = action.payload
     })
     builder.addCase(SignIn.rejected, (state, action) => {
       state.isLoggedIn = false
-      state.user = null
+      state.userAuth = null
     })
     builder.addCase(SignOut.fulfilled, (state, action) => {
       state.isLoggedIn = false
-      state.user = null
+      state.userAuth = null
     })
   }
 })

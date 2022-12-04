@@ -2,7 +2,7 @@ import database from "../models/index.js"
 import jwt from "jsonwebtoken"
 import bycrypt from "bcryptjs"
 import dotenv from "dotenv"
-import EmailService from "../services/email.service.js"
+import uniqid from "uniqid"
 import { Op } from "sequelize"
 
 dotenv.config()
@@ -30,8 +30,8 @@ const SignIn = (req, res) => {
       return res.status(401).send({ message: "User and/or password is incorrect" })
     }
     const token = jwt.sign({ id: user.id }, secret, {
-      // 1 hour
-      expiresIn: 3600
+      // 1 day
+      expiresIn: 86400
     })
 
     const refreshToken = jwt.sign({ id: user.id }, refreshSecret, {
@@ -83,6 +83,7 @@ const SignUp = (req, res) => {
       }
     } else {
       User.create({
+        id: uniqid(),
         username: req.body.username,
         email: req.body.email,
         password: bycrypt.hashSync(req.body.password, 8)
@@ -96,6 +97,7 @@ const SignUp = (req, res) => {
       }).catch((err) => {
         res.status(500).send({ message: err.message })
       })
+      
     }
   }).catch((err) => {
     res.status(500).send({ message: err.message })

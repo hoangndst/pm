@@ -8,12 +8,12 @@ import {
   Snackbar
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { SignIn } from '../auth/userAuth'
+import { GetUser } from 'src/auth/user'
 import { clearMessage } from '../auth/messageSlice'
 import { useAppDispatch, useAppSelector } from '../app/hook'
 
-const user = JSON.parse( localStorage.getItem( "user" ) as string )
 const Login = () => {
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
@@ -21,23 +21,13 @@ const Login = () => {
   const [open, setOpen] = React.useState(false)
   const [alertStatus, setAlertStatus] = React.useState<'success' | 'error'>('success')
 
-  const dispath = useAppDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { isLoggedIn } = useAppSelector((state) => state.auth)
   const { message } = useAppSelector((state) => state.message)
 
   useEffect(() => {
-    dispath(clearMessage())
-  }, [dispath])
-
-  // useEffect(() => {
-  //   console.log('loggedIn', isLoggedIn)
-  //   if (user) {
-  //     console.log('user', true)
-  //   } else {
-  //     console.log('user', false)
-  //   }
-  // },[])
+    dispatch(clearMessage())
+  }, [dispatch])
 
   const handleClose = () => {
     setOpen(false)
@@ -45,22 +35,38 @@ const Login = () => {
 
   const handleSubmit = () => {
     setLoading(true)
-    dispath(SignIn({ username, password }))
+    dispatch(SignIn({ username, password }))
       .unwrap()
       .then(() => {
         setLoading(false)
+        setOpen(true)
         setAlertStatus('success')
-        setOpen(true)
-        navigate('/')
-        console.log('Login success')
-      }).catch(() => {
-        console.log('Login failed')
+        const userAuth = JSON.parse(localStorage.getItem('userAuth') || '{}')
+        if (userAuth.id) {
+          console.log('userAuth', userAuth.id)
+          dispatch(GetUser({ id: userAuth.id }))
+            .unwrap()
+            .then(() => {
+              const user = JSON.parse(localStorage.getItem('user') || '{}') 
+              if (user.id !== userAuth.id) {
+                navigate('/welcome', { replace: true })
+              } else {
+                navigate('/', { replace: true })
+              }
+            })
+            .catch((error) => {
+              console.log('error', error)
+            })
+        }  
+      })
+      .catch((error) => {
         setLoading(false)
-        setAlertStatus('error')
         setOpen(true)
+        setAlertStatus('error')
+        console.log('error', error)
       })
   }
-
+    
   return (
     <Box
       sx={{

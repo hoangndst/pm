@@ -1,5 +1,9 @@
 const projectModel = (sequelize, Sequelize) => {
   const Project = sequelize.define('project', {
+    id: {
+      type: Sequelize.STRING,
+      primaryKey: true
+    },
     name: {
       type: Sequelize.STRING
     },
