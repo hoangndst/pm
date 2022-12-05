@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import { TextField, IconButton, Stack, Avatar, Tooltip } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import { getMessages2 } from 'src/libs/data';
+import { getMessages2 } from 'src/libs/Data';
 import { useInBox } from 'src/contexts/InboxContext';
 import { format } from 'date-fns'
 

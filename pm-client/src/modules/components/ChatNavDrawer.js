@@ -15,7 +15,7 @@ import { styled, alpha } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { Outlet, Link, NavLink, useLocation } from "react-router-dom";
-import { getMessages } from "src/libs/data";
+import { getMessages } from "src/libs/Data";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import PropTypes from 'prop-types'

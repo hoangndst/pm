@@ -9,7 +9,7 @@ import {
 } from "@mui/material"
 import { styled, alpha } from '@mui/material/styles'
 import { Outlet, Link, NavLink, useLocation } from "react-router-dom"
-import { getMessages } from "../libs/data"
+import { getMessages } from "../libs/Data"
 import CssBaseline from '@mui/material/CssBaseline'
 import ChatNavDrawer from "src/modules/components/ChatNavDrawer"
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'

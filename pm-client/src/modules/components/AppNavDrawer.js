@@ -11,7 +11,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
-import { SideBarData } from '../../libs/sidebar';
+import { SideBarData } from '../../libs/SideBar';
 import { Link, useLocation } from 'react-router-dom';
 import ListItemText from '@mui/material/ListItemText';
 import clsx from 'clsx';
@@ -21,7 +21,7 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { CollapseTeamList } from './CollapseTeamList';
-import { createTeams } from '../../libs/data';
+import { createTeams } from '../../libs/Data';
 
 const savedScrollTop = {};
 

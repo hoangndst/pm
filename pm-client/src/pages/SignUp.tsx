@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { SignUp as SignUpF } from '../auth/userAuth'
+import { SignUp as SignUpF } from '../auth/UserAuth'
 import { clearMessage, setMessage } from '../auth/messageSlice'
 import { useAppDispatch, useAppSelector } from '../app/hook'
 

@@ -3,7 +3,7 @@ import { AppLayout } from "../modules/components/AppLayout"
 import { Outlet } from "react-router-dom"
 import { useAppSelector } from "../app/hook"
 import { Navigate } from "react-router-dom"
-import { SignOut } from '../auth/userAuth'
+import { SignOut } from '../auth/UserAuth'
 import AuthVerify from '../auth/authVerify'
 import { useAppDispatch } from '../app/hook'
 import { useCallback } from "react"
