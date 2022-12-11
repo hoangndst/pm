@@ -8,7 +8,7 @@ const teamModel = (sequelize, Sequelize) => {
       type: Sequelize.STRING
     },
     description: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: true
     }
   })

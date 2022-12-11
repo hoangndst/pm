@@ -2,7 +2,7 @@ import authJWT from "../middleware/authJWT.js"
 import { createUser, getUser, searchUsers } from "../controllers/user.controller.js"
 import { createConversation, getConversations } from "../controllers/conversation.controller.js"
 import { createMessage, getMessages } from "../controllers/message.controller.js"
-
+import { createTeam } from "../controllers/team.controller.js"
 const userRoutes = (app) => {
   app.use(function(req, res, next) {
     res.header(
@@ -18,6 +18,7 @@ const userRoutes = (app) => {
   app.post("/pm/create-message", [authJWT.verifyToken], createMessage)
   app.get("/pm/get-messages", [authJWT.verifyToken], getMessages)
   app.get("/pm/search-users", [authJWT.verifyToken], searchUsers)
+  app.post("/pm/create-team", [authJWT.verifyToken], createTeam)
 }
 
 export default userRoutes
