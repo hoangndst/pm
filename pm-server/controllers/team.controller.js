@@ -1,33 +1,35 @@
-import database from "../models/index.js"
-import uniqid from "uniqid"
-import { Op } from "sequelize"
+import database from "../models/index.js";
+import uniqid from "uniqid";
+import { Op } from "sequelize";
 
-// create team
+export const createTeam = async (req, res) => {
+  const listMembers = req.body.membersId;
+  const team_id = uniqid();
+  const team_name = req.body.teamName;
 
-export const createTeam = async (req, res) => { // ["1", "2", "3"]
-  const id = uniqid()
-  const teamMembers = req.body.teamMembers
-  const teamName = req.body.teamName
-  const team = {
-    id: id,
-    name: teamName
-  }
-  const teamMems = teamMembers.map((member, index) => {
-    return {
-      user_id: member.id,
-      team_id: id,
-      is_admin: index === 0 ? true : false
-    }
-  })
-  try {
-    await database.team.create(team)
-    await database.teamMember.bulkCreate(teamMems)
-    res.status(200).send({ message: "Team created successfully" })
-  } catch (error) {
-    res.status(500).send({ message: error.message })
-  }
-}
+  const createTeam = async (req, res) => {
+    // ["1", "2", "3"]
+    const membersId = req.body.membersId;
+    const teamId = uniqid();
+    const team_name = req.body.teamName;
+    const team = {
+      id: teamId,
+      name: team_name,
+    };
+    var team_members = [];
+    membersId.forEach((id) => {
+      const team_member = {
+        user_id: id,
+        team_id: teamId,
+      };
+      team_members.push(team_member);
+    });
 
-const addTeamMember = async (req, res) => {
-  const teamId = req.body.teamId
-}
+    try {
+      await database.team.create(team);
+      team_members.forEach((team_member) => {
+        database.teamMember(team_member);
+      });
+    } catch (err) {}
+  };
+};
