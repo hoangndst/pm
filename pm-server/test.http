@@ -82,6 +82,17 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwMjNrbGI0eGhw
 
 ###
 
+##Create a project
+POST http://localhost:5000/pm/create-project
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImcycGM2NGc4bGJhaTE4MzEiLCJpYXQiOjE2NzAyNDIxMTksImV4cCI6MTY3MDMyODUxOX0.9wzUP0sAbGnCJsQpOR3Ocanfh1dL_gWKqOBJ6OX6Crc
+
+{
+    "userId": "g2pc64g8lbai1831",
+    "teamId": "1",
+    "projectName": "testProj"
+}
+
 GET http://localhost:5000/pm/get-conversations?userId=1lvc0a60lb34lc5r
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwMjNrbGI0eGhwbGwiLCJpYXQiOjE2NzAwNDQxMzcsImV4cCI6MTY3MDEzMDUzN30.c64FGCWPqS_NdKf3NoQHzBKhNQSwozOlxvaT_yLfISU

@@ -16,7 +16,7 @@ const projectModel = (sequelize, Sequelize) => {
       allowNull: true
     },
     owner_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
     },
     start_date: {
       type: Sequelize.DATE,

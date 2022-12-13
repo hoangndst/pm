@@ -5,24 +5,28 @@ const taskModel = (sequelize, Sequelize) => {
       primaryKey: true,
     },
     task_name: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     task_description: {
       type: Sequelize.STRING,
-      allowNull: true
+      allowNull: true,
     },
     due_date: {
       type: Sequelize.DATE,
-      allowNull: true
+      allowNull: true,
+    },
+    assign_to: {
+      type: Sequelize.STRING,
+      allowNull: true,
     },
     creator_id: {
-      type: Sequelize.INTEGER
+      type: Sequelize.STRING,
     },
     completed_on: {
       type: Sequelize.DATE,
-      allowNull: true
-    }
-  })
-  return Task
-}
-export default taskModel
+      allowNull: true,
+    },
+  });
+  return Task;
+};
+export default taskModel;

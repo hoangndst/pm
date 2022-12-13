@@ -78,7 +78,7 @@ database.project.hasMany(database.task, {
 
 // Task - Task (1:N)
 database.task.hasMany(database.task, {
-  foreignKey: "task_id",
+  foreignKey: "parent_task_id",
   as: "subtask"
 })
 

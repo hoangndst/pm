@@ -4,6 +4,7 @@
   "description": "PM server",
   "main": "server.js",
   "scripts": {
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "hoangndst",
@@ -14,6 +15,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.20",
     "pg": "^8.8.0",
     "sequelize": "^6.25.3",
     "uniqid": "^5.4.0"
