@@ -1,20 +1,17 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
+import Box from '@mui/material/Box'
 
-const StyledAppContainer = styled(Container)(({ theme }) => {
+const StyledAppContainer = styled(Box)(({ theme }) => {
   return {
-    paddingTop: 'calc(var(--MuiDocs-header-height) + 36px)',
+    paddingTop: 'calc(var(--MuiDocs-header-height))',
     fontFamily: 'Arial',
-    maxWidth: '100%',
-    [theme.breakpoints.up('lg')]: {
-      paddingLeft: theme.spacing(8),
-      paddingRight: theme.spacing(8),
-    },
+    minWidth: '100%',
     minHeight: '100vh',
   };
 });
 
 export default function AppContainer(props) {
-  return <StyledAppContainer id="main-content" maxWidth={false} {...props} />;
+  return <StyledAppContainer id="main-content" maxWidth={true} {...props} />;
 }

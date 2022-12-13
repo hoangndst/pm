@@ -2,8 +2,6 @@ import AppFrame from "./AppFrame";
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { styled } from '@mui/material/styles';
 import AppContainer from "./AppContainer";
-import BrandingProvider from "../../BrandingProvider";
-import Head from "./Head";
 
 const Main = styled('main', {
   shouldForwardProp: (prop) => prop !== 'disableToc',
@@ -46,6 +44,7 @@ const StyledAppContainer = styled(AppContainer, {
 });
 
 export function AppLayout(props) {
+  
   const {
     children,
     disableAd = true,
@@ -53,22 +52,20 @@ export function AppLayout(props) {
   } = props;
 
   return (
-    <BrandingProvider>
-      <AppFrame>
-        <GlobalStyles
-          styles={{
-            ':root': {
-              '--MuiDocs-navDrawer-width': '300px',
-              '--MuiDocs-toc-width': '240px',
-            },
-          }}
-        />
-        <Main disableToc={disableToc}>
-          <StyledAppContainer disableAd={disableAd} disableToc={disableToc}>
-            {children}
-          </StyledAppContainer>
-        </Main>
-      </AppFrame>
-    </BrandingProvider>
+    <AppFrame>
+      <GlobalStyles
+        styles={{
+          ':root': {
+            '--MuiDocs-navDrawer-width': '300px',
+            '--MuiDocs-toc-width': '240px',
+          },
+        }}
+      />
+      <Main disableToc={disableToc}>
+        <StyledAppContainer disableAd={disableAd} disableToc={disableToc}>
+          {children}
+        </StyledAppContainer>
+      </Main>
+    </AppFrame>
   );
 }

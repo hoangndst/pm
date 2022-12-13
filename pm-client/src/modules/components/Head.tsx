@@ -14,7 +14,7 @@ interface HeadProps {
   type?: string;
 }
 
-export default function Head(props: HeadProps) {
+export default function Head (props: HeadProps) {
 
   const {
     card = '/static/social-previews/default-preview.jpg',

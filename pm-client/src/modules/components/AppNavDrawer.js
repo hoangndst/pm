@@ -11,23 +11,19 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
-import { SideBarData } from '../../libs/SideBar';
+import { SideBarData } from '../../libs/sidebar';
 import { Link, useLocation } from 'react-router-dom';
 import ListItemText from '@mui/material/ListItemText';
 import clsx from 'clsx';
 import { Divider } from '@mui/material';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import TreeView from '@mui/lab/TreeView';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import TreeItem from '@mui/lab/TreeItem';
-import AddIcon from '@mui/icons-material/Add';
 import { CollapseTeamList } from './CollapseTeamList';
-import { createTeams } from '../../libs/Data';
+import { createTeams } from '../../libs/data';
+import IconButton from '@mui/material/IconButton'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const savedScrollTop = {};
 
@@ -123,9 +119,9 @@ PersistScroll.propTypes = {
 };
 
 const ToolbarDiv = styled('div')(({ theme }) => ({
-  padding: theme.spacing(1.45, 2),
+  padding: theme.spacing(2),
   paddingRight: 0,
-  height: 'var(--MuiDocs-header-height)',
+  height: '100px',
   display: 'flex',
   flexGrow: 1,
   flexDirection: 'row',
@@ -291,11 +287,11 @@ const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigato
 export default function AppNavDrawer(props) {
   const { className, disablePermanent, mobileOpen, onClose, onOpen } = props;
   const mobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
-  
+
   let location = useLocation();
   const teams = createTeams();
 
-  
+
   const [openTeams, setOpenTeams] = React.useState(true);
 
   const handleClickTeams = () => {
@@ -315,8 +311,8 @@ export default function AppNavDrawer(props) {
             aria-label={'goToHome'}
             sx={{
               pr: '12px',
-              marginTop: '12px',
-              marginBottom: '12px',
+              marginTop: '15px',
+              marginBottom: '15px',
               // borderRight: '1px solid',
               borderColor: (theme) =>
                 theme.palette.mode === 'dark'
@@ -324,7 +320,16 @@ export default function AppNavDrawer(props) {
                   : theme.palette.grey[200],
             }}
           >
-            <img src="https://upload.wikimedia.org/wikipedia/vi/b/bf/Logo_HUET.svg" alt="logo" style={{ width: '50px' }} />
+            <Box
+              sx={{
+                borderRadius: '100%',
+                backgroundColor: 'white',
+                width: 60,
+                height: 60,
+              }}
+            >
+              <img src="https://upload.wikimedia.org/wikipedia/vi/b/bf/Logo_HUET.svg" alt="logo" style={{ width: '60px' }} />
+            </Box>
           </Box>
         </Link>
       </ToolbarDiv>
@@ -332,6 +337,11 @@ export default function AppNavDrawer(props) {
         {SideBarData.map((item) => (
           <Link
             to={item.href}
+            onClick={() => {
+              if (mobile) {
+                onClose();
+              }
+            }}
             style={{ textDecoration: 'none' }}
             key={item.title + '-key'}
           >
@@ -356,7 +366,7 @@ export default function AppNavDrawer(props) {
         }}
       />
       <List sx={{ my: 0.5 }}>
-        <ListItemButton onClick={handleClickTeams}
+        <ListItemButton
           sx={{
             height: '32px',
           }}
@@ -364,12 +374,21 @@ export default function AppNavDrawer(props) {
           <ListItemText primary="Teams"
             sx={{ marginLeft: '25px' }}
           />
-          {openTeams ? <ExpandLess /> : <ExpandMore />}
+          <Link to="/teams" style={{ textDecoration: 'none' }}>
+            <IconButton sx={{ marginLeft: 'auto' }} size="small">
+              <MoreHorizIcon />
+            </IconButton>
+          </Link>
+          <IconButton sx={{ marginLeft: 'auto' }} size="small"
+            onClick={handleClickTeams}
+          >
+            {openTeams ? <ExpandLess /> : <ExpandMore />}
+          </IconButton>
         </ListItemButton>
         <Collapse in={openTeams} timeout="auto" unmountOnExit>
           {teams.map((team) => (
             <CollapseTeamList
-              key={team.name + '-key'}  
+              key={team.name + '-key'}
               id={team.id}
               name={team.name}
               teamMember={team.teamMember}

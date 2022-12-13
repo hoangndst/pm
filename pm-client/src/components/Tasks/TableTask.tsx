@@ -1,35 +1,35 @@
-import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import { tasks } from '../../libs/Data';
-import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
-import EditIcon from '@mui/icons-material/Edit';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import { createData } from '../../libs/Data';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import * as React from 'react'
+import Paper from '@mui/material/Paper'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TablePagination from '@mui/material/TablePagination'
+import TableRow from '@mui/material/TableRow'
+import { tasks } from '../../libs/data'
+import Avatar from '@mui/material/Avatar'
+import Stack from '@mui/material/Stack'
+import EditIcon from '@mui/icons-material/Edit'
+import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
+import { createData } from '../../libs/data'
+import Snackbar from '@mui/material/Snackbar'
+import MuiAlert, { AlertProps } from '@mui/material/Alert'
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref,
 ) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
+})
 
 interface Column {
-  id: 'id' | 'taskName' | 'taskDescription' | 'project' | 'dueDate' | 'createdBy' | 'assignedTo' | 'createdOn' | 'lastModifiedOn' | 'completedOn' | 'description';
-  label: string;
-  minWidth?: number;
-  align?: 'right' | 'left' | 'center';
-  format?: (value: number) => string;
+  id: 'id' | 'taskName' | 'taskDescription' | 'project' | 'dueDate' | 'createdBy' | 'assignedTo' | 'createdOn' | 'lastModifiedOn' | 'completedOn' | 'description'
+  label: string
+  minWidth?: number
+  align?: 'right' | 'left' | 'center'
+  format?: (value: number) => string
 }
 
 const columns: readonly Column[] = [
@@ -53,26 +53,26 @@ const columns: readonly Column[] = [
     minWidth: 170,
     align: 'left',
   },
-];
+]
 
 function stringToColor(string: string) {
-  let hash = 0;
-  let i;
+  let hash = 0
+  let i
 
   /* eslint-disable no-bitwise */
   for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    hash = string.charCodeAt(i) + ((hash << 5) - hash)
   }
 
-  let color = '#';
+  let color = '#'
 
   for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
+    const value = (hash >> (i * 8)) & 0xff
+    color += `00${value.toString(16)}`.slice(-2)
   }
   /* eslint-enable no-bitwise */
 
-  return color;
+  return color
 }
 
 function stringAvatar(name: string) {
@@ -81,43 +81,43 @@ function stringAvatar(name: string) {
       bgcolor: stringToColor(name),
     },
     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-  };
+  }
 }
 
 
-const rows = createData();
+const rows = createData()
 
 
 
 export default function StickyHeadTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
+    setPage(newPage)
+  }
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+    setRowsPerPage(+event.target.value)
+    setPage(0)
+  }
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false)
 
   const handleClick = (completedOn?: string) => {
     if (completedOn) {
-      // setOpen(true);
-      return;
+      // setOpen(true)
+      return
     }
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
-      return;
+      return
     }
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -151,7 +151,7 @@ export default function StickyHeadTable() {
                       <Stack direction="row" spacing={2}
                         sx={{
                           alignItems: 'center',
-                          '& > :first-child': { m: 0 },
+                          '& > :first-of-type': { m: 0 },
                           justifyContent: 'space-between',
                         }}
                       >
@@ -196,7 +196,7 @@ export default function StickyHeadTable() {
                     </TableCell>
                     <TableCell>{row.completedOn}</TableCell>
                   </TableRow>
-                );
+                )
               })}
           </TableBody>
         </Table>
@@ -211,5 +211,5 @@ export default function StickyHeadTable() {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
-  );
+  )
 }
