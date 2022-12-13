@@ -22,6 +22,8 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { CollapseTeamList } from './CollapseTeamList';
 import { createTeams } from '../../libs/data';
+import IconButton from '@mui/material/IconButton'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const savedScrollTop = {};
 
@@ -285,11 +287,11 @@ const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigato
 export default function AppNavDrawer(props) {
   const { className, disablePermanent, mobileOpen, onClose, onOpen } = props;
   const mobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
-  
+
   let location = useLocation();
   const teams = createTeams();
 
-  
+
   const [openTeams, setOpenTeams] = React.useState(true);
 
   const handleClickTeams = () => {
@@ -364,7 +366,7 @@ export default function AppNavDrawer(props) {
         }}
       />
       <List sx={{ my: 0.5 }}>
-        <ListItemButton onClick={handleClickTeams}
+        <ListItemButton
           sx={{
             height: '32px',
           }}
@@ -372,12 +374,21 @@ export default function AppNavDrawer(props) {
           <ListItemText primary="Teams"
             sx={{ marginLeft: '25px' }}
           />
-          {openTeams ? <ExpandLess /> : <ExpandMore />}
+          <Link to="/teams" style={{ textDecoration: 'none' }}>
+            <IconButton sx={{ marginLeft: 'auto' }} size="small">
+              <MoreHorizIcon />
+            </IconButton>
+          </Link>
+          <IconButton sx={{ marginLeft: 'auto' }} size="small"
+            onClick={handleClickTeams}
+          >
+            {openTeams ? <ExpandLess /> : <ExpandMore />}
+          </IconButton>
         </ListItemButton>
         <Collapse in={openTeams} timeout="auto" unmountOnExit>
           {teams.map((team) => (
             <CollapseTeamList
-              key={team.name + '-key'}  
+              key={team.name + '-key'}
               id={team.id}
               name={team.name}
               teamMember={team.teamMember}

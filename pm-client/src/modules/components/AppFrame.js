@@ -1,30 +1,34 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import AppNavDrawer from './AppNavDrawer';
-import { alpha } from '@mui/material/styles';
-import { AppBar } from '@mui/material';
-import GlobalStyles from '@mui/material/GlobalStyles';
-import { Link } from 'react-router-dom';
-import Stack from '@mui/material/Stack';
-import Tooltip from '@mui/material/Tooltip';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import MenuIcon from '@mui/icons-material/Menu';
-import ThemeModeToggle from './ThemeModeToggle';
-import { useChangeTheme } from './ThemeContext';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { getCookie } from '../utils/helpers';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
-import { useAppSelector } from 'src/app/hook';
+import * as React from 'react'
+import { styled } from '@mui/material/styles'
+import Box from '@mui/material/Box'
+import CssBaseline from '@mui/material/CssBaseline'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import AppNavDrawer from './AppNavDrawer'
+import { alpha } from '@mui/material/styles'
+import { AppBar } from '@mui/material'
+import GlobalStyles from '@mui/material/GlobalStyles'
+import { Link } from 'react-router-dom'
+import Stack from '@mui/material/Stack'
+import Tooltip from '@mui/material/Tooltip'
+import GitHubIcon from '@mui/icons-material/GitHub'
+import MenuIcon from '@mui/icons-material/Menu'
+import ThemeModeToggle from './ThemeModeToggle'
+import { useChangeTheme } from './ThemeContext'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { getCookie } from '../utils/helpers'
+import Avatar from '@mui/material/Avatar'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import { useAppSelector } from 'src/app/hook'
+import { NavLink } from 'react-router-dom'
+import Button from '@mui/material/Button'
+import LogoutIcon from '@mui/icons-material/Logout'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
+import { SignOut } from 'src/auth/userAuth'
+import { useAppDispatch } from 'src/app/hook'
 
-
-const settings = ['Profile', 'Account', 'Logout'];
 const StyledAppNavDrawer = styled(AppNavDrawer)(({ disablePermanent, theme }) => {
   if (disablePermanent) {
     return {};
@@ -123,6 +127,7 @@ export default function AppFrame(props) {
   const changeTheme = useChangeTheme();
   const [mode, setMode] = React.useState(null);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const dispatch = useAppDispatch()
 
   React.useEffect(() => {
     const initialMode = getCookie('paletteMode') || 'system';
@@ -147,18 +152,24 @@ export default function AppFrame(props) {
     setAnchorElUser(null);
   };
 
-  const { user } = useAppSelector(state => state.user);
+  const handleSignOut = () => {
+    dispatch(SignOut())
+    setAnchorElUser(null);
+  };
+
+
+  const { user } = useAppSelector(state => state.user)
 
   return (
     <RootDiv className={className}>
       <CssBaseline />
       <StyledAppBar disablePermanent={disablePermanent}>
         <GlobalStyles
-        styles={{
-          ':root': {
-            '--MuiDocs-header-height': '64px',
-          },
-        }}
+          styles={{
+            ':root': {
+              '--MuiDocs-header-height': '64px',
+            },
+          }}
         />
         <Toolbar variant="dense" disableGutters>
           <NavIconButton
@@ -174,7 +185,8 @@ export default function AppFrame(props) {
           <Link href="/">
             <Box
               aria-label={('goToHome')}
-              sx={{ display: { md: 'flex', lg: 'none' }, ml: 2,
+              sx={{
+                display: { md: 'flex', lg: 'none' }, ml: 2,
                 borderRadius: '100%',
                 backgroundColor: 'white',
                 width: '50px',
@@ -208,7 +220,7 @@ export default function AppFrame(props) {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt=""  src={`https://github.com/identicons/${user.username}.png`} />
+                  <Avatar alt="" src={`https://github.com/identicons/${user.username}.png`} />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -227,11 +239,28 @@ export default function AppFrame(props) {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem key="profile" onClick={handleCloseUserMenu}>
+                  <Button variant="" color="primary" fullWidth
+                    endIcon={<AccountCircleIcon />}
+                    href={`${user.id}`}
+                  >
+                    Profile
+                  </Button>
+                </MenuItem>
+                <MenuItem key="account-setting" onClick={handleCloseUserMenu}>
+                  <Button variant="" color="primary" fullWidth
+                    endIcon={<ManageAccountsIcon />}
+                  >
+                    Account setting
+                  </Button>
+                </MenuItem>
+                <MenuItem key="logout" onClick={handleCloseUserMenu}>
+                  <Button onClick={handleSignOut} variant="" color="primary" fullWidth
+                    endIcon={<LogoutIcon />}
+                  >
+                    Sign out
+                  </Button>
+                </MenuItem>
               </Menu>
             </Box>
           </Stack>

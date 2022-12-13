@@ -1,6 +1,11 @@
 const messageReactionModel = (sequelize, Sequelize) => {
   const MessageReaction = sequelize.define('message_reaction', {
-    reaction_id: {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    reaction: {
       type: Sequelize.INTEGER
     }
   })

@@ -83,9 +83,9 @@ export function createData() {
 
 export function createTeams() {
   let data = [];
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 10; i++) {
     data.push({
-      id: i,
+      id: `${i}`,
       name: `Team ${i}`,
       about: `Team ${i} description`,
       teamMember: [
@@ -93,28 +93,52 @@ export function createTeams() {
           id: "1",
           firstName: "Nguyen Dinh",
           lastName: "Hoang",
+          username: "hoangndst",
         },
         {
           id: "2",
-          firstName: "Nguyen Dinh",
-          lastName: "Hoang",
+          firstName: "Mac Quynh",
+          lastName: "Hoa",
+          username: "hoamq",
         },
         {
           id: "3",
-          firstName: "Nguyen Dinh",
-          lastName: "Hoang",
+          firstName: "Luong Trung",
+          lastName: "Kien",
+          username: "kienlt",
         },
         {
           id: "4",
-          firstName: "Nguyen Dinh",
-          lastName: "Hoang",
+          firstName: "Ho Manh",
+          lastName: "Tien",
+          username: "tienhm",
         },
         {
           id: "5",
           firstName: "Nguyen Dinh",
           lastName: "Hoang",
+          username: "hoangndst",
         },
-      ]
+      ],
+      projects: [
+        {
+          id: "1",
+          owner: {
+            id: "1",
+            username: "hoangndst",
+          },
+          name:  `Project 1`,
+        },
+        {
+          id: "2",
+          owner: {
+            id: "2",
+            username: "hoanmq",
+          },
+          name:  `Project 2`,
+        },
+      ],
+      createdOn: "2021-10-10",
     })
   }
   return data;

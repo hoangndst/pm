@@ -5,7 +5,7 @@ const commentModel = (sequelize, Sequelize) => {
       primaryKey: true
     },
     comment_content: {
-      type: Sequelize.STRING
+      type: Sequelize.TEXT
     }
   })
   return Comment

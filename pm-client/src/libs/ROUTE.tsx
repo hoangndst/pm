@@ -12,6 +12,10 @@ import InBoxContext from "src/contexts/InboxContext"
 import SetupNewUserContext from "src/contexts/SetupNewUserContext"
 import AppContext from "src/contexts/AppContext"
 import TaskContext from "src/contexts/TaskContext"
+import Profile from "src/pages/Profile"
+import Teams from "src/pages/Teams"
+import Team from "src/pages/Team"
+import TeamContext from "src/contexts/TeamContext"
 
 const route = createBrowserRouter([
   {
@@ -39,6 +43,18 @@ const route = createBrowserRouter([
             element: <ChatSpaceIndex />,
           }
         ]
+      },
+      {
+        path: ":userId",
+        element: <Profile />,
+      },
+      {
+        path: "teams",
+        element:<TeamContext><Teams /></TeamContext>
+      },
+      {
+        path: "teams/:teamId",
+        element: <TeamContext><Team /></TeamContext>
       }
     ]
   },

@@ -16,9 +16,9 @@ const taskModel = (sequelize, Sequelize) => {
       allowNull: true
     },
     creator_id: {
-      type: Sequelize.INTEGER
+      type: Sequelize.STRING
     },
-    completed_on: {
+    completedAt: {
       type: Sequelize.DATE,
       allowNull: true
     }
