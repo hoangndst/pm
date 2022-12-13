@@ -2,41 +2,96 @@ import database from "../models/index.js"
 import uniqid from "uniqid"
 import { Op } from "sequelize"
 
-// insert new conversation for user
-export const createConversation = async (req, res) => {
-  const conversationId = uniqid()  // const teamID = uniqid()
-  const userId1 = req.body.userId1 // const userId = req.body.userId
-  const userId2 = req.body.userId2  
-  const conversationName = req.body.conversationName
+// insert new conversation for users or existing conversation
+export const insertConversationToDatabase = async (users, conversationName) => {
+  const conversationId = uniqid()
   const conversation = {
     id: conversationId,
     conversation_name: conversationName
   }
-  const groupUser1 = {
-    is_admin: true,
-    conversation_id: conversationId,
-    user_id: userId1,
-    joined_at: new Date()
-  }
-  const groupUser2 = {
-    is_admin: false,
-    conversation_id: conversationId,
-    user_id: userId2,
-    joined_at: new Date()
-  }
+  const groupUsers = users.map((user, index) => {
+    return {
+      conversation_id: conversationId,
+      user_id: user,
+      is_admin: index === 0 ? true : false
+    }
+  })
+
+  await database.conversation.create(conversation)
+  await database.groupUser.bulkCreate(groupUsers)
+  return conversationId
+}
+
+export const createConversation = async (req, res) => {
+  const users = req.body.users
+  const conversationName = req.body.conversationName
+  const response = {}
   try {
-    await database.conversation.create(conversation)
-    await database.groupUser.create(groupUser1)
-    await database.groupUser.create(groupUser2)
-    res.status(200).send({
-      message: "Conversation created successfully",
-      conversationId: conversationId
-    })
+    if (users.length === 2) {
+      const userConversations = await getConversationByUserId(users[0])
+      if (userConversations) {
+        for (let i = 0; i < userConversations.conversations.length; i++) {
+          const conversation = userConversations.conversations[i]
+          if (conversation.users.length === users.length && conversation.users.every(user => users.includes(user.id))) {
+            response.conversationId = conversation.id
+            response.isNewConversation = false
+            break
+          }
+        }
+        if (!response.conversationId) {
+          // const conversationId = await insertConversationToDatabase(users, conversationName)
+          // response.conversationId = conversationId
+          response.isNewConversation = true
+        } else {
+          response.isNewConversation = false
+        }
+      } else {
+        // const conversationId = await insertConversationToDatabase(users, conversationName)
+        // response.conversationId = conversationId
+        response.isNewConversation = true
+      }
+    } else {
+      console.log("newConversation")
+      // const conversationId = await insertConversationToDatabase(users, conversationName)
+      // response.conversationId = conversationId
+      response.isNewConversation = true
+    }
+    res.status(200).send(response)
   } catch (error) {
     res.status(500).send({
       message: error.message
     })
   }
+}
+
+const getConversationByUserId = async (userId) => {
+  const userConversations = await database.user.findOne({
+    where: {
+      id: userId
+    },
+    attributes: ["id", "username"],
+    include: [
+      {
+        model: database.conversation,
+        as: "conversations",
+        attributes: ["id", "conversation_name"],
+        through: {
+          attributes: []
+        },
+        include: [
+          {
+            model: database.user,
+            as: "users",
+            attributes: ["id"],
+            through: {
+              attributes: []
+            }
+          }
+        ],
+      }
+    ]
+  })
+  return userConversations
 }
 
 // get all conversations,conversation members and last message for user and sort by last message time
@@ -77,7 +132,7 @@ export const getConversations = async (req, res) => {
               attributes: ["id", "message_content", "from_user_id", "conversation_id", "createdAt"],
               order: [["createdAt", "DESC"]],
               limit: 1
-            } 
+            }
           ],
         }
       ]

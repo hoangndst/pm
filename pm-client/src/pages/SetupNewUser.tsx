@@ -10,9 +10,9 @@ import {
   Step,
   StepLabel
 } from '@mui/material'
-import ProfileInfo from "../components/setup-new-user/ProfileInfo"
-import ProfilePic from "../components/setup-new-user/ProfilePic"
-import Complete from "../components/setup-new-user/Complete"
+import ProfileInfo from "../components/SetupNewUser/ProfileInfo"
+import ProfilePic from "../components/SetupNewUser/ProfilePic"
+import Complete from "../components/SetupNewUser/Complete"
 import { useSetupNewUser } from "src/contexts/SetupNewUserContext"
 import { useNavigate } from "react-router-dom"
 

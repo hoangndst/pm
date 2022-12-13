@@ -5,7 +5,9 @@ import {
   Avatar,
   IconButton,
   Toolbar,
-  Grid
+  Grid,
+  Snackbar,
+  Alert,
 } from "@mui/material"
 import { styled, alpha } from '@mui/material/styles'
 import { Outlet, Link, NavLink, useLocation } from "react-router-dom"
@@ -20,6 +22,7 @@ import { useTheme } from '@mui/material/styles'
 import InboxService from "src/services/inbox.service"
 import { useAppSelector } from "src/app/hook"
 import { useNavigate } from "react-router-dom"
+import { useAppContext } from "src/contexts/AppContext"
 
 const StyledAppNavDrawer = styled(ChatNavDrawer)(({ disablePermanent, theme }) => {
   if (disablePermanent) {
@@ -65,6 +68,7 @@ const Inbox = () => {
   const [isDetailOpen, setIsDetailOpen] = React.useState(false)
   const { selectedConversation, messages, setMessages, setConversations, conversations } = useInBox()
   const { user } = useAppSelector(state => state.user)
+  const { snackbarMessage, setOpenSnackbar, snackbarSeverity, openSnackbar } = useAppContext()
 
   React.useEffect(() => {
     InboxService.GetConversationsById(user.id)
@@ -218,6 +222,11 @@ const Inbox = () => {
           </Grid>
         </Grid>
       </Box>
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+        <Alert onClose={() => setOpenSnackbar(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }

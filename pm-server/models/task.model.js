@@ -15,17 +15,17 @@ const taskModel = (sequelize, Sequelize) => {
       type: Sequelize.DATE,
       allowNull: true,
     },
-    assign_to: {
+    assigned_to: {
       type: Sequelize.STRING,
       allowNull: true,
     },
     creator_id: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
-    completed_on: {
+    completedAt: {
       type: Sequelize.DATE,
       allowNull: true,
-    },
+    }
   });
   return Task;
 };

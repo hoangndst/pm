@@ -11,7 +11,7 @@ import { LoadingButton } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
 import { SignIn } from '../auth/UserAuth'
 import { GetUser } from 'src/auth/user'
-import { clearMessage } from '../auth/messageSlice'
+import { clearMessage, setMessage } from '../auth/messageSlice'
 import { useAppDispatch, useAppSelector } from '../app/hook'
 
 const Login = () => {
@@ -35,6 +35,13 @@ const Login = () => {
 
   const handleSubmit = () => {
     setLoading(true)
+    if (username === '' || password === '') {
+      setLoading(false)
+      dispatch(setMessage('Please fill in all fields'))
+      setAlertStatus('error')
+      setOpen(true)
+      return
+    }
     dispatch(SignIn({ username, password }))
       .unwrap()
       .then(() => {

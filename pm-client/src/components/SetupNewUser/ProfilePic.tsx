@@ -9,7 +9,7 @@ import {
 import { styled } from '@mui/material/styles';
 import { useAppSelector } from "src/app/hook";
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
+export const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
     backgroundColor: '#44b700',
     color: '#44b700',
@@ -38,9 +38,12 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
+interface ProfilePicProps {
+  username?: string
+}
 
-const ProfilePic = () => {
-
+const ProfilePic = (props: ProfilePicProps) => {
+  const { username } = props
   const [profilePic, setProfilePic] = React.useState<string | null>(null)
   const { userAuth } = useAppSelector(state => state.auth)
  
@@ -69,7 +72,7 @@ const ProfilePic = () => {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             variant="dot"
           >
-            <Avatar alt="Hoang Nguyen Dinh" src={profilePic ? profilePic : `https://github.com/identicons/${userAuth.username}.png`}
+            <Avatar alt="Hoang Nguyen Dinh" src={profilePic ? profilePic : (username ? `https://github.com/identicons/${username}.png` : `https://github.com/identicons/${userAuth.username}.png`)}
               sx={{
                 minWidth: 200,
                 minHeight: 200,

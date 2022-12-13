@@ -5,7 +5,7 @@ const commentReactionModel = (sequelize, Sequelize) => {
       primaryKey: true,
       autoIncrement: true
     },
-    reaction_id: {
+    reaction: {
       type: Sequelize.INTEGER
     }
   })

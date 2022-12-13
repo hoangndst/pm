@@ -7,19 +7,6 @@ const groupUserModel = (sequelize, Sequelize) => {
     },
     is_admin: {
       type: Sequelize.BOOLEAN
-    },
-    conversation_id: {
-      type: Sequelize.STRING
-    },
-    user_id: {
-      type: Sequelize.STRING
-    },
-    joined_at: {
-      type: Sequelize.DATE
-    },
-    left_at: {
-      type: Sequelize.DATE,
-      allowNull: true
     }
   })
   return GroupUser

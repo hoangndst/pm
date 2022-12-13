@@ -133,7 +133,7 @@ export const createSubTask = async (req, res) => {
             project_id: projectId,
             task_name: taskName,
             createdAt: new Date(),
-            parent_task_id: parentTaskId,
+            task_id: parentTaskId,
             assigned_to: assignedTo,
           };
           try {

@@ -19,20 +19,20 @@ database.sequelize.sync({ }).then(() => {
   console.log('Error syncing with database', err)
 })
 
-// const initial = () => {
-//   Role.create({
-//     id: 1,
-//     name: 'user'
-//   })
-//   Role.create({
-//     id: 2,
-//     name: 'moderator'
-//   })
-//   Role.create({
-//     id: 3,
-//     name: 'admin'
-//   })
-// }
+const initial = () => {
+  Role.create({
+    id: 1,
+    name: 'user'
+  })
+  Role.create({
+    id: 2,
+    name: 'moderator'
+  })
+  Role.create({
+    id: 3,
+    name: 'admin'
+  })
+}
 
 
 route(app)

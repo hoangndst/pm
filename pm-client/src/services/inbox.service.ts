@@ -12,8 +12,14 @@ const GetMessagesByConversationId = async (id: string) => {
   return response.data
 }
 
+const createConversation = async (conversationName: string, users: any[]) => {
+  const response = await pmServer.post(`/pm/create-conversation`, { conversationName: conversationName, users: users }, { headers: AuthHeader() })
+  return response.data
+}
+
 const InboxService = {
   GetConversationsById,
-  GetMessagesByConversationId
+  GetMessagesByConversationId,
+  createConversation
 }
 export default InboxService
