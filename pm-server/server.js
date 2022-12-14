@@ -52,27 +52,29 @@ io.on('connection', (socket) => {
     socket.join(user.conversationId)
     console.log(`${user.userInfo.username} joined ${user.conversationId}`)
     callback()
-    socket.on('sendMessage', async ({ messageContent }, callback) => {
+  })
+  socket.on('sendMessage', async ({ messageContent, conversationId }, callback) => {
+    try {
       const message = {
         message_content: messageContent,
-        from_user_id: user.userInfo.id,
-        conversation_id: user.conversationId,
+        from_user_id: socket.id,
+        conversation_id: conversationId,
         createdAt: new Date(),
         user: {
-          id: user.userInfo.id,
-          username: user.userInfo.username,
-          first_name: user.userInfo.first_name,
-          last_name: user.userInfo.last_name
+          id: socket.id,
+          username: 'testusername',
+          first_name: 'test first name',
+          last_name: 'test last name',
         }
       }
-      try {
-        io.to(user.conversationId).emit('message', message)
-        callback()
-      } catch (error) {
-        callback(error)
-      }
-    })
-  });
+      console.log(`sent message from to ${conversationId} with content: ${messageContent}`)
+      io.to(conversationId).emit('message', message)
+      console.log(`rooms:`, socket.rooms)
+      callback()
+    } catch (error) {
+      callback(error)
+    }
+  })
   socket.on('disconnect', () => {
     const user = SocketService.removeUser(socket.id)
     if (user) {

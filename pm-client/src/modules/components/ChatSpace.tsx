@@ -7,6 +7,9 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getMessages2 } from 'src/libs/data';
 import { useInBox } from 'src/contexts/InboxContext';
 import { format } from 'date-fns'
+import { io } from 'socket.io-client';
+import InboxService from 'src/services/inbox.service';
+import { useAppSelector } from 'src/app/hook';
 
 interface Props {
   window?: () => Window;
@@ -17,18 +20,27 @@ interface Props {
 export default function ChatSpace(props: Props) {
 
   const [message, setMessage] = React.useState('')
-  const { socket, messages, setMessages } = useInBox()
-
+  const { socket, messages, setMessages, selectedConversation, setConversations, conversations } = useInBox()
+  const [arrivedMessage, setArrivedMessage] = React.useState<any>(null)
+  const scrollRef = React.useRef<any>()
+  
   React.useEffect(() => {
     socket.current.on('message', (message: any) => {
-      setMessages((prevMessages: any) => [...prevMessages, message])
+      console.log('new message', message)
+      setArrivedMessage(message)
     })
   }, [])
+
+  React.useEffect(() => {
+    if (arrivedMessage) {
+      setMessages((prevMessages: any) => [...prevMessages, arrivedMessage])
+    }
+  }, [arrivedMessage])
 
   const handleSendMessage = (e: any) => {
     e.preventDefault()
     if (message) {
-      socket.current.emit('sendMessage', { messageContent: message }, (error: any) => {
+      socket.current.emit('sendMessage', { messageContent: message, conversationId: selectedConversation.id }, (error: any) => {
         if (error) {
           console.log(error)
         }
@@ -39,6 +51,10 @@ export default function ChatSpace(props: Props) {
     }
   }
 
+  React.useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
   return (
     <Box
       sx={{ height: 'calc(100vh - 150px)', width: '100%' }}
@@ -48,15 +64,16 @@ export default function ChatSpace(props: Props) {
       >
         <Stack direction='column' sx={{ justifyContent: 'center' }} spacing={0}>
           {messages.map((item, index) => (
-            <Stack direction='row' 
+            <Stack direction='row'
               sx={{ justifyContent: 'flex-start', mt: index === 0 || messages[index - 1].user.id === item.user.id ? 0 : 1.5 }}
               key={`${item.user.id}-${index}`}
+              ref={scrollRef}
             >
-              <Avatar 
-                sx={{ 
-                  width: 40, height: 40, 
-                  visibility: index === 0 || messages[index - 1].user.id !== item.user.id ? 'visible' : 'hidden' 
-                }} 
+              <Avatar
+                sx={{
+                  width: 40, height: 40,
+                  visibility: index === 0 || messages[index - 1].user.id !== item.user.id ? 'visible' : 'hidden'
+                }}
                 alt={item.user.last_name} src={`https://github.com/identicons/${item.user.username}.png`}
               />
               <Stack direction='column' sx={{ justifyContent: 'center', ml: 1 }}>
@@ -74,7 +91,7 @@ export default function ChatSpace(props: Props) {
               </Stack>
             </Stack>
           ))}
-        </Stack> 
+        </Stack>
       </Box>
       <Box
         sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingButtom: '5px' }}

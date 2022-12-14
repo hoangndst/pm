@@ -2,7 +2,6 @@ import { checkConversationExistByUsername } from "../controllers/conversation.co
 
 let users = [];
 const addUser = async ({ id, userInfo, conversationId }) => {
-  console.log("addUser", id, userInfo, conversationId);
   if (!userInfo || !conversationId) return { error: "userInfo and conversationId are required." };
   const check = await checkConversationExistByUsername(userInfo.username, conversationId);
   if (check) {
