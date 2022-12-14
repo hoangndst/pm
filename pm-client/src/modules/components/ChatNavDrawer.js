@@ -22,6 +22,11 @@ import PropTypes from 'prop-types'
 import { useInBox } from "src/contexts/InboxContext"
 import { useAppSelector } from "src/app/hook"
 import InboxService from "src/services/inbox.service";
+import AddIcon from '@mui/icons-material/Add'
+import IconButton from '@mui/material/IconButton'
+import Stack from '@mui/material/Stack'
+import GroupsIcon from '@mui/icons-material/Groups'
+import { io } from "socket.io-client";
 
 const compactMessages = (messages) => {
   if (messages.length > 25) {
@@ -145,27 +150,8 @@ const ChatNavDrawer = (props) => {
   const location = useLocation();
   const mobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
   const { disablePermanent, mobileOpen, onClose, onOpen } = props;
-  const { conversations, setConversations, setSelectedConversation, setMessages } = useInBox()
+  const { conversations, socket, setSelectedConversation, setMessages } = useInBox()
   const { user } = useAppSelector(state => state.user)
-
-  // useEffect(() => {
-  //   InboxService.GetConversationsById(user.id)
-  //     .then((response) => {
-  //       setConversations(response.conversations)
-  //       InboxService.GetMessagesByConversationId(response.conversations[0].id)
-  //         .then((response) => {
-  //           setMessages(response)
-  //           console.log(response)
-  //         })
-  //         .catch((err) => {
-  //           console.log(err)
-  //         })
-  //       console.log(response)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }, [])
 
   const drawer = (
     <React.Fragment>
@@ -177,15 +163,25 @@ const ChatNavDrawer = (props) => {
             flexShrink: 0,
             alignItems: "center",
             alignContent: "center",
+            justifyContent: "space-between",
           }}
         >
-          <Grid container>
-            <Grid item xs={6}>
-              <Typography variant="h6" component="div" sx={{ p: 2 }}>
-                Inbox
-              </Typography>
-            </Grid>
-          </Grid>
+          <Stack direction="row" spacing={2} sx={{ p: 2, alignItems: "center", justifyContent: "space-between" }}>
+            <Typography variant="h6" component="div">
+              Inbox
+            </Typography>
+            <Link to="/inbox"
+              onClick={() => {
+                if (mobile) {
+                  onClose();
+                }
+              }}
+            >
+              <IconButton size="small">
+                <AddIcon />
+              </IconButton>
+            </Link>
+          </Stack>
         </Grid>
         <Grid item xs={12}>
           <Box sx={{
@@ -217,6 +213,25 @@ const ChatNavDrawer = (props) => {
                 style={{ textDecoration: 'none' }}
                 key={item.id}
                 onClick={() => {
+                  // socket.current = io("http://localhost:5000", {
+                  //   transports: ["websocket"],
+                  //   withCredentials: true,
+                  // }, (error) => {
+                  //   if (error) {
+                  //     console.log(error)
+                  //   }
+                  // })
+                  const userInfo = {
+                    id: user.id,
+                    username: user.username,
+                    first_name: user.first_name,
+                    last_name: user.last_name
+                  }
+                  socket.current.emit("join", { userInfo: userInfo, conversationId: item.id }, (error) => {
+                    if (error) {
+                      alert(error);
+                    }
+                  })
                   setSelectedConversation(item)
                   InboxService.GetMessagesByConversationId(item.id)
                     .then((response) => {
@@ -226,10 +241,9 @@ const ChatNavDrawer = (props) => {
                     .catch((err) => {
                       console.log(err)
                     })
-
                   console.log(item)
                   if (mobile) {
-                    onClose();
+                    onClose()
                   }
                 }}
               >
@@ -237,10 +251,21 @@ const ChatNavDrawer = (props) => {
                   className={location.pathname === `/inbox/${item.id}` ? "app-drawer-active" : ""}
                 >
                   <ListItemAvatar>
-                    <Avatar alt={item.users[0].username} src={`https://github.com/identicons/${item.users[0].username}.png`} />
+                    {item?.users.length === 1 ? (
+                      <Avatar
+                        alt={item?.conversation_name}
+                        src={`https://github.com/identicons/${item?.users[0].username}.png`}
+                      />
+                    ) : (
+                      <Avatar
+                        alt={item?.conversation_name}
+                      >
+                        <GroupsIcon />
+                      </Avatar>
+                    )}
                   </ListItemAvatar>
                   <ListItemText
-                    primary={item.users[0].username}
+                    primary={item.users.length === 1 ? item.users[0].username : item.conversation_name}
                     secondary={
                       <React.Fragment>
                         {compactMessages(item.message[0].message_content)}

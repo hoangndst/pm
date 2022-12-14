@@ -14,7 +14,6 @@ import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar'
 import AddIcon from '@mui/icons-material/Add'
 import Grid from '@mui/material/Grid'
-import AccountTreeIcon from '@mui/icons-material/AccountTree'
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -115,7 +114,7 @@ export default function Team() {
               <Grid item xs={6} sm={4} md={3} lg={2}>
                 <Button variant="outlined">
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <AddIcon sx={{ width: 50, height: 50 }} />
+                    <AddIcon sx={{ width: 40, height: 40 }} />
                     <Typography component="div" sx={{ fontWeight: 600 }}>
                       Add member
                     </Typography>
@@ -126,7 +125,7 @@ export default function Team() {
                 <Grid item xs={6} sm={4} md={3} lg={2} key={`member-${index}`}>
                   <Button variant="text" color={theme.palette.mode === 'dark' ? 'inherit' : 'primary'}>
                     <Stack direction="row" spacing={1} alignItems="center">
-                      <Avatar src={`https://github.com/identicons/${member.username}.png`} sx={{ width: 50, height: 50 }} />
+                      <Avatar src={`https://github.com/identicons/${member.username}.png`} sx={{ width: 40, height: 40 }} />
                       <Typography component="div" sx={{ fontWeight: 600 }}>
                         {member?.username}
                       </Typography>
@@ -141,9 +140,10 @@ export default function Team() {
               Projects
             </Typography>
           </Divider>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 10px' }}>
+          <Box sx={{ display: 'flex', alignItems: 'start', justifyContent: 'space-between', padding: '5px 10px' }}>
             <List sx={{ width: '100%' }}>
               {selectedTeam?.projects?.map((project, index) => (
+                <Button fullWidth>
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar>
@@ -155,7 +155,9 @@ export default function Team() {
                       {project.name}
                     </Typography>
                   </ListItemText>
+                  <Avatar src={`https://github.com/identicons/${project.owner.username}.png`} sx={{ width: 25, height: 25 }} />
                 </ListItem>
+                </Button>
               ))}
             </List>
           </Box>

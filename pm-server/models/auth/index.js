@@ -1,11 +1,11 @@
-import databaseConfig from "../configs/db.config.js";
+import databaseConfig from "../../configs/db.config.js";
 import { Sequelize } from "sequelize";
 import roleModel from "./role.model.js";
 import userModel from "./user.model.js";
 import refreshTokensModel from "./refreshTokens.model.js";
 
 const sequelize = new Sequelize(
-  databaseConfig.DB,
+  databaseConfig.DB_AUTH,
   databaseConfig.USER,
   databaseConfig.PASSWORD,
   {
@@ -18,7 +18,8 @@ const sequelize = new Sequelize(
       min: databaseConfig.pool.min,
       acquire: databaseConfig.pool.acquire,
       idle: databaseConfig.pool.idle
-    }
+    },
+    logging: false
   }
 )
 
