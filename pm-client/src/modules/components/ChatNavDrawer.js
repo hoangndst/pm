@@ -213,14 +213,6 @@ const ChatNavDrawer = (props) => {
                 style={{ textDecoration: 'none' }}
                 key={item.id}
                 onClick={() => {
-                  // socket.current = io("http://localhost:5000", {
-                  //   transports: ["websocket"],
-                  //   withCredentials: true,
-                  // }, (error) => {
-                  //   if (error) {
-                  //     console.log(error)
-                  //   }
-                  // })
                   const userInfo = {
                     id: user.id,
                     username: user.username,
