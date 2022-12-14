@@ -23,6 +23,9 @@ import InboxService from "src/services/inbox.service"
 import { useAppSelector } from "src/app/hook"
 import { useNavigate } from "react-router-dom"
 import { useAppContext } from "src/contexts/AppContext"
+import GroupsIcon from '@mui/icons-material/Groups'
+import { io } from "socket.io-client"
+import { SocketType } from "dgram"
 
 const StyledAppNavDrawer = styled(ChatNavDrawer)(({ disablePermanent, theme }) => {
   if (disablePermanent) {
@@ -66,20 +69,36 @@ const Inbox = () => {
   const theme = useTheme()
   const mobile = useMediaQuery(theme.breakpoints.down('lg'))
   const [isDetailOpen, setIsDetailOpen] = React.useState(false)
-  const { selectedConversation, messages, setMessages, setConversations, conversations } = useInBox()
-  const { user } = useAppSelector(state => state.user)
+  const { selectedConversation, socket, setMessages, setConversations, setSelectedConversation } = useInBox()
+  const { user } = useAppSelector((state: { user: any }) => state.user)
   const { snackbarMessage, setOpenSnackbar, snackbarSeverity, openSnackbar } = useAppContext()
+  const location = useLocation()
+
+  React.useEffect(() => {
+    console.log(location.pathname)
+  }, [location])
 
   React.useEffect(() => {
     InboxService.GetConversationsById(user.id)
       .then((response) => {
         setConversations(response.conversations)
-        setMessages([])
-        console.log('message', messages[0])
+        setSelectedConversation(response.conversations[0])
+        InboxService.GetMessagesByConversationId(response.conversations[0].id)
+          .then((response) => {
+            setMessages(response)
+            console.log(response)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
       })
       .catch((err) => {
         console.log(err)
       })
+    socket.current = io("http://localhost:5000", {
+      transports: ["websocket"],
+      withCredentials: true,
+    })
   }, [])
 
   return (
@@ -145,12 +164,20 @@ const Inbox = () => {
                   >
                     <ArrowBackIcon />
                   </NavIconButton>
-
-                  <Avatar
-                    alt={selectedConversation?.conversation_name}
-                    src={`https://github.com/identicons/${selectedConversation?.users[0].username}.png`}
-                    sx={{ width: 32, height: 32, mr: 1, ml: 1 }}
-                  />
+                  {selectedConversation?.users.length === 1 ? (
+                    <Avatar
+                      alt={selectedConversation?.conversation_name}
+                      src={`https://github.com/identicons/${selectedConversation?.users[0].username}.png`}
+                      sx={{ width: 32, height: 32, mr: 1, ml: 1 }}
+                    />
+                  ) : (
+                    <Avatar
+                      alt={selectedConversation?.conversation_name}
+                      sx={{ width: 32, height: 32, mr: 1, ml: 1 }}
+                    >
+                      <GroupsIcon />
+                    </Avatar>
+                  )}
                   {selectedConversation ? (
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       {selectedConversation?.conversation_name}

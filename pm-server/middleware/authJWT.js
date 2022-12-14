@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import database from "../models/index.js"
+import database from "../models/data/index.js"
 import databaseConfig from "../configs/db.config.js"
 
 const User = database.user
