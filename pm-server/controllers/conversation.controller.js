@@ -1,4 +1,4 @@
-import database from "../models/index.js"
+import database from "../models/data/index.js"
 import uniqid from "uniqid"
 import { Op } from "sequelize"
 
@@ -16,9 +16,15 @@ export const insertConversationToDatabase = async (users, conversationName) => {
       is_admin: index === 0 ? true : false
     }
   })
-
+  const initialMessage = {
+    id: uniqid(),
+    message_content: "Hello",
+    from_user_id: users[0],
+    conversation_id: conversationId
+  }
   await database.conversation.create(conversation)
   await database.groupUser.bulkCreate(groupUsers)
+  await database.message.create(initialMessage)
   return conversationId
 }
 
@@ -39,21 +45,20 @@ export const createConversation = async (req, res) => {
           }
         }
         if (!response.conversationId) {
-          // const conversationId = await insertConversationToDatabase(users, conversationName)
-          // response.conversationId = conversationId
+          const conversationId = await insertConversationToDatabase(users, conversationName)
+          response.conversationId = conversationId
           response.isNewConversation = true
         } else {
           response.isNewConversation = false
         }
       } else {
-        // const conversationId = await insertConversationToDatabase(users, conversationName)
-        // response.conversationId = conversationId
+        const conversationId = await insertConversationToDatabase(users, conversationName)
+        response.conversationId = conversationId
         response.isNewConversation = true
       }
     } else {
-      console.log("newConversation")
-      // const conversationId = await insertConversationToDatabase(users, conversationName)
-      // response.conversationId = conversationId
+      const conversationId = await insertConversationToDatabase(users, conversationName)
+      response.conversationId = conversationId
       response.isNewConversation = true
     }
     res.status(200).send(response)
@@ -109,7 +114,7 @@ export const getConversations = async (req, res) => {
           as: "conversations",
           attributes: ["id", "conversation_name"],
           through: {
-            attributes: ["is_admin", "joined_at"],
+            attributes: ["is_admin", "createdAt"],
             as: "permissions"
           },
           include: [
@@ -148,4 +153,30 @@ export const getConversations = async (req, res) => {
       message: error.message
     })
   }
+}
+
+export const checkConversationExistByUsername = async (username, conversationId) => {
+  const conversation = await database.conversation.findOne({
+    where: {
+      id: conversationId
+    },
+    attributes: ["id"],
+    include: [
+      {
+        model: database.user,
+        as: "users",
+        attributes: ["id", "username"],
+        through: {
+          attributes: []
+        }
+      }
+    ]
+  })
+  if (conversation) {
+    const user = conversation.users.find(user => user.username === username)
+    if (user) {
+      return true
+    }
+  }
+  return false
 }

@@ -1,4 +1,4 @@
-import database from "../models/index.js"
+import database from "../models/data/index.js"
 import uniqid from "uniqid"
 import { Op } from "sequelize"
 

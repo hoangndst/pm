@@ -1,4 +1,4 @@
-import database from "../models/index.js"
+import database from "../models/auth/index.js"
 import jwt from "jsonwebtoken"
 import bycrypt from "bcryptjs"
 import dotenv from "dotenv"

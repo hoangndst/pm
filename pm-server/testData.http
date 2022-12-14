@@ -1,0 +1,109 @@
+POST http://localhost:5000/pm/create-user
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+
+{
+    "id": "1lvc0a60lb34lc5r",
+    "username": "test",
+    "email": "test@gmail.com",
+    "first_name": "This",
+    "last_name": "Is Test0",
+    "birthday": "1990-01-02"
+}
+
+### 
+
+POST http://localhost:5000/pm/create-user
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+
+{
+    "id": "1lvc0a60lb34uxyh",
+    "username": "test1",
+    "email": "test1@gmail.com",
+    "first_name": "This",
+    "last_name": "Is Test1",
+    "birthday": "1990-01-02"
+}
+
+###
+
+POST http://localhost:5000/pm/create-user
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+
+{
+    "id": "1lvc0a60lb3b1qow",
+    "username": "test2",
+    "email": "test2@gmail.com",
+    "first_name": "This",
+    "last_name": "Is Test2",
+    "birthday": "1990-01-02"
+}
+
+###
+POST http://localhost:5000/pm/create-user
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+
+
+{
+    "id": "1lvc0a60lb3b0n2m",
+    "username": "test3",
+    "email": "test3@gmail.com",
+    "first_name": "This",
+    "last_name": "Is Test3",
+    "birthday": "1990-01-02"
+}
+
+### 
+
+POST http://localhost:5000/pm/create-conversation
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+
+{
+    "users": [
+        "1lvc0msglblz299o",
+        "1lvc0msglblzb207"
+    ],
+    "conversationName": "Hoang, Binh"
+}
+
+
+### Create a message
+POST http://localhost:5000/pm/create-message
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+
+{
+    "messageContent": "Hello Mom, this is the lastest message",
+    "fromUserId": "1lvc0msglblz299o",
+    "conversationId": "1lvc0amglbmb223r",
+    "createdAt": "2021-10-10T10:10:10.000Z"
+}
+
+###
+
+GET http://localhost:5000/pm/get-conversations?userId=1lvc0msglblz299o
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+###
+
+GET http://localhost:5000/pm/get-messages?conversationId=1lvc0amglbmb2umt
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+
+###
+GET http://localhost:5000/pm/user?id=1lvc0a60lb34lc5r
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+
+###
+
+GET http://localhost:5000/pm/search-users?searchString=
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+
+
+###

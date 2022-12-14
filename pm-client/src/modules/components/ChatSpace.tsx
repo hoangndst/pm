@@ -1,8 +1,6 @@
 import * as React from 'react'
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import { TextField, IconButton, Stack, Avatar, Tooltip } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -19,9 +17,27 @@ interface Props {
 export default function ChatSpace(props: Props) {
 
   const [message, setMessage] = React.useState('')
-  const data = getMessages2()
+  const { socket, messages, setMessages } = useInBox()
 
-  const { messages } = useInBox()
+  React.useEffect(() => {
+    socket.current.on('message', (message: any) => {
+      setMessages((prevMessages: any) => [...prevMessages, message])
+    })
+  }, [])
+
+  const handleSendMessage = (e: any) => {
+    e.preventDefault()
+    if (message) {
+      socket.current.emit('sendMessage', { messageContent: message }, (error: any) => {
+        if (error) {
+          console.log(error)
+        }
+      })
+      setMessage('')
+    } else {
+      alert('Please enter a message')
+    }
+  }
 
   return (
     <Box
@@ -77,6 +93,7 @@ export default function ChatSpace(props: Props) {
         <IconButton
           sx={{ ml: 1 }}
           aria-label="send"
+          onClick={(e) => handleSendMessage(e)}
         >
           {message ? <SendIcon /> : <ThumbUpIcon />}
         </IconButton>

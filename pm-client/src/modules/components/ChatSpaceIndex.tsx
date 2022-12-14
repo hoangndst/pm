@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useInBox } from 'src/contexts/InboxContext';
 import SearchUser from 'src/components/Inbox/SearchUser';
+import { PaperComponent } from 'src/pages/Team';
 
 export default function ChatSpaceIndex() {
   
