@@ -17,10 +17,6 @@ app.use(bodyParser.json())
 
 const port = process.env.PORT || 5000
 
-app.get('/', (req, res) => {
-  res.status(200).json({ message: process.env.DB_HOST })
-})
-
 databaseData.sequelize.sync({}).then(() => {
   console.log('Synced with database data')
 }).catch((err) => {
