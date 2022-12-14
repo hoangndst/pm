@@ -2,8 +2,6 @@ import database from "../models/index.js";
 import uniqid from "uniqid";
 import { Op } from "sequelize";
 
-export const leaveCommentForTask = async (req, res) => {};
-
 export const createComment = async (req, res) => {
   const user_id = req.body.userId;
   const comment_id = uniqid();
@@ -131,4 +129,41 @@ export const getCommentByTaskId = async (req, res) => {
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
+};
+
+export const getAllCommentReactions = async (req,res) =>{
+  const commentId=req.query.commentId;
+  try {
+    const commentReactionsData = await database.commentReaction.findAll({
+      where: {
+        comment_id: commentId
+      },
+      attributes: [
+        "id",
+        "reaction",
+        "user_id"
+      ],
+    });
+    const users = await database.user.findAll({
+      where: {
+        id: {
+          [Op.in]: commentReactions.map((commentReaction) => commentReaction.user_id),
+        },
+      },
+      attributes: ["id", "username", "first_name", "last_name"],
+    });
+    const commentReactions = commentReactionsData.map((commentReaction) => {
+      const user = users.find((user) => user.id === commentReaction.user_id);
+      return {
+        ...commentReaction,
+        user,
+      };
+    });
+    res.status(200).json(commentReactions);
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+    });
+  }
+
 };

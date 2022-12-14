@@ -43,6 +43,7 @@ export const getAllTasks = async (req, res) => {
         "due_date",
         "creator_id",
         "project_id",
+        "assigned_to",
         "status",
         "task_id",
         "complete_on",
@@ -164,7 +165,7 @@ export const getAllSubTasks = async (req, res) => {
   try {
     const subtasks = await database.task.findAll({
       where: {
-        parent_id: parentId,
+        task_id: parentId,
       },
       attributes: [
         "id",
@@ -172,6 +173,7 @@ export const getAllSubTasks = async (req, res) => {
         "due_date",
         "creator_id",
         "project_id",
+        "assigned_to",
         "status",
         "task_id",
         "completed_on",

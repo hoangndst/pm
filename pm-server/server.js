@@ -5,6 +5,12 @@ import bodyParser from 'body-parser'
 import env from 'dotenv'
 import database from './models/index.js'
 import userRoutes from './routes/user.routes.js'
+import teamRoutes from './routes/team.routes.js'
+import projectRoutes from './routes/project.routes.js'
+import taskRoutes from './routes/task.routes.js'
+import commentRoutes from './routes/comment.routes.js'
+import conversationRoutes from './routes/conversation.routes.js'
+import messageRoutes from './routes/message.routes.js'
 
 env.config()
 app.use(cors())
@@ -23,7 +29,12 @@ database.sequelize.sync({}).then(() => {
 })
 
 userRoutes(app)
-// teamRoutes(app)
+teamRoutes(app)
+projectRoutes(app)
+taskRoutes(app)
+commentRoutes(app)
+conversationRoutes(app)
+messageRoutes(app)
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`)

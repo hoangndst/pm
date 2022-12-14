@@ -87,7 +87,6 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwZm5rbGI5NHVn
 
 ###
 
-<<<<<<< HEAD
 ##Create a project
 POST http://localhost:5000/pm/create-project
 Content-Type: application/json
@@ -100,9 +99,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImcycGM2NGc4bGJhaTE4
 }
 
 GET http://localhost:5000/pm/get-conversations?userId=1lvc0a60lb34lc5r
-=======
 GET http://localhost:5000/pm/get-conversations?userId=1lvc0fn8lb94lovm
->>>>>>> origin/trungkien
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwZm5rbGI5NHVncTAiLCJpYXQiOjE2NzAxNDQ0MDgsImV4cCI6MTY3MDIzMDgwOH0.UaSkxAbhwsP9Yhac6e_gyTQDt_cxBT6Gik9fOVa6TVg
 ###
