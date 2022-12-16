@@ -257,7 +257,7 @@ const ChatNavDrawer = (props) => {
                     )}
                   </ListItemAvatar>
                   <ListItemText
-                    primary={item.users.length === 1 ? item.users[0].username : item.conversation_name}
+                    primary={item.users.length === 1 ? `${item.users[0].first_name} ${item.users[0].last_name}` : `${item.conversation_name}`}
                     secondary={
                       <React.Fragment>
                         {compactMessages(item.message[0].message_content)}

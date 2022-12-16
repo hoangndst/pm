@@ -7,10 +7,14 @@ import { SignOut } from '../auth/userAuth'
 import AuthVerify from '../auth/authVerify'
 import { useAppDispatch } from '../app/hook'
 import { useCallback } from "react"
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
+import { useAppContext } from 'src/contexts/AppContext'
 
 const Main = () => {
   const { userAuth: currentUser } = useAppSelector((state) => state.auth)
   const dispatch = useAppDispatch()
+  const { openSnackbar, setOpenSnackbar, snackbarSeverity, snackbarMessage } = useAppContext()
 
   const signOut = useCallback(() => {
     dispatch(SignOut())
@@ -23,6 +27,11 @@ const Main = () => {
   return (
     <AppLayout>
       <Outlet />
+      <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)}>
+        <Alert onClose={() => setOpenSnackbar(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       <AuthVerify signOut={signOut} />
     </AppLayout>
   )

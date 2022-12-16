@@ -63,6 +63,7 @@ export default function UserCard() {
     } = event;
     const newSelectedUser = users.find((user) => user.id === value)?.id
     if (newSelectedUser) {
+      console.log(newSelectedUser)
       setSelectedUser(newSelectedUser);
     }
   };

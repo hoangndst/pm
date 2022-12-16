@@ -139,6 +139,16 @@ export default function TaskDetailDialog() {
                 ))
               ) : <Typography>No comments</Typography>}
             </Stack>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="comment"
+              required
+              label="Comment"
+              type="text"
+              fullWidth
+              variant="outlined"
+            />
           </Stack>
         </DialogContent>
         <DialogActions>

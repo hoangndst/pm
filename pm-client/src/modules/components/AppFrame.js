@@ -28,6 +28,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import { SignOut } from 'src/auth/userAuth'
 import { useAppDispatch } from 'src/app/hook'
+import TeamContext from 'src/contexts/TeamContext'
 
 const StyledAppNavDrawer = styled(AppNavDrawer)(({ disablePermanent, theme }) => {
   if (disablePermanent) {
@@ -163,6 +164,7 @@ export default function AppFrame(props) {
   return (
     <RootDiv className={className}>
       <CssBaseline />
+
       <StyledAppBar disablePermanent={disablePermanent}>
         <GlobalStyles
           styles={{
@@ -266,13 +268,14 @@ export default function AppFrame(props) {
           </Stack>
         </Toolbar>
       </StyledAppBar>
-
-      <StyledAppNavDrawer
-        disablePermanent={disablePermanent}
-        onClose={() => setMobileOpen(false)}
-        onOpen={() => setMobileOpen(true)}
-        mobileOpen={mobileOpen}
-      />
+      <TeamContext>
+        <StyledAppNavDrawer
+          disablePermanent={disablePermanent}
+          onClose={() => setMobileOpen(false)}
+          onOpen={() => setMobileOpen(true)}
+          mobileOpen={mobileOpen}
+        />
+      </TeamContext>
       {children}
     </RootDiv>
   );

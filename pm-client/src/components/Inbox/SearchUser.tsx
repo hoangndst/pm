@@ -33,7 +33,7 @@ export default function SearchUser() {
   const [selectedUsers, setSelectedUsers] = React.useState<user[]>([])
   const loading = open && users.length === 0
   const { setSnackbarMessage, setOpenSnackbar, setSnackbarSeverity } = useAppContext()
-  const { user } = useAppSelector((state) => state.user)
+  const { user } = useAppSelector((state: { user: any }) => state.user)
   const theme = useTheme()
   const navigate = useNavigate()
 
@@ -54,15 +54,18 @@ export default function SearchUser() {
       InboxService.createConversation(conversationName, selectedUserIds)
         .then((response) => {
           console.log(response)
+          const conversationId = response.conversationId
+          const isNewConversation = response.isNewConversation
           InboxService.GetConversationsById(user.id)
             .then((response) => {
               setConversations(response.conversations)
-              setSelectedConversation(response.conversations[0])
-              InboxService.GetMessagesByConversationId(response.conversations[0].id)
+              const newSelectedConversation = response.conversations.find((conversation: { id: any }) => conversation.id === conversationId)
+              setSelectedConversation(newSelectedConversation)
+              InboxService.GetMessagesByConversationId(conversationId)
                 .then((response) => {
                   setMessages(response)
                   console.log(response)
-                  navigate(`/inbox/${response[0].conversation_id}`)
+                  navigate(`/inbox/${conversationId}`)
                 })
                 .catch((err) => {
                   console.log(err)
@@ -71,9 +74,16 @@ export default function SearchUser() {
             .catch((err) => {
               console.log(err)
             })
-          setSnackbarMessage('Conversation created')
-          setSnackbarSeverity('success')
-          setOpenSnackbar(true)
+          if (isNewConversation) {
+            setSnackbarMessage('Conversation created')
+            setSnackbarSeverity('success')
+            setOpenSnackbar(true)
+          } else {
+            setSnackbarMessage('Conversation already exists')
+            setSnackbarSeverity('info')
+            setOpenSnackbar(true)
+            navigate(`/inbox/${conversationId}`)
+          }
         })
         .catch((error) => {
           console.log(error)
