@@ -74,72 +74,62 @@ const Inbox = () => {
   const { snackbarMessage, setOpenSnackbar, snackbarSeverity, openSnackbar } = useAppContext()
   const location = useLocation()
 
-  React.useEffect(() => {
-    InboxService.GetConversationsById(user.id)
-      .then((response) => {
-        setConversations(response.conversations)
-        console.log('get conversations', response.conversations)
-        const re = /\/inbox\/\d+/
-        if (re.test(location.pathname)) {
-          const conversationId = location.pathname.split("/")[2]
-          const conversation = response.conversations.find((conversation: any) => conversation.id === conversationId)
-          setSelectedConversation(conversation)
-          InboxService.GetMessagesByConversationId(conversationId)
-            .then((response) => {
-              setMessages(response)
-              console.log(response)
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-          const userInfo = {
-            id: user.id,
-            username: user.username,
-            first_name: user.first_name,
-            last_name: user.last_name
-          }
-          socket.current.emit("join", { userInfo: userInfo, conversationId: conversationId }, (error: any) => {
-            if (error) {
-              alert(error);
-            }
-          })
-        } else {
-          setSelectedConversation(response.conversations[0])
-          InboxService.GetMessagesByConversationId(response.conversations[0].id)
-            .then((response) => {
-              setMessages(response)
-              console.log(response)
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-          const userInfo = {
-            id: user.id,
-            username: user.username,
-            first_name: user.first_name,
-            last_name: user.last_name
-          }
-          socket.current.emit("join", { userInfo: userInfo, conversationId: response.conversations[0].id }, (error: any) => {
-            if (error) {
-              alert(error);
-            }
-          })
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
-
-  React.useEffect(() => {
-    console.log(location.pathname)
-    console.log('conversations', conversations)
-    const re = /\/inbox\/\d+/
-    if (re.test(location.pathname)) {
-      const conversationId = location.pathname.split("/")[2]
-      console.log(conversationId)
-    }
-  }, [location])
+  // React.useEffect(() => {
+  //   InboxService.GetConversationsById(user.id)
+  //     .then((response) => {
+  //       setConversations(response.conversations)
+  //       console.log('get conversations', response.conversations)
+  //       const re = /\/inbox\/\d+/
+  //       if (re.test(location.pathname)) {
+  //         const conversationId = location.pathname.split("/")[2]
+  //         const conversation = response.conversations.find((conversation: any) => conversation.id === conversationId)
+  //         setSelectedConversation(conversation)
+  //         InboxService.GetMessagesByConversationId(conversationId)
+  //           .then((response) => {
+  //             setMessages(response)
+  //             console.log(response)
+  //           })
+  //           .catch((err) => {
+  //             console.log(err)
+  //           })
+  //         const userInfo = {
+  //           id: user.id,
+  //           username: user.username,
+  //           first_name: user.first_name,
+  //           last_name: user.last_name
+  //         }
+  //         socket.current.emit("join", { userInfo: userInfo, conversationId: conversationId }, (error: any) => {
+  //           if (error) {
+  //             alert(error);
+  //           }
+  //         })
+  //       } else {
+  //         setSelectedConversation(response.conversations[0])
+  //         InboxService.GetMessagesByConversationId(response.conversations[0].id)
+  //           .then((response) => {
+  //             setMessages(response)
+  //             console.log(response)
+  //           })
+  //           .catch((err) => {
+  //             console.log(err)
+  //           })
+  //         const userInfo = {
+  //           id: user.id,
+  //           username: user.username,
+  //           first_name: user.first_name,
+  //           last_name: user.last_name
+  //         }
+  //         socket.current.emit("join", { userInfo: userInfo, conversationId: response.conversations[0].id }, (error: any) => {
+  //           if (error) {
+  //             alert(error);
+  //           }
+  //         })
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //     })
+  // }, [])
 
 
   return (
@@ -155,7 +145,6 @@ const Inbox = () => {
       }}
     >
       <CssBaseline />
-
       <StyledAppNavDrawer
         disablePermanent={disablePermanent}
         onClose={() => setMobileOpen(false)}
@@ -221,7 +210,11 @@ const Inbox = () => {
                   )}
                   {selectedConversation ? (
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                      {selectedConversation?.conversation_name}
+                      {selectedConversation?.users.length === 1 ? (
+                        `${selectedConversation?.users[0].first_name} ${selectedConversation?.users[0].last_name}`
+                      ) : (
+                        selectedConversation?.conversation_name
+                      )}
                     </Typography>
 
                   ) : (

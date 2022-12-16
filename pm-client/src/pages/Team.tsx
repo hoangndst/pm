@@ -2,7 +2,6 @@ import Box from '@mui/material/Box'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import { useAppSelector } from "src/app/hook"
-import { createTeams } from 'src/libs/data'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import { useTeams } from 'src/contexts/TeamContext'
@@ -19,6 +18,15 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
+import CreateProjectDialog from 'src/components/Teams/CreateProjectDialog'
+import IconButton from '@mui/material/IconButton'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { Link } from 'react-router-dom'
+import DeleteDialog from 'src/modules/components/DeleteDialog'
+import React from 'react'
+import ProjectService from 'src/services/project.service'
+import TeamsService from 'src/services/team.service'
+import { useAppContext } from 'src/contexts/AppContext'
 
 export const PaperComponent = styled(Paper)(({ theme }) => ({
   p: 2,
@@ -51,9 +59,38 @@ export default function Team() {
 
   const theme = useTheme()
   const mobile = useMediaQuery(theme.breakpoints.down('lg'))
+  const [openDeleteProjectDialog, setOpenDeleteProjectDialog] = React.useState<boolean>(false)
   const { user } = useAppSelector(state => state.user)
-  const teams = createTeams()
-  const { selectedTeam } = useTeams()
+  const { selectedTeam, setOpenCreateProjectDialog, setTeams, setSelectedTeam } = useTeams()
+  const [deleteProject, setDeleteProject] = React.useState<any>(null)
+  const { setOpenSnackbar, setSnackbarSeverity, setSnackbarMessage } = useAppContext()
+
+  const handleOpenDeleteProject = () => {
+    ProjectService.DeleteProject(user.id, deleteProject.id)
+      .then(() => {
+        TeamsService.GetTeamsByUserId(user.id).then((res) => {
+          console.log(res.teams)
+          setTeams(res.teams)
+          setSelectedTeam(res.teams.find((team: any) => team.id === selectedTeam.id))
+          setSnackbarSeverity('success')
+          setSnackbarMessage('Project deleted successfully')
+          setOpenSnackbar(true)
+          setOpenDeleteProjectDialog(false)
+        }).catch((err) => {
+          console.log(err)
+          setSnackbarSeverity('error')
+          setSnackbarMessage('Something went wrong')
+          setOpenSnackbar(true)
+        })
+      })
+      .catch((err) => {
+        console.log(err)
+        setSnackbarSeverity('error')
+        setSnackbarMessage('Something went wrong')
+        setOpenSnackbar(true)
+      })
+  }
+
   return (
     <Box
       sx={{
@@ -121,7 +158,7 @@ export default function Team() {
                   </Stack>
                 </Button>
               </Grid>
-              {selectedTeam?.teamMember?.map((member, index) => (
+              {selectedTeam?.users?.map((member: any, index: number) => (
                 <Grid item xs={6} sm={4} md={3} lg={2} key={`member-${index}`}>
                   <Button variant="text" color={theme.palette.mode === 'dark' ? 'inherit' : 'primary'}>
                     <Stack direction="row" spacing={1} alignItems="center">
@@ -140,28 +177,77 @@ export default function Team() {
               Projects
             </Typography>
           </Divider>
-          <Box sx={{ display: 'flex', alignItems: 'start', justifyContent: 'space-between', padding: '5px 10px' }}>
-            <List sx={{ width: '100%' }}>
-              {selectedTeam?.projects?.map((project, index) => (
-                <Button fullWidth>
-                <ListItem>
+          {selectedTeam?.permissions.is_admin ? (
+            <Button variant="outlined" fullWidth
+              sx={{
+                marginBottom: '10px',
+              }}
+              onClick={() => setOpenCreateProjectDialog(true)}
+            >
+              <Stack direction="row" spacing={1} alignItems="center">
+                <AddIcon />
+                <Typography component="div" sx={{ fontWeight: 600 }}>
+                  Add project
+                </Typography>
+              </Stack>
+            </Button>
+          ) : null}
+          <Box sx={{ display: 'flex', alignItems: 'center', padding: '5px 10px', flexDirection: 'column' }}>
+            <List sx={{ width: '100%', maxWidth: 1000, borderRadius: '10px' }}>
+              {selectedTeam?.project?.map((prj: any, index: number) => (
+                <ListItem sx={{ padding: '5px 0' }} key={`prj-${index}`}>
                   <ListItemAvatar>
                     <Avatar>
                       <FormatListBulletedOutlinedIcon />
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText secondary="Jan 9, 2014">
-                    <Typography component="div" sx={{ fontWeight: 600, color: theme.palette.mode === 'dark' ? 'inherit' : 'primary', fontSize: '1.1rem' }}>
-                      {project.name}
-                    </Typography>
+                    <Link
+                      style={{
+                        textDecoration: 'none',
+                        color: theme.palette.mode === 'dark' ? 'inherit' : 'black',
+                        width: '100%',
+                      }}
+                      to={`/project/${prj.id}`}
+                    >
+                      <Typography component="div" sx={{ fontWeight: 600, color: theme.palette.mode === 'dark' ? 'inherit' : 'primary', fontSize: '1.1rem' }}>
+                        {prj.name}
+                      </Typography>
+                    </Link>
                   </ListItemText>
-                  <Avatar src={`https://github.com/identicons/${project.owner.username}.png`} sx={{ width: 25, height: 25 }} />
+                  <Stack direction="row" spacing={0.5} sx={{ ml: 4, alignItems: 'center' }}>
+                    <Avatar
+                      src={`https://github.com/identicons/${selectedTeam.users.find((user: any) => user.id === prj.owner_id).username}.png`}
+                      sx={{ width: 25, height: 25 }}
+                    />
+                    {selectedTeam.permissions.is_admin ? (
+                      <IconButton size="small"
+                        sx={{
+                          color: theme.palette.mode === 'dark' ? 'primary.600' : 'grey.900',
+                          ml: 1,
+                        }}
+                        onClick={() => {
+                          setDeleteProject(prj)
+                          setOpenDeleteProjectDialog(true)
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    ) : null}
+                  </Stack>
                 </ListItem>
-                </Button>
               ))}
             </List>
           </Box>
         </PaperComponent>
+        <CreateProjectDialog />
+        <DeleteDialog
+          open={openDeleteProjectDialog}
+          setOpen={setOpenDeleteProjectDialog}
+          handleAction={handleOpenDeleteProject}
+          title={`Delete Project ${deleteProject?.name}`}
+          contentText={`Are you sure you want to delete this project? This action cannot be undone.`}
+        />
       </Box>
     </Box>
   )

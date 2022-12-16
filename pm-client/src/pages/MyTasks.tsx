@@ -93,7 +93,7 @@ export const MyTasks = () => {
             height: '100%',
           }}
         >
-          <StickyHeadTable />
+          <StickyHeadTable isMyTasks={true} />
         </Grid>
       </Grid>
       <AddTaskDialog />

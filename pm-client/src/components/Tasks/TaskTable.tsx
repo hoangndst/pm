@@ -348,8 +348,8 @@ const taskRows: RowTask[] = [
     '2021-01-01'
   ),
 ]
-export function Row(props: { row: RowTask }) {
-  const { row } = props;
+export function Row(props: { row: RowTask, isMyTask?: boolean }) {
+  const { row, isMyTask } = props;
   const [open, setOpen] = React.useState(false)
   const { setTask, setOpenTaskDetailDialog } = useTask()
   return (
@@ -415,7 +415,15 @@ export function Row(props: { row: RowTask }) {
           </Stack>
         </TableCell>
         <TableCell align="left">
-          <UserCard />
+          {isMyTask ? (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', }}>
+              <Chip variant="filled" label={`${row.createdBy?.firstName} ${row.createdBy?.lastName}`} key={row.createdBy?.id}
+                avatar={<Avatar alt={row.createdBy?.username} src={`https://github.com/identicons/${row.createdBy?.username}.png`} />}
+              />
+            </Box>
+          ) : (
+            <UserCard />
+          )}
         </TableCell>
         <TableCell align="left">
           <DateTime />
@@ -428,6 +436,11 @@ export function Row(props: { row: RowTask }) {
           </Box>
         </TableCell>
         <TableCell align="left">{row.completedOn}</TableCell>
+        {isMyTask && (
+          <TableCell align="left">
+            Project Name
+          </TableCell>
+        )}
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -472,7 +485,7 @@ export function Row(props: { row: RowTask }) {
                               }}
                             >
                               <Badge badgeContent={row.subtasks?.length} color="primary">
-                                <SubdirectoryArrowRightIcon 
+                                <SubdirectoryArrowRightIcon
                                   sx={{
                                     width: '20px',
                                     height: '20px',
@@ -526,8 +539,11 @@ export function Row(props: { row: RowTask }) {
   );
 }
 
-export default function CollapsibleTable() {
+interface Props {
+  isMyTasks?: boolean
+}
 
+export default function CollapsibleTable({ isMyTasks }: Props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -542,7 +558,7 @@ export default function CollapsibleTable() {
 
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden',  }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', }}>
       <TableContainer component={Paper} sx={{ maxHeight: 'calc(100vh - 190px)' }}>
         <Table stickyHeader aria-label="sticky table" size='small'>
           <TableHead>
@@ -552,13 +568,18 @@ export default function CollapsibleTable() {
               <TableCell align="left">Due Date</TableCell>
               <TableCell align="left">Created By</TableCell>
               <TableCell align="left">Completed On</TableCell>
+              {isMyTasks && (
+                <TableCell align="left">
+                  Project Name
+                </TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
             {taskRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row) => (
-              <Row key={row.id} row={row} />
-            ))}
+              .map((row) => (
+                <Row key={row.id} row={row} isMyTask={isMyTasks} />
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

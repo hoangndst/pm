@@ -1,6 +1,6 @@
 POST http://localhost:5000/pm/create-user
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
 
 {
     "id": "1lvc0a60lb34lc5r",
@@ -15,7 +15,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 
 POST http://localhost:5000/pm/create-user
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
 
 {
     "id": "1lvc0a60lb34uxyh",
@@ -30,7 +30,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 
 POST http://localhost:5000/pm/create-user
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
 
 {
     "id": "1lvc0a60lb3b1qow",
@@ -44,7 +44,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 ###
 POST http://localhost:5000/pm/create-user
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
 
 
 {
@@ -60,7 +60,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 
 POST http://localhost:5000/pm/create-conversation
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
 
 {
     "users": [
@@ -74,7 +74,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 ### Create a message
 POST http://localhost:5000/pm/create-message
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
 
 {
     "messageContent": "Hello Mom, this is the lastest message",
@@ -87,23 +87,90 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 
 GET http://localhost:5000/pm/get-conversations?userId=1lvc0msglblz299o
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
 ###
 
 GET http://localhost:5000/pm/get-messages?conversationId=1lvc0amglbmb2umt
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
 
 ###
 GET http://localhost:5000/pm/user?id=1lvc0a60lb34lc5r
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
 
 ###
 
 GET http://localhost:5000/pm/search-users?searchString=
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzA5MjA3NTksImV4cCI6MTY3MTAwNzE1OX0.qn5WXUBk8O8ZKvmcvlEh_HF34pyk8o-Z0ri1sKxX22I
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
 
 
-###
+### create team
+POST http://localhost:5000/pm/create-team
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+
+{
+    "membersId": [
+        "1lvc0msglblz299o",
+        "1lvc0msglblzb207",
+        "1lvc0egklbm8h9hj",
+        "1lvc0egklbm8iii7",
+        "1lvc0egklbm8jq39"
+    ],
+    "teamName": "Team 1: (Hoang, Binh, Diep, Minh, Quang)"
+}
+
+### get teams by user id
+GET http://localhost:5000/pm/get-teams-by-userid?userId=1lvc0egklbm8iii7
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+
+### delete team by id
+POST http://localhost:5000/pm/delete-team-by-id
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+
+{
+    "teamId": "1lvc0dgwlbp0g2y9",
+    "userId": "1lvc0msglblz299o"
+}
+
+# "1lvc0msglblz299o"	"hoangndst"
+# "1lvc0msglblzb207"	"binhnd"
+# "1lvc0egklbm8h9hj"	"diepnt"
+# "1lvc0egklbm8iii7"	"minhnd"
+# "1lvc0egklbm8jq39"	"quangnd"
+
+# {
+#     "id": "1lvc0msglblz299o",
+#     "name": "team 1",
+#     "isAmin": true,
+#     "members": [
+#         {
+#             "id": "1lvc0msglblz299o",
+#             "username": "hoangndst",
+#             "first_name": "Hoang",
+#             "last_name": "Nguyen",
+#         },
+#         {
+#             "id": "1lvc0msglblzb207",
+#             "username": "binhnd",
+#             "first_name": "Binh",
+#             "last_name": "Nguyen",
+#         },
+#         {
+#             "id": "1lvc0egklbm8h9hj",
+#             "username": "diepnt",
+#             "first_name": "Diep",
+#             "last_name": "Nguyen",
+#         },
+#         {
+#             "id": "1lvc0egklbm8iii7",
+#             "username": "minhnd",
+#             "first_name": "Minh",
+#             "last_name": "Nguyen",
+#         }
+#     ]
+# }

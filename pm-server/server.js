@@ -1,15 +1,14 @@
 import express from 'express'
 import cors from 'cors'
 const app = express()
+import uniqid from 'uniqid'
 import bodyParser from 'body-parser'
 import env from 'dotenv'
-import userRoutes from './routes/user.routes.js'
-import authRoutes from './routes/auth.route.js'
-import clientRoute from './routes/client.route.cjs'
 import { Server } from 'socket.io'
 import SocketService from './services/socket.service.js'
 import databaseData from './models/data/index.js'
 import databaseAuth from './models/auth/index.js'
+import routes from './routes/index.js'
 
 env.config()
 app.use(cors())
@@ -30,9 +29,7 @@ databaseAuth.sequelize.sync({}).then(() => {
 })
 
 // routes
-userRoutes(app)
-authRoutes(app)
-clientRoute(app)
+routes(app)
 
 const server = app.listen(port, () => {
   console.log(`Server is listening on port ${port}`)
@@ -53,23 +50,33 @@ io.on('connection', (socket) => {
     console.log(`${user.userInfo.username} joined ${user.conversationId}`)
     callback()
   })
-  socket.on('sendMessage', async ({ messageContent, conversationId }, callback) => {
+  socket.on('sendMessage', async ({ messageContent, conversationId, userInfo }, callback) => {
     try {
+      const id = uniqid()
       const message = {
+        id: id,
         message_content: messageContent,
-        from_user_id: socket.id,
+        from_user_id: userInfo.id,
         conversation_id: conversationId,
         createdAt: new Date(),
         user: {
-          id: socket.id,
-          username: 'testusername',
-          first_name: 'test first name',
-          last_name: 'test last name',
+          id: userInfo.id,
+          username: userInfo.username,
+          first_name: userInfo.first_name,
+          last_name: userInfo.last_name,
         }
       }
       console.log(`sent message from to ${conversationId} with content: ${messageContent}`)
       io.to(conversationId).emit('message', message)
       console.log(`rooms:`, socket.rooms)
+      const messageToSave = {
+        id: message.id,
+        message_content: message.message_content,
+        from_user_id: message.from_user_id,
+        conversation_id: message.conversation_id,
+        createdAt: message.createdAt
+      }
+      await databaseData.message.create(messageToSave)
       callback()
     } catch (error) {
       callback(error)

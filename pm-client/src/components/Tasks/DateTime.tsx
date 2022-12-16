@@ -7,7 +7,8 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 
 interface DateTimeProps {
-  label?: string;
+  label?: string,
+  taskId?: string
 }
 
 const DateTime = (props: DateTimeProps) => {
@@ -18,6 +19,7 @@ const DateTime = (props: DateTimeProps) => {
 
   const handleChange = (newValue: Dayjs | null) => {
     setValue(newValue);
+    console.log(newValue?.format('YYYY-MM-DDTHH:mm:ss'));
   };
   return (
     <Box sx={{ width: 220 }}>

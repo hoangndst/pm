@@ -4,11 +4,10 @@ import Box from '@mui/material/Box';
 import { TextField, IconButton, Stack, Avatar, Tooltip } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import { getMessages2 } from 'src/libs/data';
 import { useInBox } from 'src/contexts/InboxContext';
 import { format } from 'date-fns'
-import { io } from 'socket.io-client';
-import InboxService from 'src/services/inbox.service';
+import { useAppContext } from 'src/contexts/AppContext';
+import { useLocation } from 'react-router-dom';
 import { useAppSelector } from 'src/app/hook';
 
 interface Props {
@@ -20,34 +19,60 @@ interface Props {
 export default function ChatSpace(props: Props) {
 
   const [message, setMessage] = React.useState('')
-  const { socket, messages, setMessages, selectedConversation, setConversations, conversations } = useInBox()
+  const { socket, messages, setMessages, selectedConversation } = useInBox()
   const [arrivedMessage, setArrivedMessage] = React.useState<any>(null)
   const scrollRef = React.useRef<any>()
-  
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useAppContext()
+  const location = useLocation()
+  const { user } = useAppSelector((state: { user: any }) => state.user)
+
   React.useEffect(() => {
     socket.current.on('message', (message: any) => {
       console.log('new message', message)
       setArrivedMessage(message)
     })
-  }, [])
+  }, [location.pathname, socket])
 
   React.useEffect(() => {
     if (arrivedMessage) {
-      setMessages((prevMessages: any) => [...prevMessages, arrivedMessage])
+      console.log('arrivedMessage changed')
+      console.log(arrivedMessage)
+      const re = /\/inbox\/\d+/
+      if (re.test(location.pathname)) {
+        const conversationId = location.pathname.split('/')[2]
+        if (arrivedMessage.conversation_id === conversationId) {
+          setMessages((prevMessages: any) => [...prevMessages, arrivedMessage])
+        } else {
+          console.log(false)
+        }
+      }
     }
-  }, [arrivedMessage])
+  }, [arrivedMessage, location.pathname, setMessages])
 
   const handleSendMessage = (e: any) => {
     e.preventDefault()
     if (message) {
-      socket.current.emit('sendMessage', { messageContent: message, conversationId: selectedConversation.id }, (error: any) => {
-        if (error) {
-          console.log(error)
-        }
-      })
+      const userInfo = {
+        id: user.id,
+        username: user.username,
+        first_name: user.first_name,
+        last_name: user.last_name
+      }
+      socket.current.emit('sendMessage',
+        {
+          messageContent: message,
+          conversationId: selectedConversation.id,
+          userInfo: userInfo
+        }, (error: any) => {
+          if (error) {
+            console.log(error)
+          }
+        })
       setMessage('')
     } else {
-      alert('Please enter a message')
+      setOpenSnackbar(true)
+      setSnackbarMessage('Message cannot be empty')
+      setSnackbarSeverity('error')
     }
   }
 
@@ -60,7 +85,7 @@ export default function ChatSpace(props: Props) {
       sx={{ height: 'calc(100vh - 150px)', width: '100%' }}
     >
       <Box
-        sx={{ flexGrow: 1, overflow: "auto", height: '97%', width: '100%', p: 1 }}
+        sx={{ flexGrow: 1, overflow: "auto", height: '94%', width: '100%', p: 1 }}
       >
         <Stack direction='column' sx={{ justifyContent: 'center' }} spacing={0}>
           {messages.map((item, index) => (
@@ -103,9 +128,14 @@ export default function ChatSpace(props: Props) {
           placeholder="Type a message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          maxRows={1}
+          rows={2}
           multiline
           size='small'
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              handleSendMessage(e)
+            }
+          }}
         />
         <IconButton
           sx={{ ml: 1 }}
