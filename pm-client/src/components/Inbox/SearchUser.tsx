@@ -33,7 +33,7 @@ export default function SearchUser() {
   const [selectedUsers, setSelectedUsers] = React.useState<user[]>([])
   const loading = open && users.length === 0
   const { setSnackbarMessage, setOpenSnackbar, setSnackbarSeverity } = useAppContext()
-  const { user } = useAppSelector((state: { user: any }) => state.user)
+  const { user } = useAppSelector((state) => state.user)
   const theme = useTheme()
   const navigate = useNavigate()
 

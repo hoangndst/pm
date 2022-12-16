@@ -29,6 +29,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import { SignOut } from 'src/auth/userAuth'
 import { useAppDispatch } from 'src/app/hook'
 import TeamContext from 'src/contexts/TeamContext'
+import Notifications from './Notifications'
 
 const StyledAppNavDrawer = styled(AppNavDrawer)(({ disablePermanent, theme }) => {
   if (disablePermanent) {
@@ -164,7 +165,6 @@ export default function AppFrame(props) {
   return (
     <RootDiv className={className}>
       <CssBaseline />
-
       <StyledAppBar disablePermanent={disablePermanent}>
         <GlobalStyles
           styles={{
@@ -212,6 +212,7 @@ export default function AppFrame(props) {
                 <GitHubIcon fontSize="small" />
               </IconButton>
             </Tooltip>
+            <Notifications />
             {mode !== null ? (
               <ThemeModeToggle
                 checked={mode === 'system' ? prefersDarkMode : mode === 'dark'}

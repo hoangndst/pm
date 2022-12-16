@@ -1,9 +1,9 @@
 import { createCtx } from "./CreateCtx"
 import React from "react"
-import { io } from "socket.io-client"
 import { useLocation } from "react-router-dom"
 import { useAppSelector } from "src/app/hook"
 import InboxService from "src/services/inbox.service"
+import { useAppContext } from "./AppContext"
 
 interface InBoxContextType {
   conversations: any[]
@@ -12,7 +12,6 @@ interface InBoxContextType {
   setSelectedConversation: React.Dispatch<React.SetStateAction<any>>,
   messages: any[]
   setMessages: React.Dispatch<React.SetStateAction<any[]>>,
-  socket: any
 }
 
 export const [useInBox, InBoxProvider] = createCtx<InBoxContextType>()
@@ -23,7 +22,8 @@ export default function InboxContext({ children }: { children: React.ReactNode }
   const [conversations, setConversations] = React.useState<any[]>([])
   const [selectedConversation, setSelectedConversation] = React.useState<any>(conversations[0])
   const [messages, setMessages] = React.useState<any[]>([])
-  const socket = React.useRef(io("http://localhost:5000", { transports: ["websocket"], withCredentials: true }))
+  const { socket } = useAppContext()
+
   React.useEffect(() => {
     InboxService.GetConversationsById(user.id)
       .then((response) => {
@@ -61,17 +61,6 @@ export default function InboxContext({ children }: { children: React.ReactNode }
             .catch((err) => {
               console.log(err)
             })
-          const userInfo = {
-            id: user.id,
-            username: user.username,
-            first_name: user.first_name,
-            last_name: user.last_name
-          }
-          socket.current.emit("join", { userInfo: userInfo, conversationId: response.conversations[0].id }, (error: any) => {
-            if (error) {
-              alert(error);
-            }
-          })
         }
       })
       .catch((err) => {
@@ -79,8 +68,26 @@ export default function InboxContext({ children }: { children: React.ReactNode }
       })
   }, [])
 
+  React.useEffect(() => {
+    const re = /\/inbox\/\d+/
+    if (re.test(location.pathname)) {
+      const conversationId = location.pathname.split("/")[2]
+      const userInfo = {
+        id: user.id,
+        username: user.username,
+        first_name: user.first_name,
+        last_name: user.last_name
+      }
+      socket.current.emit("join", { userInfo: userInfo, conversationId: conversationId }, (error: any) => {
+        if (error) {
+          alert(error);
+        }
+      })
+    }
+  }, [location.pathname])
+
   return (
-    <InBoxProvider value={{ conversations, setConversations, selectedConversation, setSelectedConversation, messages, setMessages, socket }}>
+    <InBoxProvider value={{ conversations, setConversations, selectedConversation, setSelectedConversation, messages, setMessages }}>
       {children}
     </InBoxProvider>
   )

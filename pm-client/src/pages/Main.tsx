@@ -10,6 +10,7 @@ import { useCallback } from "react"
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 import { useAppContext } from 'src/contexts/AppContext'
+import NotificationSnackBar from 'src/modules/components/NotificationSnackBar'
 
 const Main = () => {
   const { userAuth: currentUser } = useAppSelector((state) => state.auth)
@@ -32,6 +33,8 @@ const Main = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+      {/* notification snackbar */}
+      <NotificationSnackBar />
       <AuthVerify signOut={signOut} />
     </AppLayout>
   )

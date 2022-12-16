@@ -12,6 +12,7 @@ import conversationModel from "./conversation.model.js"
 import messageModel from "./message.model.js"
 import messageReactionModel from "./messageReaction.model.js"
 import groupUserModel from "./groupUser.model.js"
+import notificationModel from "./notification.model.js";
 
 const sequelize = new Sequelize(
   databaseConfig.DB_DATA,
@@ -47,7 +48,7 @@ database.conversation = conversationModel(sequelize, Sequelize)
 database.message = messageModel(sequelize, Sequelize)
 database.messageReaction = messageReactionModel(sequelize, Sequelize)
 database.groupUser = groupUserModel(sequelize, Sequelize)
-
+database.notification = notificationModel(sequelize, Sequelize)
 /**
  * Relationships
  */
@@ -136,6 +137,12 @@ database.message.hasMany(database.messageReaction, {
 database.user.hasMany(database.messageReaction, {
   foreignKey: "user_id",
   as: "message_reaction"
+})
+
+// User - Notification (1:N)
+database.user.hasMany(database.notification, {
+  foreignKey: "to_user_id",
+  as: "notification"
 })
 
 export default database

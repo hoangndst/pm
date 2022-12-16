@@ -180,3 +180,52 @@ export const checkConversationExistByUsername = async (username, conversationId)
   }
   return false
 }
+
+export const checkConversationExistByUserId = async (userId, conversationId) => {
+  const conversation = await database.conversation.findOne({
+    where: {
+      id: conversationId
+    },
+    attributes: ["id"],
+    include: [
+      {
+        model: database.user,
+        as: "users",
+        attributes: ["id", "username"],
+        through: {
+          attributes: []
+        }
+      }
+    ]
+  })
+  if (conversation) {
+    const user = conversation.users.find(user => user.id === userId)
+    if (user) {
+      return true
+    }
+  }
+  return false
+}
+
+export const getUsersByConversationId = async (conversationId) => {
+  const conversation = await database.conversation.findOne({
+    where: {
+      id: conversationId
+    },
+    attributes: ["id"],
+    include: [
+      {
+        model: database.user,
+        as: "users",
+        attributes: ["id", "username"],
+        through: {
+          attributes: []
+        }
+      }
+    ]
+  })
+  if (conversation) {
+    return conversation.users
+  }
+  return []
+}
