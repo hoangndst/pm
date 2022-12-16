@@ -69,68 +69,9 @@ const Inbox = () => {
   const theme = useTheme()
   const mobile = useMediaQuery(theme.breakpoints.down('lg'))
   const [isDetailOpen, setIsDetailOpen] = React.useState(false)
-  const { selectedConversation, socket, setMessages, setConversations, setSelectedConversation, conversations } = useInBox()
+  const { selectedConversation, setMessages, setConversations, setSelectedConversation, conversations } = useInBox()
   const { user } = useAppSelector((state: { user: any }) => state.user)
-  const { snackbarMessage, setOpenSnackbar, snackbarSeverity, openSnackbar } = useAppContext()
-  const location = useLocation()
-
-  // React.useEffect(() => {
-  //   InboxService.GetConversationsById(user.id)
-  //     .then((response) => {
-  //       setConversations(response.conversations)
-  //       console.log('get conversations', response.conversations)
-  //       const re = /\/inbox\/\d+/
-  //       if (re.test(location.pathname)) {
-  //         const conversationId = location.pathname.split("/")[2]
-  //         const conversation = response.conversations.find((conversation: any) => conversation.id === conversationId)
-  //         setSelectedConversation(conversation)
-  //         InboxService.GetMessagesByConversationId(conversationId)
-  //           .then((response) => {
-  //             setMessages(response)
-  //             console.log(response)
-  //           })
-  //           .catch((err) => {
-  //             console.log(err)
-  //           })
-  //         const userInfo = {
-  //           id: user.id,
-  //           username: user.username,
-  //           first_name: user.first_name,
-  //           last_name: user.last_name
-  //         }
-  //         socket.current.emit("join", { userInfo: userInfo, conversationId: conversationId }, (error: any) => {
-  //           if (error) {
-  //             alert(error);
-  //           }
-  //         })
-  //       } else {
-  //         setSelectedConversation(response.conversations[0])
-  //         InboxService.GetMessagesByConversationId(response.conversations[0].id)
-  //           .then((response) => {
-  //             setMessages(response)
-  //             console.log(response)
-  //           })
-  //           .catch((err) => {
-  //             console.log(err)
-  //           })
-  //         const userInfo = {
-  //           id: user.id,
-  //           username: user.username,
-  //           first_name: user.first_name,
-  //           last_name: user.last_name
-  //         }
-  //         socket.current.emit("join", { userInfo: userInfo, conversationId: response.conversations[0].id }, (error: any) => {
-  //           if (error) {
-  //             alert(error);
-  //           }
-  //         })
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }, [])
-
+  const { snackbarMessage, setOpenSnackbar, snackbarSeverity, openSnackbar, socket } = useAppContext()
 
   return (
     <Box

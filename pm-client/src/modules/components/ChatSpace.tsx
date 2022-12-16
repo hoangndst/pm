@@ -9,6 +9,7 @@ import { format } from 'date-fns'
 import { useAppContext } from 'src/contexts/AppContext';
 import { useLocation } from 'react-router-dom';
 import { useAppSelector } from 'src/app/hook';
+import InboxService from 'src/services/inbox.service';
 
 interface Props {
   window?: () => Window;
@@ -19,10 +20,10 @@ interface Props {
 export default function ChatSpace(props: Props) {
 
   const [message, setMessage] = React.useState('')
-  const { socket, messages, setMessages, selectedConversation } = useInBox()
+  const { messages, setMessages, selectedConversation, setConversations } = useInBox()
   const [arrivedMessage, setArrivedMessage] = React.useState<any>(null)
   const scrollRef = React.useRef<any>()
-  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useAppContext()
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity, socket } = useAppContext()
   const location = useLocation()
   const { user } = useAppSelector((state: { user: any }) => state.user)
 
@@ -46,6 +47,14 @@ export default function ChatSpace(props: Props) {
           console.log(false)
         }
       }
+      InboxService.GetConversationsById(user.id)
+        .then((response) => {
+          setConversations(response.conversations)
+          console.log('get conversations', response.conversations)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   }, [arrivedMessage, location.pathname, setMessages])
 

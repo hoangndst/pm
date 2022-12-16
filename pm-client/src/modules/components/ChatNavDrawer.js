@@ -1,5 +1,5 @@
 import {
-  Container, Box, Grid, Typography, Paper,
+  Box, Grid, Typography,
   TextField,
   List,
   ListItem,
@@ -7,15 +7,13 @@ import {
   ListItemText,
   Divider,
   Avatar,
-  Drawer
 } from "@mui/material"
 import React, { useEffect } from "react"
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import { Outlet, Link, NavLink, useLocation } from "react-router-dom";
-import { getMessages } from "src/libs/data";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import PropTypes from 'prop-types'
@@ -26,7 +24,7 @@ import AddIcon from '@mui/icons-material/Add'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import GroupsIcon from '@mui/icons-material/Groups'
-import { io } from "socket.io-client";
+import { useAppContext } from "src/contexts/AppContext";
 
 const compactMessages = (messages) => {
   if (messages.length > 25) {
@@ -150,7 +148,8 @@ const ChatNavDrawer = (props) => {
   const location = useLocation();
   const mobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
   const { disablePermanent, mobileOpen, onClose, onOpen } = props;
-  const { conversations, socket, setSelectedConversation, setMessages } = useInBox()
+  const { conversations, setSelectedConversation, setMessages, selectedConversation } = useInBox()
+  const { socket } = useAppContext()
   const { user } = useAppSelector(state => state.user)
 
   const drawer = (
@@ -219,9 +218,18 @@ const ChatNavDrawer = (props) => {
                     first_name: user.first_name,
                     last_name: user.last_name
                   }
+                  socket.current.emit("leave", { conversationId: selectedConversation.id }, (error) => {
+                    if (error) {
+                      alert(error);
+                    } else {
+                      console.log('emit leave')
+                    }
+                  })
                   socket.current.emit("join", { userInfo: userInfo, conversationId: item.id }, (error) => {
                     if (error) {
                       alert(error);
+                    } else {
+                      console.log('emit join')
                     }
                   })
                   setSelectedConversation(item)

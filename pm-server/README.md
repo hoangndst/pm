@@ -77,3 +77,31 @@
 ``` json
 
 ```
+
+
+``` get comment by task id
+``` json
+[
+    {
+        id: "1",
+        comment_content: "asdkasjdas",
+        user: {
+            id: 1232132,
+            username:
+            f
+            l
+        },
+        likes: [
+            {
+                user: {
+                    id
+                    username
+                    f
+                    l
+                },
+                reaction: option
+            }
+        ]
+    }
+]
+```
