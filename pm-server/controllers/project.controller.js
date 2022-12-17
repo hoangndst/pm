@@ -20,12 +20,12 @@ export const createProject = async (req, res) => {
           const teamId = req.body.teamId;
           const projectName = req.body.project.name;
           const project = {
+            ...req.body.project,
             id: projectId,
             owner_id: userId,
             team_id: teamId,
             name: projectName,
             createdAt: new Date(),
-            ...req.body.project,
           };
           try {
             await database.project.create(project);
@@ -46,7 +46,7 @@ export const createProject = async (req, res) => {
   }
 };
 // get all proj of a team user joined
-export const getAllProjects = async (req, res) => {
+export const getProjectsByTeamId = async (req, res) => {
   const teamId = req.query.teamId;
   try {
     const projects = await database.project.findAll({
@@ -157,6 +157,123 @@ export const deleteProject = async (req, res) => {
           }
         }
       });
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+    });
+  }
+};
+export const getProjectByProjectId = async (req, res) => {
+  const projectId = req.query.projectId;
+  try {
+    let project = await database.project.findOne({
+      where: {
+        id: projectId,
+      },
+      attributes: [
+        "id",
+        "name",
+        "status",
+        "owner_id",
+        "start_date",
+        "end_date",
+        "createdAt",
+        "team_id",
+      ],
+      include: [
+        {
+          model: database.task,
+          as: "task",
+          where: {
+            task_id: null,
+          },
+          attributes: [
+            "id",
+            "task_name",
+            "task_description",
+            "due_date",
+            "creator_id",
+            "assigned_to",
+            "completedAt",
+            "task_id",
+          ],
+          include: [
+            {
+              model: database.task,
+              as: "subtask",
+              attributes: [
+                "id",
+                "task_name",
+                "task_description",
+                "due_date",
+                "creator_id",
+                "assigned_to",
+                "completedAt",
+                "task_id",
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    const createdProjUser = await database.user.findOne({
+      where: {
+        id: project.owner_id,
+      },
+      attributes: ["id", "username", "email", "first_name", "last_name"],
+    });
+    project.owner_id = createdProjUser;
+    await Promise.all(
+      project.task.map(async (task) => {
+        const createdTaskUser = await database.user.findOne({
+          where: {
+            id: task.creator_id,
+          },
+          attributes: ["id", "username", "email", "first_name", "last_name"],
+        });
+        const assignedTaskUser = await database.user.findOne({
+          where: {
+            id: task.assigned_to,
+          },
+          attributes: ["id", "username", "email", "first_name", "last_name"],
+        });
+        task.creator_id = createdTaskUser;
+        task.assigned_to = assignedTaskUser;
+        await Promise.all(
+          task.subtask.map(async (subtask) => {
+            const createdSubTaskUser = await database.user.findOne({
+              where: {
+                id: subtask.creator_id,
+              },
+              attributes: [
+                "id",
+                "username",
+                "email",
+                "first_name",
+                "last_name",
+              ],
+            });
+            const assignedSubTaskUser = await database.user.findOne({
+              where: {
+                id: subtask.assigned_to,
+              },
+              attributes: [
+                "id",
+                "username",
+                "email",
+                "first_name",
+                "last_name",
+              ],
+            });
+            subtask.creator_id = createdSubTaskUser;
+            subtask.assigned_to = assignedSubTaskUser;
+            return subtask;
+          })
+        );
+        return task;
+      })
+    );
+    res.status(200).json(project);
   } catch (error) {
     res.status(500).send({
       message: error.message,

@@ -1,15 +1,16 @@
-import database from "../models/index.js"
-import { Op } from "sequelize"
+import database from "../models/index.js";
+import { Op } from "sequelize";
 
 // insert new user
 export const createUser = (req, res) => {
-  database.user.findOne({ where: { id: req.body.id } })
+  database.user
+    .findOne({ where: { id: req.body.id } })
     .then((user) => {
       if (user) {
         res.status(200).send({
           message: "User already exists",
-          user: user
-        })
+          user: user,
+        });
       } else {
         const user = {
           id: req.body.id,
@@ -19,62 +20,95 @@ export const createUser = (req, res) => {
           last_name: req.body.last_name,
           avatar: req.body.avatar,
           birthday: req.body.birthday,
-        }
-        database.user.create(user)
+        };
+        database.user
+          .create(user)
           .then((user) => {
             res.status(200).send({
               message: "User created successfully",
-              user: user
-            })
+              user: user,
+            });
           })
           .catch((error) => {
             res.status(500).send({
-              message: error.message
-            })
-          }
-          )
+              message: error.message,
+            });
+          });
       }
     })
     .catch((error) => {
       res.status(500).send({
-        message: error.message
-      })
-    })
-}
+        message: error.message,
+      });
+    });
+};
 
 // get user
 export const getUser = (req, res) => {
-  database.user.findOne({
-    where: {
-      id: req.query.id
-    }
-  }).then((user) => {
-    res.status(200).send(user)
-  }).catch((err) => {
-    res.status(500).send({ message: err.message })
-  })
-}
+  database.user
+    .findOne({
+      where: {
+        id: req.query.id,
+      },
+    })
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
+};
 
 // search users by search string username, name or email
 
 export const searchUsers = (req, res) => {
-  const searchString = req.query.searchString
+  const searchString = req.query.searchString;
   if (searchString) {
-    database.user.findAll({
-      where: {
-        [Op.or]: [
-          { username: { [Op.like]: `%${searchString}%` } },
-          { first_name: { [Op.like]: `%${searchString}%` } },
-          { last_name: { [Op.like]: `%${searchString}%` } }
-        ]
-      },
-      attributes: ["id", "username", "first_name", "last_name"]
-    }).then((users) => {
-      res.status(200).send(users)
-    }).catch((err) => {
-      res.status(500).send({ message: err.message })
-    })
+    database.user
+      .findAll({
+        where: {
+          [Op.or]: [
+            { username: { [Op.like]: `%${searchString}%` } },
+            { first_name: { [Op.like]: `%${searchString}%` } },
+            { last_name: { [Op.like]: `%${searchString}%` } },
+          ],
+        },
+        attributes: ["id", "username", "first_name", "last_name"],
+      })
+      .then((users) => {
+        res.status(200).send(users);
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err.message });
+      });
   } else {
-    res.status(200).send([])
+    res.status(200).send([]);
   }
-}
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    await database.user
+      .findOne({
+        where: { user_id: req.body.userId },
+      })
+      .then(async (user) => {
+        try {
+          let updateData = req.body.updateData;
+          await user.update({ ...user, ...updateData }).then(() => {
+            res.status(200).send({
+              message: "user update successfully",
+            });
+          });
+        } catch (error) {
+          res.status(500).send({
+            message: error.message,
+          });
+        }
+      });
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+    });
+  }
+};

@@ -9,10 +9,10 @@ const commentRoutes = (app) => {
         )
         next()
       })
-      app.post("/pm/create-comment", createComment);
-      app.delete("/pm/delete-comment", deleteComment);
-      app.get("/pm/get-comment-by-user", getCommentByUserId);
-      app.get("/pm/get-comment-by-task", getCommentByTaskId);
-      app.get("/pm/get-comment-reaction", getAllCommentReactions)
+      app.post("/pm/create-comment",[authJWT.verifyToken], createComment);
+      app.delete("/pm/delete-comment",[authJWT.verifyToken], deleteComment);
+      app.get("/pm/get-comment-by-user", [authJWT.verifyToken],getCommentByUserId);
+      app.get("/pm/get-comment-by-task",[authJWT.verifyToken], getCommentByTaskId);
+      app.get("/pm/get-comment-reaction", [authJWT.verifyToken],getAllCommentReactions)
 }
 export default commentRoutes;

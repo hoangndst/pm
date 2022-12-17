@@ -1,4 +1,4 @@
-import database from "../models/index.js";
+import database from "../models/index.js"
 import uniqid from "uniqid";
 import { Op } from "sequelize";
 
@@ -70,7 +70,7 @@ export const removeReaction = async (req, res) => {
 };
 
 export const getCommentByUserId = async (req, res) => {
-  const userId = req.query.id;
+  const userId = req.query.userId;
   try {
     const comments = await database.comment.findAll({
       where: {
@@ -100,7 +100,7 @@ export const getCommentByUserId = async (req, res) => {
 };
 
 export const getCommentByTaskId = async (req, res) => {
-  const taskId = req.query.id;
+  const taskId = req.query.taskId;
   try {
     const comments = await database.comment.findAll({
       where: {

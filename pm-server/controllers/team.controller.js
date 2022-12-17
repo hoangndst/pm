@@ -17,6 +17,7 @@ export const createTeam = async (req, res) => {
       user_id: id,
       team_id: team_id,
       is_admin: index == 0 ? true : false,
+      joined_at: null,
     };
   });
 
@@ -40,6 +41,7 @@ export const addTeamMembers = async (req, res) => {
       user_id: id,
       team_id: team_id,
       is_admin: false,
+      joined_at: new Date(),
     };
   });
 
@@ -51,20 +53,71 @@ export const addTeamMembers = async (req, res) => {
   }
 };
 
-export const removeTeamMembers = async (req, res) => {
-  const listMembers = req.body.membersId;
-  const team_id = req.body.team_id;
 
+export const leaveTeam = async (req,res) => {
   try {
-    await database.teamMember.destroy({
-      where: {
-        user_id: listMembers,
-        team_id: team_id,
-      },
-    });
-    res.status(200).send({ message: "Detele Successfully" });
+    await database.teamMember
+      .findOne({ where: { id: req.body.teamMemberId } })
+      .then(async (teamMember) => {
+        if (teamMember) {
+          await teamMember.destroy().then(() => {
+            res.status(200).send({
+              message: "leave team successfully",
+            });
+          });
+        } else {
+          res.status(500).send({
+            message: error.message,
+          });
+        }
+      });
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({
+      message: error.message,
+    });
+  }
+}
+
+export const deleteTeamMember = async (req, res) => {
+  try {
+    await database.teamMember
+      .findOne({
+        where: { user_id: req.body.userId, team_id: req.body.teamId },
+        attributes: ["is_admin"],
+      })
+      .then(async (user) => {
+        if (!user.is_admin) {
+          res.status(200).send({
+            message: "User isn't admin",
+          });
+        } else {
+          try {
+            await database.teamMember
+              .findOne({ where: { id: req.body.teamMemberId } })
+              .then(async (teamMember) => {
+                if (teamMember) {
+                  await teamMember.destroy().then(() => {
+                    res.status(200).send({
+                      message: "teamMember delete successfully",
+                    });
+                  });
+                } else {
+                  res.status(500).send({
+                    message: error.message,
+                  });
+                }
+              });
+          } catch (error) {
+            res.status(500).send({
+              message: error.message,
+            });
+          }
+        }
+      });
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+    });
   }
 };
 
@@ -84,5 +137,224 @@ export const promoteToPM = async (req, res) => {
     res.status(200).send({ message: "promote successfully" });
   } catch (error) {
     res.status(500).send({ message: error.message });
+  }
+};
+
+export const getTeamsByUserId = async (req, res) => {
+  const userId = req.query.userId;
+  try {
+    const userTeams = await database.user.findOne({
+      where: {
+        id: userId,
+      },
+      include: [
+        {
+          model: database.team,
+          as: "teams",
+          attributes: ["id", "name", "description"],
+          through: {
+            where: {
+              joined_at: { [Op.ne]: null },
+            },
+            attributes: ["is_admin", "createdAt"],
+            as: "permissions",
+          },
+          include: [
+            {
+              model: database.user,
+              as: "users",
+              attributes: [
+                "id",
+                "username",
+                "email",
+                "first_name",
+                "last_name",
+              ],
+              through: {
+                attributes: [],
+              },
+              include: [
+                {
+                  model: database.team,
+                  as: "teams",
+                  atrributes: [],
+                  through: { attributes: ["joined_at"], as: "is_joined" },
+                },
+              ],
+            },
+            {
+              model: database.project,
+              as: "project",
+              attributes: [
+                "id",
+                "name",
+                "status",
+                "owner_id",
+                "start_date",
+                "end_date",
+                "createdAt",
+                "team_id",
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    if (userTeams.teams.length > 0) {
+      userTeams.teams.map((team) => {
+        team.users.map((user) => {
+          let teamId = team.dataValues.id;
+          let is_joined = false;
+          user.dataValues.teams.forEach((team2) => {
+            if (
+              team2.id === teamId &&
+              team2.dataValues.is_joined.joined_at !== null
+            ) {
+              is_joined = true;
+            }
+          });
+          delete user.dataValues.teams;
+          user.dataValues.is_joined = is_joined;
+          return user;
+        });
+        return team;
+      });
+    }
+    res.status(200).send(userTeams);
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
+export const getTeamMembersByTeamId = async (req, res) => {
+  const teamId = req.query.teamId;
+  try {
+    const teamMembers = await database.teamMember.findAll({
+      where: {
+        team_id: teamId,
+      },
+      attributes: ["id", "is_admin", "joined_at", "user_id", "team_id"],
+    });
+    res.status(200).json(teamMembers);
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+    });
+  }
+};
+
+
+export const deleteTeam = async (req, res) => {
+  try {
+    await database.teamMember
+      .findOne({
+        where: { user_id: req.body.userId, team_id: req.body.teamId },
+        attributes: ["is_admin"],
+      })
+      .then(async (user) => {
+        if (!user.is_admin) {
+          res.status(200).send({
+            message: "User isn't admin",
+          });
+        } else {
+          try {
+            await database.team
+              .findOne({ where: { id: req.body.teamId } })
+              .then(async (team) => {
+                if (team) {
+                  await team.destroy().then(() => {
+                    res.status(200).send({
+                      message: "team delete successfully",
+                    });
+                  });
+                } else {
+                  res.status(500).send({
+                    message: error.message,
+                  });
+                }
+              });
+          } catch (error) {
+            res.status(500).send({
+              message: error.message,
+            });
+          }
+        }
+      });
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+    });
+  }
+};
+
+export const updateTeam = async (req, res) => {
+  try {
+    await database.teamMember
+      .findOne({
+        where: { user_id: req.body.userId },
+        attributes: ["is_admin"],
+      })
+      .then(async (user) => {
+        if (!user.is_admin) {
+          res.status(200).send({
+            message: "User isn't admin",
+          });
+        } else {
+          try {
+            await database.team
+              .findOne({ where: { id: req.body.teamId } })
+              .then(async (team) => {
+                if (team) {
+                  let updateData = req.body.updateData;
+                  await team
+                    .update({ ...team, ...updateData })
+                    .then(() => {
+                      res.status(200).send({
+                        message: "team update successfully",
+                      });
+                    });
+                } else {
+                  res.status(500).send({
+                    message: error.message,
+                  });
+                }
+              });
+          } catch (error) {
+            res.status(500).send({
+              message: error.message,
+            });
+          }
+        }
+      });
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+    });
+  }
+};
+
+export const updateTeamMember = async (req, res) => {
+  try {
+    await database.teamMember
+      .findOne({ where: { user_id: req.body.userId, team_id: req.body.teamId} })
+      .then(async (teamMember) => {
+        if (teamMember) {
+          await teamMember
+            .update({joined_at: new Date()})
+            .then(() => {
+              res.status(200).send({
+                message: "teamMember update successfully",
+              });
+            });
+        } else {
+          res.status(500).send({
+            message: error.message,
+          });
+        }
+      });
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+    });
   }
 };
