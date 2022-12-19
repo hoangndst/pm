@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useTeams } from 'src/contexts/TeamContext'
+import { useTeams } from 'src/contexts/TeamsContext'
 import Autocomplete from '@mui/material/Autocomplete'
 import UserService from 'src/services/user.service'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -85,6 +85,7 @@ export default function CreateTeamDialog() {
     selectedUsers.forEach((user) => {
       selectedUserIds.push(user.id)
     })
+    setOpenCreateTeamDialog(false)
     TeamsService.CreateTeam(teamName, selectedUserIds)
       .then((res) => {
         // socket.on('inviteToTeam', async ({ listMembersId, teamInfo, userInfo }, callback) => {
@@ -99,12 +100,14 @@ export default function CreateTeamDialog() {
           setSnackbarSeverity('success')
           setSnackbarMessage('Team created')
           setOpenSnackbar(true)
-          setOpenCreateTeamDialog(false)
           setSelectedUsers([])
           setTeamName('')
           // sent notification to all users
         }).catch((err) => {
           console.log(err)
+          setSnackbarSeverity('error')
+          setSnackbarMessage('Error creating team')
+          setOpenSnackbar(true)
         })
       })
       .catch((err) => {

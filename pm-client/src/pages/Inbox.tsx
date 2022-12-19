@@ -10,8 +10,7 @@ import {
   Alert,
 } from "@mui/material"
 import { styled, alpha } from '@mui/material/styles'
-import { Outlet, Link, NavLink, useLocation } from "react-router-dom"
-import { getMessages } from "../libs/data"
+import { Outlet } from "react-router-dom"
 import CssBaseline from '@mui/material/CssBaseline'
 import ChatNavDrawer from "src/modules/components/ChatNavDrawer"
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -19,13 +18,8 @@ import InfoIcon from '@mui/icons-material/Info'
 import { useInBox } from "src/contexts/InboxContext"
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
-import InboxService from "src/services/inbox.service"
-import { useAppSelector } from "src/app/hook"
-import { useNavigate } from "react-router-dom"
 import { useAppContext } from "src/contexts/AppContext"
 import GroupsIcon from '@mui/icons-material/Groups'
-import { io } from "socket.io-client"
-import { SocketType } from "dgram"
 
 const StyledAppNavDrawer = styled(ChatNavDrawer)(({ disablePermanent, theme }) => {
   if (disablePermanent) {
@@ -69,9 +63,8 @@ const Inbox = () => {
   const theme = useTheme()
   const mobile = useMediaQuery(theme.breakpoints.down('lg'))
   const [isDetailOpen, setIsDetailOpen] = React.useState(false)
-  const { selectedConversation, setMessages, setConversations, setSelectedConversation, conversations } = useInBox()
-  const { user } = useAppSelector((state: { user: any }) => state.user)
-  const { snackbarMessage, setOpenSnackbar, snackbarSeverity, openSnackbar, socket } = useAppContext()
+  const { selectedConversation } = useInBox()
+  const { snackbarMessage, setOpenSnackbar, snackbarSeverity, openSnackbar } = useAppContext()
 
   return (
     <Box

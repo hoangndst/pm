@@ -28,6 +28,7 @@ import { format } from 'date-fns'
 import ProjectService from 'src/services/project.service';
 import { useAppSelector } from 'src/app/hook';
 import { useAppContext } from 'src/contexts/AppContext';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export interface comment {
   id: string,
@@ -67,299 +68,14 @@ export interface RowTask {
   comments?: comment[],
 }
 
-function createDataTask(
-  id: string,
-  taskName: string,
-  assignedTo: {
-    id: string,
-    username: string,
-    firstName: string,
-    lastName: string,
-  },
-  dueDate: string,
-  createdBy: {
-    id: string,
-    username: string,
-    firstName: string,
-    lastName: string,
-  },
-  completedOn?: string,
-  subtasks?: RowTask[],
-  comments?: comment[],
-) {
-  return {
-    id,
-    taskName,
-    assignedTo,
-    dueDate,
-    createdBy,
-    completedOn,
-    subtasks,
-    comments,
-  };
-}
 
-const taskRows: RowTask[] = [
-  createDataTask(
-    '1',
-    'Frozen yoghurt1',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '',
-    [
-      createDataTask(
-        '1.1',
-        'Frozen yoghurt1subtask1',
-        { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        '2021-01-01',
-        { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        '',
-        [
-          createDataTask(
-            '1.1.1',
-            'Frozen yoghurt1subtask1',
-            { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-            '2021-01-01',
-            { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-            '',
-          ),
-          createDataTask(
-            '1.1.2',
-            'Frozen yoghurt1subtask2',
-            { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-            '2021-01-01',
-            { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-            '',
-          ),
-        ]
-      ),
-      createDataTask(
-        '1.2',
-        'Frozen yoghurt1subtask2',
-        { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        '2021-01-01',
-        { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        '',
-      ),
-    ],
-    [
-      {
-        id: '1',
-        commentContent: 'this is a comment 1',
-        user: { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        commentReaction: {
-          id: '1',
-          reaction: 'like',
-          reactionCount: 10,
-        },
-        createdAt: '2021-01-01',
-      },
-      {
-        id: '2',
-        commentContent: 'this is a comment 2',
-        user: { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        commentReaction: {
-          id: '1',
-          reaction: 'like',
-          reactionCount: 5,
-        },
-        createdAt: '2021-01-01',
-      }
-    ]
-  ),
-  createDataTask(
-    '2',
-    'Frozen yoghurt2',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01'
-  ),
-  createDataTask(
-    '3',
-    'Frozen yoghurt3',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01'
-  ),
-  createDataTask(
-    '4',
-    'Frozen yoghurt4',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    ''
-  ),
-  createDataTask(
-    '5',
-    'Frozen yoghurt5',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01'
-  ),
-  createDataTask(
-    '6',
-    'Frozen yoghurt1',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '',
-    [
-      createDataTask(
-        '6.1',
-        'Frozen yoghurt1subtask1',
-        { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        '2021-01-01',
-        { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        '',
-        [
-          createDataTask(
-            '6.1.1',
-            'Frozen yoghurt1subtask1',
-            { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-            '2021-01-01',
-            { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-            '',
-          ),
-          createDataTask(
-            '6.1.2',
-            'Frozen yoghurt1subtask2',
-            { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-            '2021-01-01',
-            { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-            '',
-          ),
-        ]
-      ),
-      createDataTask(
-        '6.2',
-        'Frozen yoghurt1subtask2',
-        { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        '2021-01-01',
-        { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        '',
-      ),
-    ]
-  ),
-  createDataTask(
-    '7',
-    'Frozen yoghurt2',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01'
-  ),
-  createDataTask(
-    '8',
-    'Frozen yoghurt3',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01'
-  ),
-  createDataTask(
-    '9',
-    'Frozen yoghurt4',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    ''
-  ),
-  createDataTask(
-    '10',
-    'Frozen yoghurt5',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01'
-  ),
-  createDataTask(
-    '11',
-    'Frozen yoghurt1',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '',
-    [
-      createDataTask(
-        '11.1',
-        'Frozen yoghurt1subtask1',
-        { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        '2021-01-01',
-        { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        '',
-        [
-          createDataTask(
-            '11.1.1',
-            'Frozen yoghurt1subtask1',
-            { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-            '2021-01-01',
-            { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-            '',
-          ),
-          createDataTask(
-            '11.1.2',
-            'Frozen yoghurt1subtask2',
-            { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-            '2021-01-01',
-            { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-            '',
-          ),
-        ]
-      ),
-      createDataTask(
-        '11.2',
-        'Frozen yoghurt1subtask2',
-        { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        '2021-01-01',
-        { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-        '',
-      ),
-    ]
-  ),
-  createDataTask(
-    '12',
-    'Frozen yoghurt2',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01'
-  ),
-  createDataTask(
-    '13',
-    'Frozen yoghurt3',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01'
-  ),
-  createDataTask(
-    '14',
-    'Frozen yoghurt4',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    ''
-  ),
-  createDataTask(
-    '15',
-    'Frozen yoghurt5',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01',
-    { id: '1', username: 'test', firstName: 'test', lastName: 'test' },
-    '2021-01-01'
-  ),
-]
 
 
 
 export function Row(props: { row: any, isSubTask?: boolean }) {
   const { row, isSubTask } = props;
   const [open, setOpen] = React.useState(false)
-  const { setTask, setOpenTaskDetailDialog, task: selectedTask } = useTask()
+  const { setTask, setOpenTaskDetailDialog, task: selectedTask, setOpenDeleteTaskDialog } = useTask()
   const { selectedProject, setSelectedProject, setListMembers } = useProjects()
   const { user } = useAppSelector((state: { user: { user: any; }; }) => state.user)
   const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity, socket } = useAppContext()
@@ -474,6 +190,22 @@ export function Row(props: { row: any, isSubTask?: boolean }) {
                 }}
               >
                 <MoreHorizIcon
+                  sx={{
+                    width: '20px',
+                    height: '20px',
+                  }}
+                />
+              </IconButton>
+              <IconButton
+                aria-label="delete task"
+                size="small"
+                disabled={row.canEdit ? false : true}
+                onClick={() => {
+                  setTask(row)
+                  setOpenDeleteTaskDialog(true)
+                }}
+              >
+                <ClearIcon
                   sx={{
                     width: '20px',
                     height: '20px',

@@ -2,7 +2,8 @@ import { createCtx } from "./CreateCtx"
 import React from "react"
 import { io } from "socket.io-client"
 import { useAppSelector } from "src/app/hook"
-import TeamContext from "./TeamContext"
+import TeamsContext from "./TeamsContext"
+import NotificationContext from "./NotificationContex"
 
 interface AppContextType {
   openSnackbar: boolean,
@@ -32,8 +33,7 @@ export default function AppContext({ children }: { children: React.ReactNode }) 
         console.log(error)
       }
     })
-  }, [])
-
+  }, [user.id])
 
   return (
     <AppContextProvider value={{
@@ -41,9 +41,11 @@ export default function AppContext({ children }: { children: React.ReactNode }) 
       setSnackbarMessage, snackbarSeverity, setSnackbarSeverity, socket,
       openInviteDialog, setOpenInviteDialog
     }}>
-      <TeamContext>
-        {children}
-      </TeamContext>
+      <NotificationContext>
+        <TeamsContext>
+          {children}
+        </TeamsContext>
+      </NotificationContext>
     </AppContextProvider>
   )
 }

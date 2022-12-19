@@ -3,7 +3,6 @@ import React from 'react'
 import { UserType } from "./UserContext"
 import ProjectService from "src/services/project.service"
 import { useAppSelector } from "src/app/hook"
-import TeamContext, { useTeams } from "./TeamContext"
 import { useLocation } from "react-router-dom"
 
 export interface ProjectType {
@@ -50,23 +49,7 @@ export default function ProjectContext({ children }: { children: React.ReactNode
           console.log(err)
         })
     }
-  }, [])
-
-  React.useEffect(() => {
-    // projects/*
-    const re = /\/projects\/\d+/
-    if (re.test(location.pathname)) {
-      const projectId = location.pathname.split("/")[2]
-      ProjectService.GetProjectByProjectId(projectId , user.id)
-        .then((res) => {
-          setListMembers(res.listMembers)
-          console.log(res)
-          setSelectedProject(res)
-        }).catch((err) => {
-          console.log(err)
-        })
-    }
-  }, [location.pathname])
+  }, [location.pathname, user.id])
 
   return (
     <ProjectsProvider

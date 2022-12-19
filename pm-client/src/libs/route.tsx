@@ -12,18 +12,18 @@ import InBoxContext from "src/contexts/InboxContext"
 import SetupNewUserContext from "src/contexts/SetupNewUserContext"
 import AppContext from "src/contexts/AppContext"
 import TaskContext from "src/contexts/TaskContext"
+import MyTaskContext from "src/contexts/MyTaskContext"
 import Profile from "src/pages/Profile"
 import Teams from "src/pages/Teams"
 import Team from "src/pages/Team"
-import TeamContext from "src/contexts/TeamContext"
-import NotificationContext from "src/contexts/NotificationContex"
 import { Project } from "src/pages/Project"
 import ProjectContext from "src/contexts/ProjectContext"
+import AccountSettings from "src/pages/AccountSettings"
 
 const route = createBrowserRouter([
   {
     path: "/",
-    element: <AppContext><NotificationContext><Main /></NotificationContext></AppContext>,
+    element: <AppContext><Main /></AppContext>,
     children: [
       {
         path: "/",
@@ -31,7 +31,7 @@ const route = createBrowserRouter([
       },
       {
         path: "tasks",
-        element: <TaskContext><MyTasks /></TaskContext>,
+        element: <MyTaskContext><MyTasks /></MyTaskContext>,
       },
       {
         path: "inbox",
@@ -48,8 +48,12 @@ const route = createBrowserRouter([
         ]
       },
       {
-        path: ":userId",
+        path: "profile/:userId",
         element: <Profile />,
+      },
+      {
+        path: "account-settings/:userId",
+        element: <AccountSettings />,
       },
       {
         path: "teams",
@@ -57,11 +61,11 @@ const route = createBrowserRouter([
       },
       {
         path: "teams/:teamId",
-        element: <TeamContext><Team /></TeamContext>,
+        element: <Team />,
       },
       {
         path: "projects/:projectId",
-        element: <TeamContext><ProjectContext><TaskContext><Project /></TaskContext></ProjectContext></TeamContext>,
+        element: <ProjectContext><TaskContext><Project /></TaskContext></ProjectContext>,
       }
     ]
   },

@@ -46,7 +46,7 @@ const ProfilePic = (props: ProfilePicProps) => {
   const { username } = props
   const [profilePic, setProfilePic] = React.useState<string | null>(null)
   const { userAuth } = useAppSelector(state => state.auth)
- 
+
   const handleUploadProfilePic = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();

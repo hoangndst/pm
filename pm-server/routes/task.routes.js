@@ -12,7 +12,7 @@ const taskRoutes = (app) => {
       app.post("/pm/create-task", [authJWT.verifyToken], createTask)
       app.get("/pm/get-tasks-by-userid", [authJWT.verifyToken], getTasksByUserId)
       app.put("/pm/update-task", [authJWT.verifyToken], updateTask)
-      app.delete("/pm/delete-task", [authJWT.verifyToken], deleteTask)
+      app.post("/pm/delete-task", [authJWT.verifyToken], deleteTask)
       app.post("/pm/create-subtask", [authJWT.verifyToken], createSubTask)
       app.get("/pm/get-subtasks-by-taskid", [authJWT.verifyToken], getSubTasksByTaskId)
       app.put("/pm/update-subtask", [authJWT.verifyToken], updateSubTask)

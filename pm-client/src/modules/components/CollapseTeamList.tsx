@@ -6,17 +6,14 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
-import AddIcon from '@mui/icons-material/Add';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
-import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
 import { Team } from '../../libs/type';
-import { Item } from './AppNavDrawer';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 
 export function CollapseTeamList(props: Team) {
 
-  const { id, name, about, teamMember } = props;
+  const { id, name, teamMember } = props;
 
   const [open, setOpen] = React.useState(true);
 
@@ -49,13 +46,9 @@ export function CollapseTeamList(props: Team) {
               src={`https://github.com/identicons/${member.username}.png`}
             />
           ))}
-          <Button variant="text" color="primary" size="small" startIcon={<AddIcon />}
-            sx={{
-              height: '24px',
-            }}
-          >
-            Invite Member
-          </Button>
+          {teamMember?.length && teamMember?.length > 3 && (
+            <MoreHorizIcon />
+          )}
         </Stack>
 
       </Collapse>

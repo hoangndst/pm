@@ -8,7 +8,7 @@ import {
   Snackbar
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { SignUp as SignUpF } from '../auth/userAuth'
 import { clearMessage, setMessage } from '../auth/messageSlice'
 import { useAppDispatch, useAppSelector } from '../app/hook'

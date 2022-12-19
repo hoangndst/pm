@@ -66,7 +66,7 @@ export default function InboxContext({ children }: { children: React.ReactNode }
       .catch((err) => {
         console.log(err)
       })
-  }, [])
+  }, [user.id])
 
   React.useEffect(() => {
     const re = /\/inbox\/\d+/

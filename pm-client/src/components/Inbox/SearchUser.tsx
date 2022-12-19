@@ -12,7 +12,6 @@ import { useAppSelector } from 'src/app/hook'
 import Grid from '@mui/material/Grid'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useTheme } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
 import IconButton from '@mui/material/IconButton'
 import { useNavigate } from 'react-router-dom'
@@ -34,7 +33,6 @@ export default function SearchUser() {
   const loading = open && users.length === 0
   const { setSnackbarMessage, setOpenSnackbar, setSnackbarSeverity } = useAppContext()
   const { user } = useAppSelector((state) => state.user)
-  const theme = useTheme()
   const navigate = useNavigate()
 
   const handleChatButton = () => {
