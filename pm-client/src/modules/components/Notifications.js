@@ -19,6 +19,7 @@ import { Stack, Avatar } from '@mui/material';
 import NotificationService from 'src/services/notification.service';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from 'src/contexts/AppContext';
+import { format } from 'date-fns';
 
 const Paper = styled(MuiPaper)({
   transformOrigin: 'top right',
@@ -147,7 +148,11 @@ export default function Notifications() {
                       <React.Fragment key={notification.id.toString()}>
                         <ListItem alignItems="flex-start">
                           <Button
-                            sx={{ width: '100%', textAlign: 'left' }}
+                            sx={{
+                              width: '100%', textAlign: 'left',
+                              alignItems: 'left',
+                              justifyContent: 'space-between',
+                            }}
                             onClick={() => {
                               handleReadNotification(notification.id)
                               setSelectedNotification(notification)
@@ -172,11 +177,7 @@ export default function Notifications() {
                               </Stack>
                               {notification.createdAt && (
                                 <Typography variant="caption" color="text.secondary">
-                                  {new Date(notification.createdAt).toLocaleDateString('en-US', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                  })}
+                                  {format(new Date(notification.createdAt), 'dd MMM yyyy HH:mm')}
                                 </Typography>
                               )}
                             </Stack>

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Button, Box, TextField } from "@mui/material"
+import { Button, Box, IconButton, Stack } from "@mui/material"
 import AddIcon from '@mui/icons-material/Add'
 import ProjectTaskTable from 'src/components/Project/ProjectTaskTable'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -12,6 +12,9 @@ import { useAppContext } from 'src/contexts/AppContext'
 import { useTeams } from 'src/contexts/TeamsContext'
 import DeleteDialog from 'src/modules/components/DeleteDialog'
 import { useTask } from 'src/contexts/TaskContext'
+import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import SaveIcon from '@mui/icons-material/Save';
 
 export const Project = () => {
 
@@ -34,30 +37,30 @@ export const Project = () => {
     }
   }, [selectedProject])
 
-  React.useEffect(() => {
-    // delay to update the project name
-    const timer = setTimeout(() => {
-      // ignore if the project name has new spaces at start or end
-      if (projectName.trim() !== selectedProject?.name && selectedProject) {
-        const project = {
-          name: projectName
-        }
-        ProjectService.UpdateProject(selectedProject.id, project)
-          .then((res) => {
-            setOpenSnackbar(true)
-            setSnackbarMessage('Project name updated')
-            setSnackbarSeverity('success')
-            selectedProject.name = projectName
-          })
-          .catch((err) => {
-            setOpenSnackbar(true)
-            setSnackbarMessage('Error updating project name')
-            setSnackbarSeverity('error')
-          })
+  const handleChangeProjectName = () => {
+    if (projectName.trim() !== selectedProject?.name && selectedProject && projectName.trim() !== '') {
+      const project = {
+        name: projectName
       }
-    }, 1000)
-    return () => clearTimeout(timer)
-  }, [projectName])
+      ProjectService.UpdateProject(selectedProject.id, project)
+        .then((res) => {
+          setOpenSnackbar(true)
+          setSnackbarMessage('Project name updated')
+          setSnackbarSeverity('success')
+          selectedProject.name = projectName
+        })
+        .catch((err) => {
+          setOpenSnackbar(true)
+          setSnackbarMessage('Error updating project name')
+          setSnackbarSeverity('error')
+        })
+    } else {
+      setProjectName(selectedProject?.name)
+      setSnackbarMessage('Project name cannot be empty')
+      setSnackbarSeverity('error')
+      setOpenSnackbar(true)
+    }
+  }
 
   const handleDeleteTask = () => {
     setOpenDeleteTaskDialog(false)
@@ -74,6 +77,11 @@ export const Project = () => {
         setSnackbarSeverity('error')
       })
   }
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   return (
     <Box
       sx={{
@@ -99,23 +107,43 @@ export const Project = () => {
           alignItems: "center",
         }}
       >
-        <TextField
-          required
-          id="outlined-required"
-          value={projectName}
-          disabled={!isAdmin}
-          size='small'
-          variant="outlined"
-          onChange={(e) => setProjectName(e.target.value)}
-        />
-        <Button variant="outlined" startIcon={<AddIcon fontSize='small' />} size="small"
-          sx={{
-            height: '30px'
-          }}
-          onClick={() => setOpenAddProjectTask(true)}
-        >
-          Add Task
-        </Button>
+        <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between" width="100%">
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={'text'}
+            size="small"
+            value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleChangeProjectName}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  <SaveIcon />
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          {mobile ? (
+            <IconButton
+              size="small"
+              onClick={() => setOpenAddProjectTask(true)}
+            >
+              <AddIcon fontSize='small' />
+            </IconButton>
+          ) : (
+            <Button variant="outlined" startIcon={<AddIcon fontSize='small' />} size="small"
+              sx={{
+                height: '30px'
+              }}
+              onClick={() => setOpenAddProjectTask(true)}
+            >
+              Add Task
+            </Button>
+          )}
+        </Stack>
       </Box>
       <ProjectTaskTable tasks={selectedProject?.task} />
       <AddTaskDialog open={openAddProjectTask} setOpen={setOpenAddProjectTask} isAddSubTask={false} />

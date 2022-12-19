@@ -1,5 +1,5 @@
 import authJWT from "../middleware/authJWT.js"
-import { createUser, getUser, searchUsers } from "../controllers/user.controller.js"
+import { createUser, getUser, searchUsers, updateUser } from "../controllers/user.controller.js"
 
 const userRoutes = (app) => {
   app.use(function(req, res, next) {
@@ -12,6 +12,7 @@ const userRoutes = (app) => {
   app.post("/pm/create-user", [authJWT.verifyToken], createUser)
   app.get("/pm/user", [authJWT.verifyToken], getUser)
   app.get("/pm/search-users", [authJWT.verifyToken], searchUsers)
+  app.put("/pm/update-user", [authJWT.verifyToken], updateUser)
 }
 
 export default userRoutes;

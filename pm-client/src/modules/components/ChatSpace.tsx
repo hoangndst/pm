@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { TextField, IconButton, Stack, Avatar, Tooltip } from '@mui/material';
+import { TextField, IconButton, Stack, Avatar, Tooltip, Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useInBox } from 'src/contexts/InboxContext';
 import { format } from 'date-fns'
@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { useAppSelector } from 'src/app/hook';
 import InboxService from 'src/services/inbox.service';
 import { useNotification } from 'src/contexts/NotificationContex';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   window?: () => Window;
@@ -27,6 +28,7 @@ export default function ChatSpace(props: Props) {
   const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity, socket } = useAppContext()
   const location = useLocation()
   const { user } = useAppSelector((state: { user: any }) => state.user)
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     if (notification) {
@@ -119,13 +121,22 @@ export default function ChatSpace(props: Props) {
               key={`${item.user.id}-${index}`}
               ref={scrollRef}
             >
-              <Avatar
+              <Button onClick={() => {
+                navigate(`/profile/${item.user.id}`)
+              }}
                 sx={{
-                  width: 40, height: 40,
-                  visibility: index === 0 || messages[index - 1].user.id !== item.user.id ? 'visible' : 'hidden'
+                  visibility: index === 0 || messages[index - 1].user.id !== item.user.id ? 'visible' : 'hidden',
+                  borderRadius: '2',
                 }}
-                alt={item.user.last_name} src={`https://github.com/identicons/${item.user.username}.png`}
-              />
+              >
+                <Avatar
+                  sx={{
+                    width: 40, height: 40,
+                    visibility: index === 0 || messages[index - 1].user.id !== item.user.id ? 'visible' : 'hidden'
+                  }}
+                  alt={item.user.last_name} src={`https://github.com/identicons/${item.user.username}.png`}
+                />
+              </Button>
               <Stack direction='column' sx={{ justifyContent: 'center', ml: 1 }}>
                 {index === 0 || messages[index - 1].user.id !== item.user.id ? (
                   <Typography variant='body2' sx={{ fontWeight: 600, fontSize: 14 }}>

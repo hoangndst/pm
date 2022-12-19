@@ -13,6 +13,34 @@ const RefreshTokens = database.refreshTokens
 const secret = process.env.PM_SECRET
 const refreshSecret = process.env.PM_REFRESH_SECRET
 
+export const changePassword = (req, res) => {
+  User.findOne({
+    where: {
+      id: req.body.id
+    }
+  }).then((user) => {
+    if (!user) {
+      return res.status(401).send({ message: "User does not exist" })
+    }
+    const passwordIsValid = bycrypt.compareSync(
+      req.body.currentPassword,
+      user.password
+    )
+    if (!passwordIsValid) {
+      return res.status(401).send({ message: "Incorrect current password" })
+    }
+    const hashedPassword = bycrypt.hashSync(req.body.newPassword, 8)
+    user.password = hashedPassword
+    user.save().then(() => {
+      res.status(200).send({ message: "Password changed successfully" })
+    }).catch((err) => {
+      res.status(500).send({ message: err.message })
+    })
+  }).catch((err) => {
+    res.status(500).send({ message: err.message })
+  })
+}
+
 const SignIn = (req, res) => {
   User.findOne({
     where: {
@@ -38,11 +66,11 @@ const SignIn = (req, res) => {
       // 24 hours
       expiresIn: 86400
     })
-    
+
     /**
      * Save refresh token to database.
      */
-    
+
     RefreshTokens.create({
       userId: user.id,
       token: refreshToken
@@ -97,7 +125,7 @@ const SignUp = (req, res) => {
       }).catch((err) => {
         res.status(500).send({ message: err.message })
       })
-      
+
     }
   }).catch((err) => {
     res.status(500).send({ message: err.message })
