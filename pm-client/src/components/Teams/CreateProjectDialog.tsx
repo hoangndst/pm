@@ -6,30 +6,18 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useTeams } from 'src/contexts/TeamContext'
+import { useTeams } from 'src/contexts/TeamsContext'
 import { useAppContext } from 'src/contexts/AppContext'
 import { useAppSelector } from 'src/app/hook'
 import ProjectService from 'src/services/project.service'
 import TeamsService from 'src/services/team.service'
-import Grid from '@mui/material/Grid'
-import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
-import CloseIcon from '@mui/icons-material/Close'
-import IconButton from '@mui/material/IconButton'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import dayjs, { Dayjs } from 'dayjs';
+import { Dayjs } from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-
-
-interface user {
-  id: string,
-  username: string,
-  first_name: string,
-  last_name: string,
-}
 
 export default function CreateProjectDialog() {
   const theme = useTheme()
@@ -62,6 +50,7 @@ export default function CreateProjectDialog() {
         end_date: endDate?.format('YYYY-MM-DDTHH:mm:ss'),
       }
     }
+    setOpenCreateProjectDialog(false)
     ProjectService.CreateProject(project)
       .then((res) => {
         console.log(res)
@@ -89,7 +78,6 @@ export default function CreateProjectDialog() {
           setSnackbarSeverity('success')
           setSnackbarMessage('Project created successfully')
           setOpenSnackbar(true)
-          setOpenCreateProjectDialog(false)
           setProjectName('')
           setStartDate(null)
           setEndDate(null)
@@ -123,7 +111,7 @@ export default function CreateProjectDialog() {
               autoFocus
               margin='dense'
               id='name'
-              label='Team name'
+              label='Project name'
               type='text'
               fullWidth
               onChange={(e) => setProjectName(e.target.value)}

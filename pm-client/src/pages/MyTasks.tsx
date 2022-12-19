@@ -1,14 +1,9 @@
 import * as React from 'react'
 import { Grid, Button, Menu, MenuItem, Typography, Box } from "@mui/material"
-import AddIcon from '@mui/icons-material/Add'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import TuneIcon from '@mui/icons-material/Tune'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
-import AddTaskDialog from 'src/components/Project/AddTaskDialog'
 import MyTaskTable from 'src/components/Tasks/MyTaskTable'
-// import TaskDetailDialog from 'src/components/Tasks/TaskDetailDialog'
-import { useTask } from 'src/contexts/TaskContext'
 
 const options = ['Incomplete tasks', 'Completed tasks', 'All tasks']
 
@@ -18,7 +13,6 @@ export const MyTasks = () => {
   const mobile = useMediaQuery(theme.breakpoints.down('lg'))
   const [option, setOption] = React.useState<string | null>(options[0])
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
-  const { setOpenDialog, task } = useTask()
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)

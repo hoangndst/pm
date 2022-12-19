@@ -59,7 +59,7 @@ export default function AddTaskDialog(props: AddTaskDialogProps) {
       task_id: isAddSubTask ? task.id : null
     }
     console.log(addTask)
-    // (task: any)
+    handleClose()
     ProjectService.CreateTaskByProjectId(addTask)
       .then((res) => {
         if (user.id !== addTask.assigned_to) {
@@ -90,7 +90,6 @@ export default function AddTaskDialog(props: AddTaskDialogProps) {
             setSnackbarMessage('Task added successfully')
             setSnackbarSeverity('success')
             setOpenSnackbar(true)
-            handleClose()
             setTaskName('')
             setAssignedTo('')
             setDueDate(null)
@@ -102,6 +101,7 @@ export default function AddTaskDialog(props: AddTaskDialogProps) {
           })
       })
       .catch((err) => {
+        console.log(err)
         setSnackbarMessage('Error adding task')
         setSnackbarSeverity('error')
         setOpenSnackbar(true)

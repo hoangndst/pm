@@ -78,7 +78,7 @@ const DateTime = (props: DateTimeProps) => {
           readOnly={readOnly}
           onChange={handleChange}
           renderInput={(params) => <TextField {...params} />}
-          minDate={dayjs()}
+          minDateTime={dayjs()}
         />
       </LocalizationProvider>
     </Box>

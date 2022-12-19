@@ -41,6 +41,11 @@ const CreateCommentByTaskId = async (userId: string, taskId: string, content: st
   return response.data
 }
 
+const DeleteTaskByTaskId = async (taskId: string) => {
+  const response = await pmServer.post(`/pm/delete-task`, { taskId: taskId }, { headers: AuthHeader() })
+  return response.data
+}
+
 const ProjectService = {
   CreateProject,
   DeleteProject,
@@ -49,6 +54,7 @@ const ProjectService = {
   UpdateTaskByTaskId,
   GetTasksByUserId,
   CreateCommentByTaskId,
-  UpdateProject
+  UpdateProject,
+  DeleteTaskByTaskId
 }
 export default ProjectService

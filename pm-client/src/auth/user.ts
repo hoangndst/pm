@@ -23,23 +23,23 @@ export const GetUser = createAsyncThunk<
   {
     rejectValue: string
   }
->('user/getUser', async ( { id }, thunkAPI ) => {
+>('user/getUser', async ({ id }, thunkAPI) => {
   try {
-    const response = await UserService.GetUser( id )
+    const response = await UserService.GetUser(id)
     return response as unknown as GetUserResponse
-  } catch ( error: any | AxiosError ) {
-    if ( error.response ) {
-      thunkAPI.dispatch( setMessage( error.response.data.message ) )
+  } catch (error: any | AxiosError) {
+    if (error.response) {
+      thunkAPI.dispatch(setMessage(error.response.data.message))
     } else {
-      thunkAPI.dispatch( setMessage( error.message ) )
+      thunkAPI.dispatch(setMessage(error.message))
     }
-    return thunkAPI.rejectWithValue( error.response.data.message )
+    return thunkAPI.rejectWithValue(error.response.data.message)
   }
 })
 
 
-const user = JSON.parse( localStorage.getItem( "user" ) as string )
-const initialState = user === null ? {user: {}} : {user: user}
+const user = JSON.parse(localStorage.getItem("user") as string)
+const initialState = user === null ? { user: {} } : { user: user }
 
 const userSlice = createSlice({
   name: "user",

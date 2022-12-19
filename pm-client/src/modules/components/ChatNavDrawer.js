@@ -8,7 +8,7 @@ import {
   Divider,
   Avatar,
 } from "@mui/material"
-import React, { useEffect } from "react"
+import React from "react"
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -18,13 +18,10 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import PropTypes from 'prop-types'
 import { useInBox } from "src/contexts/InboxContext"
-import { useAppSelector } from "src/app/hook"
-import InboxService from "src/services/inbox.service";
 import AddIcon from '@mui/icons-material/Add'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import GroupsIcon from '@mui/icons-material/Groups'
-import { useAppContext } from "src/contexts/AppContext";
 
 const compactMessages = (messages) => {
   if (messages.length > 25) {
@@ -148,9 +145,7 @@ const ChatNavDrawer = (props) => {
   const location = useLocation();
   const mobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
   const { disablePermanent, mobileOpen, onClose, onOpen } = props;
-  const { conversations, setSelectedConversation, setMessages, selectedConversation } = useInBox()
-  const { socket } = useAppContext()
-  const { user } = useAppSelector(state => state.user)
+  const { conversations } = useInBox()
 
   const drawer = (
     <React.Fragment>
@@ -212,36 +207,6 @@ const ChatNavDrawer = (props) => {
                 style={{ textDecoration: 'none' }}
                 key={item.id}
                 onClick={() => {
-                  // const userInfo = {
-                  //   id: user.id,
-                  //   username: user.username,
-                  //   first_name: user.first_name,
-                  //   last_name: user.last_name
-                  // }
-                  // socket.current.emit("leave", { conversationId: selectedConversation.id }, (error) => {
-                  //   if (error) {
-                  //     alert(error);
-                  //   } else {
-                  //     console.log('emit leave')
-                  //   }
-                  // })
-                  // socket.current.emit("join", { userInfo: userInfo, conversationId: item.id }, (error) => {
-                  //   if (error) {
-                  //     alert(error);
-                  //   } else {
-                  //     console.log('emit join')
-                  //   }
-                  // })
-                  // setSelectedConversation(item)
-                  // InboxService.GetMessagesByConversationId(item.id)
-                  //   .then((response) => {
-                  //     setMessages(response)
-                  //     console.log(response)
-                  //   })
-                  //   .catch((err) => {
-                  //     console.log(err)
-                  //   })
-                  // console.log(item)
                   if (mobile) {
                     onClose()
                   }

@@ -273,7 +273,7 @@ export const getTeamsByUserId = async (req, res) => {
         {
           model: database.team,
           as: "teams",
-          attributes: ["id", "name", "description"],
+          attributes: ["id", "name", "description", "createdAt"],
           through: {
             where: {
               joined_at: { [Op.ne]: null },
@@ -307,6 +307,7 @@ export const getTeamsByUserId = async (req, res) => {
             {
               model: database.project,
               as: "project",
+              // order: [["createdAt", "DESC"]],
               attributes: [
                 "id",
                 "name",
@@ -321,6 +322,7 @@ export const getTeamsByUserId = async (req, res) => {
           ],
         },
       ],
+      order: [[{ model: database.team, as: "teams" }, { model: database.project, as: "project" }, "createdAt", "DESC"]],
     });
     if (userTeams.teams.length > 0) {
       userTeams.teams.map((team) => {

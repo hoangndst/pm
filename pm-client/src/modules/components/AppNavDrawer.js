@@ -21,10 +21,9 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { CollapseTeamList } from './CollapseTeamList';
-import { createTeams } from '../../libs/data';
 import IconButton from '@mui/material/IconButton'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { useTeams } from 'src/contexts/TeamContext';
+import { useTeams } from 'src/contexts/TeamsContext';
 
 const savedScrollTop = {};
 

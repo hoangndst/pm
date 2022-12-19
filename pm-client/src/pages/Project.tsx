@@ -9,17 +9,20 @@ import TaskDetailDialog from 'src/components/Tasks/TaskDetailDialog'
 import { useProjects } from 'src/contexts/ProjectContext'
 import ProjectService from 'src/services/project.service'
 import { useAppContext } from 'src/contexts/AppContext'
-import { useTeams } from 'src/contexts/TeamContext'
+import { useTeams } from 'src/contexts/TeamsContext'
+import DeleteDialog from 'src/modules/components/DeleteDialog'
+import { useTask } from 'src/contexts/TaskContext'
 
 export const Project = () => {
 
   const theme = useTheme()
   const mobile = useMediaQuery(theme.breakpoints.down('lg'))
-  const { setOpenAddProjectTask, openAddProjectTask, selectedProject, setOpenAddSubTask, openAddSubTask } = useProjects()
+  const { setOpenAddProjectTask, openAddProjectTask, selectedProject, setSelectedProject, setOpenAddSubTask, openAddSubTask } = useProjects()
   const [projectName, setProjectName] = React.useState('')
   const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useAppContext()
   const { teams } = useTeams()
   const [isAdmin, setIsAdmin] = React.useState(false)
+  const { openDeleteTaskDialog, setOpenDeleteTaskDialog, task } = useTask()
 
   React.useEffect(() => {
     if (selectedProject) {
@@ -56,6 +59,21 @@ export const Project = () => {
     return () => clearTimeout(timer)
   }, [projectName])
 
+  const handleDeleteTask = () => {
+    setOpenDeleteTaskDialog(false)
+    ProjectService.DeleteTaskByTaskId(task.id)
+      .then((res) => {
+        selectedProject.task = selectedProject.task.filter((t: any) => t.id !== task.id)
+        setOpenSnackbar(true)
+        setSnackbarMessage('Task deleted')
+        setSnackbarSeverity('success')
+      })
+      .catch((err) => {
+        setOpenSnackbar(true)
+        setSnackbarMessage('Error deleting task')
+        setSnackbarSeverity('error')
+      })
+  }
   return (
     <Box
       sx={{
@@ -103,6 +121,13 @@ export const Project = () => {
       <AddTaskDialog open={openAddProjectTask} setOpen={setOpenAddProjectTask} isAddSubTask={false} />
       <AddTaskDialog open={openAddSubTask} setOpen={setOpenAddSubTask} isAddSubTask={true} />
       <TaskDetailDialog />
+      <DeleteDialog
+        open={openDeleteTaskDialog}
+        setOpen={setOpenDeleteTaskDialog}
+        handleAction={handleDeleteTask}
+        title={`Delete ${task?.task_name}`}
+        contentText={`Are you sure you want to delete ${task?.task_name}?`}
+      />
     </Box>
   )
 }

@@ -19,7 +19,7 @@ interface TeamsContextType {
 
 export const [useTeams, TeamsProvider] = createCtx<TeamsContextType>()
 
-export default function TeamContext({ children }: { children: React.ReactNode }) {
+export default function TeamsContext({ children }: { children: React.ReactNode }) {
   const [selectedTeam, setSelectedTeam] = React.useState<any>()
   const [openCreateTeamDialog, setOpenCreateTeamDialog] = React.useState<boolean>(false)
   const [openCreateProjectDialog, setOpenCreateProjectDialog] = React.useState<boolean>(false)
@@ -29,20 +29,17 @@ export default function TeamContext({ children }: { children: React.ReactNode })
   const location = useLocation()
 
   React.useEffect(() => {
-    console.log(user.id)
     TeamsService.GetTeamsByUserId(user.id).then((res) => {
-      console.log(res.teams)
       setTeams(res.teams)
     }).catch((err) => {
       console.log(err)
     })
-  }, [])
+  }, [user.id])
 
   React.useEffect(() => {
     const re = /\/teams\/\d+/
     if (re.test(location.pathname)) {
       TeamsService.GetTeamsByUserId(user.id).then((res) => {
-        console.log(res.teams)
         setTeams(res.teams)
         const teamId = location.pathname.split("/")[2]
         const team = res.teams.find((team: any) => team.id === teamId)
@@ -51,7 +48,7 @@ export default function TeamContext({ children }: { children: React.ReactNode })
         console.log(err)
       })
     }
-  }, [location.pathname])
+  }, [location.pathname, user.id])
 
   return (
     <TeamsProvider

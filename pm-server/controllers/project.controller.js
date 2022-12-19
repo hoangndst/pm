@@ -337,6 +337,7 @@ export const getProjectByProjectId = async (req, res) => {
           required: false,
         },
       ],
+      order: [[database.task,"due_date", "ASC"]],
     })
     const teamId = project.dataValues.team_id;
     console.log(teamId);

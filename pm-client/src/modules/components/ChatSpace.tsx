@@ -3,13 +3,13 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { TextField, IconButton, Stack, Avatar, Tooltip } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { useInBox } from 'src/contexts/InboxContext';
 import { format } from 'date-fns'
 import { useAppContext } from 'src/contexts/AppContext';
 import { useLocation } from 'react-router-dom';
 import { useAppSelector } from 'src/app/hook';
 import InboxService from 'src/services/inbox.service';
+import { useNotification } from 'src/contexts/NotificationContex';
 
 interface Props {
   window?: () => Window;
@@ -22,17 +22,41 @@ export default function ChatSpace(props: Props) {
   const [message, setMessage] = React.useState('')
   const { messages, setMessages, selectedConversation, setConversations } = useInBox()
   const [arrivedMessage, setArrivedMessage] = React.useState<any>(null)
+  const { notification } = useNotification()
   const scrollRef = React.useRef<any>()
   const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity, socket } = useAppContext()
   const location = useLocation()
   const { user } = useAppSelector((state: { user: any }) => state.user)
 
   React.useEffect(() => {
+    if (notification) {
+      if (notification.type === "message") {
+        InboxService.GetConversationsById(user.id)
+          .then((response) => {
+            setConversations(response.conversations)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
+    }
+  }, [notification, setConversations, user.id])
+
+  React.useEffect(() => {
     socket.current.on('message', (message: any) => {
       console.log('new message', message)
+      InboxService.GetConversationsById(user.id)
+        .then((response) => {
+          setConversations(response.conversations)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
       setArrivedMessage(message)
     })
   }, [location.pathname, socket])
+
+
 
   React.useEffect(() => {
     if (arrivedMessage) {
@@ -47,14 +71,6 @@ export default function ChatSpace(props: Props) {
           console.log(false)
         }
       }
-      InboxService.GetConversationsById(user.id)
-        .then((response) => {
-          setConversations(response.conversations)
-          console.log('get conversations', response.conversations)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
     }
   }, [arrivedMessage, location.pathname, setMessages])
 

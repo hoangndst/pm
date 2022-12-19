@@ -67,11 +67,6 @@ export default function Profile() {
             </Stack>
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12}>
-          <Typography variant="h6" component="div">
-            We are working on this page. Please come back later.
-          </Typography>
-        </Grid>
       </Grid>
     </Box>
   )
