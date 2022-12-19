@@ -91,7 +91,6 @@ export const deleteTask = async (req, res) => {
     });
   }
 };
-
 export const createSubTask = async (req, res) => {
   try {
     await database.task
