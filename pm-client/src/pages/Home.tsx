@@ -22,7 +22,7 @@ const Home = () => {
           <Typography
             sx={{ textAlign: 'center', fontSize: '2.8rem', fontWeight: 'bold' }}
           >
-            Good Morning, {user.last_name}
+            Welcome back, {user.last_name}
           </Typography>
         </Grid>
       </Grid>

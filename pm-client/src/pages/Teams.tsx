@@ -16,14 +16,18 @@ import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import AddIcon from '@mui/icons-material/Add'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { IconButton } from '@mui/material'
 import { useTeams } from 'src/contexts/TeamContext'
 import CreateTeamDialog from 'src/components/Teams/CreateTeamDialog'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DeleteTeamDialog from 'src/components/Teams/DeleteTeamDialog'
 import React from 'react'
+import DeleteDialog from 'src/modules/components/DeleteDialog'
 import { format } from 'date-fns'
+import { useNotification } from 'src/contexts/NotificationContex'
+import { useAppContext } from 'src/contexts/AppContext'
+import TeamsService from 'src/services/team.service'
 
 export const PaperComponent = styled(Paper)(({ theme }) => ({
   p: 2,
@@ -57,10 +61,47 @@ export default function Teams() {
   const theme = useTheme()
   const mobile = useMediaQuery(theme.breakpoints.down('lg'))
   const { user } = useAppSelector(state => state.user)
-  const { teams } = useTeams()
+  const { teams, setTeams } = useTeams()
   const { setSelectedTeam, setOpenCreateTeamDialog } = useTeams()
   const [open, setOpen] = React.useState(false)
   const [deleteTeam, setDeleteTeam] = React.useState()
+  const { setSnackbarMessage, setSnackbarSeverity, setOpenSnackbar, openInviteDialog, setOpenInviteDialog } = useAppContext()
+  const { selectedNotification } = useNotification()
+  const navigate = useNavigate()
+
+  const handleAccept = () => {
+    // /teams/*
+    const re = /\/teams\/\d+/
+    if (re.test(selectedNotification.route)) {
+      const teamId = selectedNotification.route.split("/")[2]
+      console.log(teamId)
+      TeamsService.UpdateTeamMember(user.id, teamId).then((res) => {
+        console.log(res)
+        TeamsService.GetTeamsByUserId(user.id).then((res) => {
+          setTeams(res.teams)
+          setSelectedTeam(res.teams.find((team: any) => team.id === teamId))
+          setOpenInviteDialog(false)
+          setSnackbarMessage("You have joined the team")
+          setSnackbarSeverity("success")
+          setOpenSnackbar(true)
+          navigate(`/teams/${teamId}`)
+        })
+          .catch((err) => {
+            console.log(err)
+            setOpenInviteDialog(false)
+            setSnackbarMessage(err.response.data.message)
+            setSnackbarSeverity("info")
+            setOpenSnackbar(true)
+          })
+      }).catch((err) => {
+        console.log(err)
+        setOpenInviteDialog(false)
+        setSnackbarMessage(err.response.data.message)
+        setSnackbarSeverity("info")
+        setOpenSnackbar(true)
+      })
+    }
+  }
 
   return (
     <Box
@@ -196,6 +237,13 @@ export default function Teams() {
         </PaperComponent>
       </Box>
       <CreateTeamDialog />
+      <DeleteDialog
+        open={openInviteDialog}
+        setOpen={setOpenInviteDialog}
+        title={selectedNotification?.notification_content}
+        contentText="Do you want to accept this invitation?"
+        handleAction={handleAccept}
+      />
       <DeleteTeamDialog open={open} setOpen={setOpen} team={deleteTeam} userId={user.id} />
     </Box>
   )

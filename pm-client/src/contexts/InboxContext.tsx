@@ -70,8 +70,30 @@ export default function InboxContext({ children }: { children: React.ReactNode }
 
   React.useEffect(() => {
     const re = /\/inbox\/\d+/
+    if (selectedConversation) {
+      socket.current.emit("leave", { conversationId: selectedConversation.id }, (error: any) => {
+        if (error) {
+          alert(error);
+        } else {
+          console.log('emit leave')
+        }
+      })
+    }
     if (re.test(location.pathname)) {
       const conversationId = location.pathname.split("/")[2]
+      conversations.forEach((conversation: any) => {
+        if (conversation.id === conversationId) {
+          setSelectedConversation(conversation)
+        }
+      })
+      InboxService.GetMessagesByConversationId(conversationId)
+        .then((response) => {
+          setMessages(response)
+          console.log(response)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
       const userInfo = {
         id: user.id,
         username: user.username,
@@ -79,6 +101,7 @@ export default function InboxContext({ children }: { children: React.ReactNode }
         last_name: user.last_name
       }
       socket.current.emit("join", { userInfo: userInfo, conversationId: conversationId }, (error: any) => {
+        console.log('emit join', conversationId)
         if (error) {
           alert(error);
         }

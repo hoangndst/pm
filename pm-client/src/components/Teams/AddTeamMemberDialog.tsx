@@ -29,19 +29,18 @@ interface user {
   last_name: string,
 }
 
-export default function CreateTeamDialog() {
+export default function AddTeamMemberDialog() {
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
-  const { openCreateTeamDialog, setOpenCreateTeamDialog } = useTeams()
+  const { openAddMemberDialog, setOpenAddMemberDialog } = useTeams()
   const [open, setOpen] = React.useState(false)
   const [selectedUsers, setSelectedUsers] = React.useState<user[]>([])
-  const [teamName, setTeamName] = React.useState('')
   const [users, setUsers] = React.useState<user[]>([])
   const loading = open && users.length === 0
   const [searchString, setSearchString] = React.useState('')
   const { user } = useAppSelector((state: { user: { user: any } }) => state.user)
   const { setOpenSnackbar, setSnackbarSeverity, setSnackbarMessage, socket } = useAppContext()
-  const { setTeams } = useTeams()
+  const { setTeams, selectedTeam, setSelectedTeam } = useTeams()
 
   React.useEffect(() => {
     let active = true
@@ -69,26 +68,24 @@ export default function CreateTeamDialog() {
     }
   }, [open])
   const handleClose = () => {
-    setOpenCreateTeamDialog(false)
+    setOpenAddMemberDialog(false)
   }
 
   const handleCreateTeam = async () => {
-    if (selectedUsers.length === 0 || teamName === '') {
+    if (selectedUsers.length === 0) {
       setSnackbarSeverity('error')
       setSnackbarMessage('Please fill all fields')
       setOpenSnackbar(true)
       return
     }
     console.log(selectedUsers)
-    console.log(teamName)
     let selectedUserIds = [user.id]
     selectedUsers.forEach((user) => {
       selectedUserIds.push(user.id)
     })
-    TeamsService.CreateTeam(teamName, selectedUserIds)
+    TeamsService.AddTeamMembers(selectedUserIds.slice(1), selectedTeam.id)
       .then((res) => {
-        // socket.on('inviteToTeam', async ({ listMembersId, teamInfo, userInfo }, callback) => {
-        socket.current.emit('inviteToTeam', { listMembersId: selectedUserIds.slice(1), teamInfo: res.team, userInfo: user }, (error: any) => {
+        socket.current.emit('inviteToTeam', { listMembersId: selectedUserIds.slice(1), teamInfo: selectedTeam, userInfo: user }, (error: any) => {
           if (error) {
             console.log(error)
           }
@@ -96,13 +93,12 @@ export default function CreateTeamDialog() {
         TeamsService.GetTeamsByUserId(user.id).then((res) => {
           console.log(res.teams)
           setTeams(res.teams)
+          setSelectedTeam(res.teams.find((team: any) => team.id === selectedTeam.id))
           setSnackbarSeverity('success')
-          setSnackbarMessage('Team created')
+          setSnackbarMessage('Members added successfully')
           setOpenSnackbar(true)
-          setOpenCreateTeamDialog(false)
+          setOpenAddMemberDialog(false)
           setSelectedUsers([])
-          setTeamName('')
-          // sent notification to all users
         }).catch((err) => {
           console.log(err)
         })
@@ -110,7 +106,7 @@ export default function CreateTeamDialog() {
       .catch((err) => {
         console.log(err)
         setSnackbarSeverity('error')
-        setSnackbarMessage('Error creating team')
+        setSnackbarMessage('Error adding members')
         setOpenSnackbar(true)
       })
   }
@@ -118,24 +114,15 @@ export default function CreateTeamDialog() {
   return (
     <div>
       <Dialog
-        open={openCreateTeamDialog}
+        open={openAddMemberDialog}
         onClose={handleClose}
         fullScreen={fullScreen}
         scroll='paper'
         maxWidth='lg'
       >
-        <DialogTitle>Create new team</DialogTitle>
-        <DialogContent sx={{ width: fullScreen ? '100%' : '1000px' }}>
+        <DialogTitle>Add Team Members</DialogTitle>
+        <DialogContent sx={{ width: fullScreen ? '100%' : '800px' }}>
           <Stack spacing={2} direction='column'>
-            <TextField
-              autoFocus
-              margin='dense'
-              id='name'
-              label='Team name'
-              type='text'
-              fullWidth
-              onChange={(e) => setTeamName(e.target.value)}
-            />
             <Typography variant='h6'>Team members</Typography>
             <Autocomplete
               id="tags-filled"
@@ -197,11 +184,10 @@ export default function CreateTeamDialog() {
                 ))}
               </Grid>
             </Box>
-
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCreateTeam}>Create team</Button>
+          <Button onClick={handleCreateTeam}>Add Members</Button>
           <Button onClick={handleClose}>Exit</Button>
         </DialogActions>
       </Dialog>

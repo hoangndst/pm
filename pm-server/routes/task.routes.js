@@ -1,5 +1,5 @@
 import authJWT from "../middleware/authJWT.js"
-import { createTask,getTasksByUserId, updateTask,deleteTask,createSubTask,getSubTasksByTaskId, updateSubTask,deleteSubTask, getTasksByProjectId } from "../controllers/task.controller.js"
+import { createTask,getTasksByUserId, updateTask, deleteTask,createSubTask,getSubTasksByTaskId, updateSubTask,deleteSubTask, getTasksByProjectId } from "../controllers/task.controller.js"
 
 const taskRoutes = (app) => {
     app.use(function(req, res, next) {

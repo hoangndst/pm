@@ -25,7 +25,7 @@ const ProfileInfo = (props: ProfileInfoProps) => {
   const [birthday, setBirthday] = React.useState<Dayjs | null>(null)
   const [firstName, setFirstName] = React.useState('')
   const [lastName, setLastName] = React.useState('')
-  const { userAuth } = useAppSelector(state => state.auth)
+  const { userAuth } = useAppSelector((state: { auth: { isLoggedIn: boolean; userAuth: any; }; }) => state.auth)
 
   const handleSubmit = () => {
     if (firstName === '' || lastName === '' || birthday === null) {
@@ -35,13 +35,14 @@ const ProfileInfo = (props: ProfileInfoProps) => {
       setOpen(true)
       return
     }
+    console.log('birthday: ', birthday.format('YYYY-MM-DD'))
     const user = {
       id: userAuth.id,
       username: userAuth.username,
       email: userAuth.email,
       first_name: firstName,
       last_name: lastName,
-      birthday: birthday?.format('YYYY-MM-DD')
+      birth_date: birthday
     }
     pmServer.post('/pm/create-user', user, { headers: AuthHeader() })
       .then((res) => {
@@ -93,6 +94,7 @@ const ProfileInfo = (props: ProfileInfoProps) => {
             label="Birthday"
             value={birthday}
             onChange={(newValue) => {
+              console.log(newValue?.format('YYYY-MM-DD'))
               setBirthday(newValue);
             }}
             renderInput={(params) => <TextField {...params} required fullWidth />}

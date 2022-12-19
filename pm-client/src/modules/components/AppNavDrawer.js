@@ -290,14 +290,12 @@ export default function AppNavDrawer(props) {
   const mobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
   let location = useLocation();
-  // const teams = createTeams();
   const { teams } = useTeams()
 
   const [openTeams, setOpenTeams] = React.useState(true);
 
   const handleClickTeams = () => {
     setOpenTeams(!openTeams);
-    console.log(teams[0].name)
   };
 
   const drawer = (
@@ -393,7 +391,7 @@ export default function AppNavDrawer(props) {
           </IconButton>
         </ListItemButton>
         <Collapse in={openTeams} timeout="auto" unmountOnExit>
-          {teams.map((team) => (
+          {teams?.map((team) => (
             <CollapseTeamList
               key={`team-${team.id}`}
               id={team.id}

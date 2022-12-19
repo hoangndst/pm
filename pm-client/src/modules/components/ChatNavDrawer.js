@@ -212,36 +212,36 @@ const ChatNavDrawer = (props) => {
                 style={{ textDecoration: 'none' }}
                 key={item.id}
                 onClick={() => {
-                  const userInfo = {
-                    id: user.id,
-                    username: user.username,
-                    first_name: user.first_name,
-                    last_name: user.last_name
-                  }
-                  socket.current.emit("leave", { conversationId: selectedConversation.id }, (error) => {
-                    if (error) {
-                      alert(error);
-                    } else {
-                      console.log('emit leave')
-                    }
-                  })
-                  socket.current.emit("join", { userInfo: userInfo, conversationId: item.id }, (error) => {
-                    if (error) {
-                      alert(error);
-                    } else {
-                      console.log('emit join')
-                    }
-                  })
-                  setSelectedConversation(item)
-                  InboxService.GetMessagesByConversationId(item.id)
-                    .then((response) => {
-                      setMessages(response)
-                      console.log(response)
-                    })
-                    .catch((err) => {
-                      console.log(err)
-                    })
-                  console.log(item)
+                  // const userInfo = {
+                  //   id: user.id,
+                  //   username: user.username,
+                  //   first_name: user.first_name,
+                  //   last_name: user.last_name
+                  // }
+                  // socket.current.emit("leave", { conversationId: selectedConversation.id }, (error) => {
+                  //   if (error) {
+                  //     alert(error);
+                  //   } else {
+                  //     console.log('emit leave')
+                  //   }
+                  // })
+                  // socket.current.emit("join", { userInfo: userInfo, conversationId: item.id }, (error) => {
+                  //   if (error) {
+                  //     alert(error);
+                  //   } else {
+                  //     console.log('emit join')
+                  //   }
+                  // })
+                  // setSelectedConversation(item)
+                  // InboxService.GetMessagesByConversationId(item.id)
+                  //   .then((response) => {
+                  //     setMessages(response)
+                  //     console.log(response)
+                  //   })
+                  //   .catch((err) => {
+                  //     console.log(err)
+                  //   })
+                  // console.log(item)
                   if (mobile) {
                     onClose()
                   }

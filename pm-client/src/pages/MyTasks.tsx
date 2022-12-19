@@ -3,11 +3,11 @@ import { Grid, Button, Menu, MenuItem, Typography, Box } from "@mui/material"
 import AddIcon from '@mui/icons-material/Add'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import TuneIcon from '@mui/icons-material/Tune'
-import StickyHeadTable from '../components/Tasks/TaskTable'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
-import AddTaskDialog from 'src/components/Tasks/AddTaskDialog'
-import TaskDetailDialog from 'src/components/Tasks/TaskDetailDialog'
+import AddTaskDialog from 'src/components/Project/AddTaskDialog'
+import MyTaskTable from 'src/components/Tasks/MyTaskTable'
+// import TaskDetailDialog from 'src/components/Tasks/TaskDetailDialog'
 import { useTask } from 'src/contexts/TaskContext'
 
 const options = ['Incomplete tasks', 'Completed tasks', 'All tasks']
@@ -50,16 +50,14 @@ export const MyTasks = () => {
             justifyContent: 'space-between',
           }}
         >
-          <Button variant="outlined" startIcon={<AddIcon fontSize='small' />} size="small"
-            sx={{
-              marginLeft: '5px',
-            }}
-            onClick={() => setOpenDialog(true)}
-          >
-            Add Task
-          </Button>
           <div>
-            <Button onClick={handleOpenUserMenu} variant="text" size='small' startIcon={<CheckCircleIcon fontSize='small' />}>
+            <Button
+              sx={{
+                ml: '5px',
+              }}
+              onClick={handleOpenUserMenu} variant="text" size='small' startIcon={<CheckCircleIcon fontSize='small' />}
+
+            >
               {option}
             </Button>
             <Menu
@@ -83,9 +81,6 @@ export const MyTasks = () => {
                 </MenuItem>
               ))}
             </Menu>
-            <Button variant="text" size='small' startIcon={<TuneIcon fontSize='small' />}>
-              Filter
-            </Button>
           </div>
         </Grid>
         <Grid item xs={12}
@@ -93,11 +88,11 @@ export const MyTasks = () => {
             height: '100%',
           }}
         >
-          <StickyHeadTable isMyTasks={true} />
+          <MyTaskTable />
         </Grid>
       </Grid>
-      <AddTaskDialog />
-      <TaskDetailDialog />
+      {/* <AddTaskDialog /> */}
+      {/* <TaskDetailDialog /> */}
     </Box>
   )
 }

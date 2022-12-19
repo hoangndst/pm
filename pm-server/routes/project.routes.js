@@ -1,5 +1,5 @@
 import authJWT from "../middleware/authJWT.js"
-import { createProject, getProjectsByTeamId, updateProject, deleteProject } from "../controllers/project.controller.js"
+import { createProject, getProjectsByTeamId, updateProject, deleteProject, getProjectByProjectId } from "../controllers/project.controller.js"
 
 const projectRoutes = (app) => {
   app.use(function (req, res, next) {
@@ -13,5 +13,6 @@ const projectRoutes = (app) => {
   app.get("/pm/get-all-projects", [authJWT.verifyToken], getProjectsByTeamId)
   app.put("/pm/update-project", [authJWT.verifyToken], updateProject)
   app.post("/pm/delete-project", [authJWT.verifyToken], deleteProject)
+  app.get("/pm/get-project", [authJWT.verifyToken], getProjectByProjectId)
 }
 export default projectRoutes;

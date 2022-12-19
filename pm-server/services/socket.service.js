@@ -72,10 +72,20 @@ const addUsersSendNotificationMessage = async ({ conversationId }) => {
   return userToSendMessage
 }
 
+const getUserToSendNotification = async ({ userId }) => {
+  return users.find((user) => user.userId === userId)
+}
+
+const getUsersToSendNotification = async ({ userIds }) => {
+  return users.filter((user) => userIds.includes(user.userId))
+}
+
 const SocketService = {
   addUser,
   removeUser,
   initUser,
-  addUsersSendNotificationMessage
+  addUsersSendNotificationMessage,
+  getUserToSendNotification,
+  getUsersToSendNotification
 };
 export default SocketService

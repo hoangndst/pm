@@ -79,9 +79,9 @@ export default function ChatSpace(props: Props) {
         })
       setMessage('')
     } else {
-      setOpenSnackbar(true)
       setSnackbarMessage('Message cannot be empty')
-      setSnackbarSeverity('error')
+      setSnackbarSeverity('info')
+      setOpenSnackbar(true)
     }
   }
 
@@ -151,7 +151,7 @@ export default function ChatSpace(props: Props) {
           aria-label="send"
           onClick={(e) => handleSendMessage(e)}
         >
-          {message ? <SendIcon /> : <ThumbUpIcon />}
+          <SendIcon />
         </IconButton>
       </Box>
     </Box >
