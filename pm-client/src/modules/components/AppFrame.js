@@ -213,6 +213,7 @@ export default function AppFrame(props) {
               </IconButton>
             </Tooltip>
             <Notifications />
+            
             {mode !== null ? (
               <ThemeModeToggle
                 checked={mode === 'system' ? prefersDarkMode : mode === 'dark'}

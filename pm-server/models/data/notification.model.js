@@ -5,7 +5,7 @@ const notificationModel = (sequelize, Sequelize) => {
       primaryKey: true,
       autoIncrement: true
     },
-    message: {
+    notification_content: {
       type: Sequelize.STRING
     },
     type: {
@@ -15,6 +15,9 @@ const notificationModel = (sequelize, Sequelize) => {
       type: Sequelize.BOOLEAN
     },
     from_user_id: {
+      type: Sequelize.STRING
+    },
+    route: {
       type: Sequelize.STRING
     }
   })

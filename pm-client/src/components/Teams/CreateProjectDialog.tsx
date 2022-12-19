@@ -38,16 +38,15 @@ export default function CreateProjectDialog() {
   const [projectName, setProjectName] = React.useState('')
   const [startDate, setStartDate] = React.useState<Dayjs | null>(null)
   const [endDate, setEndDate] = React.useState<Dayjs | null>(null)
-  const [users, setUsers] = React.useState<user[]>([])
   const { user } = useAppSelector((state) => state.user)
-  const { setOpenSnackbar, setSnackbarSeverity, setSnackbarMessage } = useAppContext()
+  const { setOpenSnackbar, setSnackbarSeverity, setSnackbarMessage, socket } = useAppContext()
   const { setTeams } = useTeams()
 
   const handleClose = () => {
     setOpenCreateProjectDialog(false)
   }
 
-  const handleCreateTeam = async () => {
+  const handleCreateProject = async () => {
     if (projectName === '') {
       setSnackbarSeverity('error')
       setSnackbarMessage('Please enter a project name')
@@ -65,8 +64,26 @@ export default function CreateProjectDialog() {
     }
     ProjectService.CreateProject(project)
       .then((res) => {
+        console.log(res)
         TeamsService.GetTeamsByUserId(user.id).then((res) => {
-          console.log(res.teams)
+          console.log('teams: ', res.teams)
+          TeamsService.GetTeamMembers(selectedTeam.id).then((res) => {
+            let selectedUserIds: any[] = []
+            console.log('members: ', res)
+            res.forEach((member: any) => {
+              if (member.joined_at !== null && member.user_id !== user.id) {
+                selectedUserIds.push(member.user_id)
+              }
+            })
+            console.log('selectedUserIds: ', selectedUserIds)
+            socket.current.emit('newProject', { listMembersId: selectedUserIds, teamInfo: selectedTeam, userInfo: user }, (error: any) => {
+              if (error) {
+                console.log(error)
+              }
+            })
+          }).catch((err) => {
+            console.log(err)
+          })
           setTeams(res.teams)
           setSelectedTeam(res.teams.find((team: any) => team.id === project.teamId))
           setSnackbarSeverity('success')
@@ -133,7 +150,7 @@ export default function CreateProjectDialog() {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCreateTeam}>Create project</Button>
+          <Button onClick={handleCreateProject}>Create project</Button>
           <Button onClick={handleClose}>Exit</Button>
         </DialogActions>
       </Dialog>

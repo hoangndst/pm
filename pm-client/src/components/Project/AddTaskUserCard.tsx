@@ -8,6 +8,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import Chip from '@mui/material/Chip';
 import Avatar from '@mui/material/Avatar';
+import { useProjects } from 'src/contexts/ProjectContext';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -21,21 +22,6 @@ const MenuProps = {
 };
 
 
-interface User {
-  id: string,
-  username: string,
-  firstName: string,
-  lastName: string,
-}
-
-const users: User[] = [
-  { id: '1', username: 'user1', firstName: 'test1', lastName: 'test1' },
-  { id: '2', username: 'user2', firstName: 'test2', lastName: 'test2' },
-  { id: '3', username: 'user3', firstName: 'test3', lastName: 'test3' },
-  { id: '4', username: 'user4', firstName: 'test4', lastName: 'test4' },
-  { id: '5', username: 'user5', firstName: 'test5', lastName: 'test5' },
-  { id: '6', username: 'user6', firstName: 'test6', lastName: 'test6' },
-];
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
   return {
     fontWeight:
@@ -45,13 +31,26 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
   };
 }
 
-export default function UserCard() {
+interface AddTaskUserCardProps {
+  setAssignedTo: React.Dispatch<React.SetStateAction<string>>;
+}
+
+
+export default function UserCard({ setAssignedTo }: AddTaskUserCardProps) {
   const theme = useTheme();
-  const [selectedUser, setSelectedUser] = React.useState<string>(users[1].id);
-  const [user, setUser] = React.useState<User>(users[1]);
+  const { listMembers } = useProjects()
+  const [user, setUser] = React.useState<any>();
+  const [selectedUser, setSelectedUser] = React.useState<string>();
+
+  React.useEffect(() => {
+    setUser(listMembers[0])
+    setAssignedTo(listMembers[0]?.id)
+    setSelectedUser(listMembers[0]?.id)
+  }, [])
+
   React.useEffect(() => {
     if (selectedUser) {
-      const selectedUserObj = users.find((user) => user.id === selectedUser)
+      const selectedUserObj = listMembers.find((user) => user.id === selectedUser)
       if (selectedUserObj) {
         setUser(selectedUserObj)
       }
@@ -61,9 +60,10 @@ export default function UserCard() {
     const {
       target: { value },
     } = event;
-    const newSelectedUser = users.find((user) => user.id === value)?.id
+    const newSelectedUser = listMembers.find((user) => user.id === value)?.id
     if (newSelectedUser) {
       console.log(newSelectedUser)
+      setAssignedTo(newSelectedUser)
       setSelectedUser(newSelectedUser);
     }
   };
@@ -75,14 +75,14 @@ export default function UserCard() {
         <Select
           labelId="assigned-to-label"
           id="assigned-to"
-          // displayEmpty
+          displayEmpty
           size='small'
-          value={selectedUser}
+          value={selectedUser || ''}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={() => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              <Chip variant="filled" label={`${user?.firstName} ${user?.lastName}`} key={user?.id}
+              <Chip variant="filled" label={`${user?.first_name} ${user?.last_name}`} key={user?.id}
                 avatar={<Avatar alt={user?.username} src={`https://github.com/identicons/${user?.username}.png`} />}
                 />
             </Box>
@@ -90,13 +90,13 @@ export default function UserCard() {
           inputProps={{ 'aria-label': 'Without label' }}
           MenuProps={MenuProps}
         >
-          {users.map((user) => (
+          {listMembers.map((user) => (
             <MenuItem
               key={user.username}
               value={user.id}
-              style={getStyles(user.lastName, users.map((user) => user.lastName), theme)}
+              style={getStyles(user.last_name, listMembers.map((user) => user.last_name), theme)}
             >
-              <Chip variant="filled" label={`${user?.firstName} ${user?.lastName}`} key={user?.id}
+              <Chip variant="filled" label={`${user?.first_name} ${user?.last_name}`} key={user?.id}
                 avatar={<Avatar alt={user?.username} src={`https://github.com/identicons/${user?.username}.png`} />}
               />
             </MenuItem>

@@ -13,14 +13,12 @@ import ClickAwayListener from '@mui/base/ClickAwayListener';
 import MuiList from '@mui/material/List';
 import MuiListItem from '@mui/material/ListItem';
 import MuiDivider from '@mui/material/Divider';
-import { getCookie } from '../utils/helpers';
-
-async function fetchNotifications() {
-  const response = await fetch(
-    'https://raw.githubusercontent.com/mui/material-ui/master/docs/notifications.json',
-  );
-  return response.json();
-}
+import { useNotification } from 'src/contexts/NotificationContex';
+import Button from '@mui/material/Button';
+import { Stack, Avatar } from '@mui/material';
+import NotificationService from 'src/services/notification.service';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from 'src/contexts/AppContext';
 
 const Paper = styled(MuiPaper)({
   transformOrigin: 'top right',
@@ -48,97 +46,32 @@ const Divider = styled(MuiDivider)(({ theme }) => ({
 export default function Notifications() {
   const [open, setOpen] = React.useState(false);
   const [tooltipOpen, setTooltipOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
-  const [{ lastSeen, messages }, setNotifications] = React.useState({
-    lastSeen: undefined,
-    messages: undefined,
-  });
-
-  const messageList = messages
-    ? messages
-      .filter((message) => {
-        if (
-          message.userLanguage &&
-          message.userLanguage !== navigator.language.substring(0, 2)
-        ) {
-          return false;
-        }
-        return true;
-      })
-      .reverse()
-    : null;
-
+  const anchorRef = React.useRef(null)
+  const { notifications, setNotifications, setSelectedNotification } = useNotification()
+  const { setOpenInviteDialog } = useAppContext()
+  const navigate = useNavigate()
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
     setTooltipOpen(false);
-
-    if (process.env.NODE_ENV === 'development') {
-      // Skip last seen logic in dev to make editing notifications easier.
-      return;
-    }
-
-    if (messageList && messageList.length > 0) {
-      const newLastSeen = messageList[0].id;
-      setNotifications((notifications) => {
-        if (newLastSeen !== notifications.lastSeen) {
-          return {
-            messages: notifications.messages,
-            lastSeen: newLastSeen,
-          };
-        }
-        return notifications;
-      });
-      document.cookie = `lastSeenNotification=${newLastSeen};path=/;max-age=31536000`;
-    }
   };
 
-  React.useEffect(() => {
-    let active = true;
-
-    // Prevent search engines from indexing the notification.
-    if (/glebot/.test(navigator.userAgent) || messages) {
-      return undefined;
-    }
-
-    // Soften the pressure on the main thread
-    // and create some distraction.
-    const timeout = setTimeout(async () => {
-      const notifications = await fetchNotifications().catch(() => {
-        // Swallow the exceptions, e.g. rate limit
-        return [];
+  const handleReadNotification = (id) => {
+    NotificationService.updateNotification(id)
+      .then((res) => {
+        setNotifications(
+          notifications.map((item) => {
+            if (item.id === id) {
+              return { ...item, is_read: true };
+            }
+            return item;
+          }),
+        );
+      })
+      .catch((err) => {
+        console.log(err);
       });
+  }
 
-      if (active) {
-        // Permanent notifications
-        const filteredNotifications = [
-          {
-            id: 0,
-            title: "Let's translate!",
-            text: '<a style="color: inherit;" target="_blank" rel="noopener" data-ga-event-category="l10n" data-ga-event-action="notification" data-ga-event-label="zh" href="https://translate.mui.com/">帮助 MUI 将文档翻译成中文</a>. 🇨🇳',
-            userLanguage: 'zh',
-          },
-          {
-            id: 1,
-            text: 'You can <a style="color: inherit;" target="_blank" rel="noopener" href="https://twitter.com/MUI_hq">follow us on Twitter</a> or subscribe on <a style="color: inherit;" target="_blank" rel="noopener" href="/blog/">our blog</a> to receive exclusive tips and updates about MUI and the React ecosystem.',
-          },
-          // Only 2
-          ...notifications.splice(-2),
-        ];
-
-        const seen = getCookie('lastSeenNotification');
-        const lastSeenNotification = seen === undefined ? 0 : parseInt(seen, 10);
-        setNotifications({
-          messages: filteredNotifications,
-          lastSeen: lastSeenNotification,
-        });
-      }
-    }, 1500);
-
-    return () => {
-      clearTimeout(timeout);
-      active = false;
-    };
-  }, [messages]);
 
   return (
     <React.Fragment>
@@ -150,7 +83,7 @@ export default function Notifications() {
         onClose={() => {
           setTooltipOpen(false);
         }}
-        title={'toggleNotifications'}
+        title={'Notifications'}
         enterDelay={300}
       >
         <IconButton
@@ -165,9 +98,9 @@ export default function Notifications() {
           <Badge
             color="error"
             badgeContent={
-              messageList
-                ? messageList.reduce(
-                  (count, message) => (message.id > lastSeen ? count + 1 : count),
+              notifications
+                ? notifications.reduce(
+                  (count, message) => (!message.is_read ? count + 1 : count),
                   0,
                 )
                 : 0
@@ -192,7 +125,9 @@ export default function Notifications() {
               setOpen(false);
             }}
           >
-            <Grow in={open} {...TransitionProps}>
+            <Grow in={open}
+              {...TransitionProps}
+            >
               <Paper
                 sx={{
                   mt: 0.5,
@@ -207,38 +142,54 @@ export default function Notifications() {
                 }}
               >
                 <List>
-                  {messageList ? (
-                    messageList.map((message, index) => (
-                      <React.Fragment key={message.id}>
+                  {notifications && notifications.length > 0 ? (
+                    notifications.map((notification, index) => (
+                      <React.Fragment key={notification.id.toString()}>
                         <ListItem alignItems="flex-start">
-                          <Typography gutterBottom>
-                            <span
-                              // eslint-disable-next-line react/no-danger
-                              dangerouslySetInnerHTML={{ __html: message.title }}
-                            />
-                          </Typography>
-                          <Typography gutterBottom variant="body2" color="text.secondary">
-                            <span
-                              id="notification-message"
-                              // eslint-disable-next-line react/no-danger
-                              dangerouslySetInnerHTML={{ __html: message.text }}
-                            />
-                          </Typography>
-                          {message.date && (
-                            <Typography variant="caption" color="text.secondary">
-                              {new Date(message.date).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                              })}
-                            </Typography>
-                          )}
+                          <Button
+                            sx={{ width: '100%', textAlign: 'left' }}
+                            onClick={() => {
+                              handleReadNotification(notification.id)
+                              setSelectedNotification(notification)
+                              if (notification.type === "inviteTeamMember") {
+                                setOpenInviteDialog(true)
+                                console.log("inviteTeamMember")
+                                navigate('/teams')
+                              } else if (notification.type !== "removeTeamMember") {
+                                navigate(`${notification.route}`)
+                              }
+                              setOpen(false);
+                            }}
+                          >
+                            <Stack direction="column" spacing={2} alignItems="left">
+                              <Stack direction="row" spacing={2} alignItems="left" justifyContent="space-between">
+                                <Badge color="error" variant="dot" invisible={notification.is_read}>
+                                  <Avatar src={`https://github.com/identicons/${notification.from_user.username}.png`} sx={{ width: 40, height: 40 }} />
+                                </Badge>
+                                <Typography variant="subtitle2" fontWeight="fontWeightBold">
+                                  {notification.notification_content}
+                                </Typography>
+                              </Stack>
+                              {notification.createdAt && (
+                                <Typography variant="caption" color="text.secondary">
+                                  {new Date(notification.createdAt).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                  })}
+                                </Typography>
+                              )}
+                            </Stack>
+                          </Button>
                         </ListItem>
-                        {index < messageList.length - 1 ? <Divider /> : null}
+                        {index < notifications.length - 1 ? <Divider /> : null}
                       </React.Fragment>
                     ))
                   ) : (
-                    <Loading>
+                    <Loading sx={{ flexDirection: 'column', alignItems: 'center', mt: 3 }}>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                        No notifications
+                      </Typography>
                       <CircularProgress size={32} />
                     </Loading>
                   )}

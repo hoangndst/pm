@@ -17,8 +17,7 @@ export const createUser = (req, res) => {
           email: req.body.email,
           first_name: req.body.first_name,
           last_name: req.body.last_name,
-          avatar: req.body.avatar,
-          birthday: req.body.birthday,
+          birth_date: req.body.birth_date,
         }
         database.user.create(user)
           .then((user) => {

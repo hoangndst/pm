@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import UserCard from './UserCard'
+import UserCard from './AssignedToCard'
 import DateTime from './DateTime'
 import Stack from '@mui/material/Stack'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -18,24 +18,26 @@ import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import { RowTask } from './TaskTable'
 import { useTheme } from '@mui/material/styles'
 import { useTask } from 'src/contexts/TaskContext'
-import { Row } from './TaskTable'
+import { Row } from '../Project/ProjectTaskTable'
 import { Typography } from '@mui/material'
-import Comment from './Comment'
+import AssignedToCard from './AssignedToCard'
+import { useAppSelector } from 'src/app/hook'
+import { useProjects } from 'src/contexts/ProjectContext'
+import { useAppContext } from 'src/contexts/AppContext'
 
 export default function TaskDetailDialog() {
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
   const { openTaskDetailDialog, setOpenTaskDetailDialog, task } = useTask()
-
+  const { setOpenAddSubTask, selectedProject } = useProjects()
+  const { user } = useAppSelector((state) => state.user)
   const [taskName, setTaskName] = React.useState('')
-  const [taskDescription, setTaskDescription] = React.useState('')
-  const [dueDate, setDueDate] = React.useState<Date | null>(null)
-  const [assignedTo, setAssignedTo] = React.useState('')
+  const [comment, setComment] = React.useState('')
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity, socket } = useAppContext()
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -49,8 +51,30 @@ export default function TaskDetailDialog() {
     setOpenTaskDetailDialog(false)
   }
 
-  const handleAddTask = () => {
-
+  const handleComment = (e: any) => {
+    e.preventDefault()
+    if (comment !== '') {
+      const notification = {
+        userInfo: user,
+        to_user_id: task.assigned_to.id,
+        route: `/projects/${selectedProject?.id}`,
+        notification_content: `${user.username} commented on task ${task.task_name}`,
+        type: 'comment'
+      }
+      console.log(notification)
+      socket.current.emit('sendNotificationtoMember',
+        notification,
+        (error: any) => {
+          if (error) {
+            console.log(error)
+          }
+        })
+      setComment('')
+    } else {
+      setSnackbarSeverity('info')
+      setSnackbarMessage('Comment cannot be empty')
+      setOpenSnackbar(true)
+    }
   }
 
   return (
@@ -74,8 +98,9 @@ export default function TaskDetailDialog() {
               id="taskName"
               required
               label="Task Name"
+              disabled={task?.canEdit ? false : true}
               type="text"
-              defaultValue={task?.taskName}
+              defaultValue={task?.task_name}
               fullWidth
               variant="outlined"
             />
@@ -86,18 +111,25 @@ export default function TaskDetailDialog() {
                 alignItems: fullScreen ? 'flex-start' : 'center',
               }}
             >
-              <UserCard />
-              <DateTime label='Due date' />
+              <AssignedToCard selectedUserId={task?.assigned_to.id} taskId={task?.id} readOnly={task?.canEdit ? false : true} />
+              <DateTime task={task} dueDate={task?.due_date} readOnly={task?.canEdit ? false : true} />
             </Stack>
-            <Typography>
-              Subtasks
-            </Typography>
-            <Button onClick={handleClose}
-              variant='outlined'
-            >
-              Add Subtask
-            </Button>
-            {task && task.subtasks ? (
+            {(task?.task_id === null) ? (
+              <>
+                <Typography>
+                  Subtasks
+                </Typography>
+                <Button
+                  onClick={() => setOpenAddSubTask(true)}
+                  variant='outlined'
+                  disabled={(task?.canEdit || task?.assigned_to.id === user.id) ? false : true}
+                >
+                  Add Subtask
+                </Button>
+              </>
+            ) : null}
+
+            {task && task.subtask ? (
               <Paper sx={{ width: '100%', overflow: 'hidden', }}>
                 <TableContainer component={Paper} sx={{ maxHeight: 'calc(100vh - 190px)' }}>
                   <Table stickyHeader aria-label="sticky table" size='small'>
@@ -111,17 +143,17 @@ export default function TaskDetailDialog() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {task.subtasks.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map((row) => (
-                          <Row key={row.id} row={row} />
+                      {task.subtask.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((row: any) => (
+                          <Row key={row.id} row={row} isSubTask={true} />
                         ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
                 <TablePagination
-                  rowsPerPageOptions={[10, 25, 100]}
+                  rowsPerPageOptions={[5, 10, 20]}
                   component="div"
-                  count={task.subtasks.length}
+                  count={task.subtask.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}
@@ -132,13 +164,14 @@ export default function TaskDetailDialog() {
             <Typography>
               Comments
             </Typography>
-            <Stack direction='column' spacing={1}>
+            {/* cmt */}
+            {/* <Stack direction='column' spacing={1}>
               {task && task.comments ? (
                 task.comments.map((comment) => (
                   <Comment key={comment.id} comment={comment} />
                 ))
               ) : <Typography>No comments</Typography>}
-            </Stack>
+            </Stack> */}
             <TextField
               autoFocus
               margin="dense"
@@ -148,6 +181,13 @@ export default function TaskDetailDialog() {
               type="text"
               fullWidth
               variant="outlined"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  handleComment(e)
+                }
+              }}
             />
           </Stack>
         </DialogContent>

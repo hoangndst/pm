@@ -1,6 +1,6 @@
 POST http://localhost:5000/pm/create-user
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 
 {
     "id": "1lvc0a60lb34lc5r",
@@ -15,7 +15,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 
 POST http://localhost:5000/pm/create-user
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 
 {
     "id": "1lvc0a60lb34uxyh",
@@ -30,7 +30,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 
 POST http://localhost:5000/pm/create-user
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 
 {
     "id": "1lvc0a60lb3b1qow",
@@ -44,7 +44,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 ###
 POST http://localhost:5000/pm/create-user
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 
 
 {
@@ -60,7 +60,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 
 POST http://localhost:5000/pm/create-conversation
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 
 {
     "users": [
@@ -74,7 +74,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 ### Create a message
 POST http://localhost:5000/pm/create-message
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 
 {
     "messageContent": "Hello Mom, this is the lastest message",
@@ -87,29 +87,29 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 
 GET http://localhost:5000/pm/get-conversations?userId=1lvc0msglblz299o
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 ###
 
 GET http://localhost:5000/pm/get-messages?conversationId=1lvc0amglbmb2umt
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 
 ###
 GET http://localhost:5000/pm/user?id=1lvc0a60lb34lc5r
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 
 ###
 
-GET http://localhost:5000/pm/search-users?searchString=
+GET http://localhost:5000/pm/search-users?searchString=h
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 
 
 ### create team
 POST http://localhost:5000/pm/create-team
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 
 {
     "membersId": [
@@ -125,17 +125,64 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5
 ### get teams by user id
 GET http://localhost:5000/pm/get-teams-by-userid?userId=1lvc0egklbm8iii7
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 
 ### delete team by id
 POST http://localhost:5000/pm/delete-team-by-id
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwbXNnbGJsejI5OW8iLCJpYXQiOjE2NzEwOTE4MTgsImV4cCI6MTY3MTE3ODIxOH0.o9_iDXXq1wG9-a_uOivgiX6QQtLiIpoSbtW4MBRlgy0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
 
 {
     "teamId": "1lvc0dgwlbp0g2y9",
     "userId": "1lvc0msglblz299o"
 }
+###
+GET http://localhost:5000/pm/get-notifications-by-userid?userId=3c4148glbqmga6i
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+### 
+
+PUT http://localhost:5000/pm/update-notification/9
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+###
+GET http://localhost:5000/pm/get-project?projectId=1lvc08wlbs4zk0e&userId=1lvc0cnolbrnzl5r
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+###
+GET http://localhost:5000/pm/get-tasks-by-userid?userId=1lvc0cnolbrnzl5r
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###
 
 # "1lvc0msglblz299o"	"hoangndst"
 # "1lvc0msglblzb207"	"binhnd"

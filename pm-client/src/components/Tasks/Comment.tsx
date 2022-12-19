@@ -4,11 +4,11 @@ import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 import Badge from '@mui/material/Badge'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
-import { comment } from './TaskTable'
+// import { comment } from './MyTaskTable'
 import { useTheme } from '@mui/material/styles'
 import LikeIcon from 'src/modules/components/Like'
 
-export default function Comment({ comment }: { comment: comment }) {
+export default function Comment({ comment }: { comment: any }) {
   const theme = useTheme()
   return (
     <Stack

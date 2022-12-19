@@ -17,10 +17,11 @@ const Main = () => {
   const dispatch = useAppDispatch()
   const { openSnackbar, setOpenSnackbar, snackbarSeverity, snackbarMessage } = useAppContext()
 
+
   const signOut = useCallback(() => {
     dispatch(SignOut())
   }, [dispatch])
-  
+
   if (!currentUser) {
     return <Navigate to="/login" />
   }

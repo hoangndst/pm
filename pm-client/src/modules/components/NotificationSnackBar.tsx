@@ -3,7 +3,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar';
-import { useAppContext } from 'src/contexts/AppContext';
+import { useNotification } from 'src/contexts/NotificationContex';
 import Slide, { SlideProps } from '@mui/material/Slide';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -16,7 +16,7 @@ function TransitionLeft(props: TransitionProps) {
 }
 
 export default function NotificationSnackBar() {
-  const { openNotificationSnackbar, setOpenNotificationSnackbar, notification } = useAppContext()
+  const { openNotificationSnackbar, setOpenNotificationSnackbar, notification } = useNotification()
 
   const handleClose = () => {
     setOpenNotificationSnackbar(false);
