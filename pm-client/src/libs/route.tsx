@@ -16,11 +16,14 @@ import Profile from "src/pages/Profile"
 import Teams from "src/pages/Teams"
 import Team from "src/pages/Team"
 import TeamContext from "src/contexts/TeamContext"
+import NotificationContext from "src/contexts/NotificationContex"
+import { Project } from "src/pages/Project"
+import ProjectContext from "src/contexts/ProjectContext"
 
 const route = createBrowserRouter([
   {
     path: "/",
-    element: <AppContext><Main /></AppContext>,
+    element: <AppContext><NotificationContext><Main /></NotificationContext></AppContext>,
     children: [
       {
         path: "/",
@@ -28,7 +31,7 @@ const route = createBrowserRouter([
       },
       {
         path: "tasks",
-        element: <TaskContext><MyTasks/></TaskContext>,
+        element: <TaskContext><MyTasks /></TaskContext>,
       },
       {
         path: "inbox",
@@ -50,11 +53,15 @@ const route = createBrowserRouter([
       },
       {
         path: "teams",
-        element:<TeamContext><Teams /></TeamContext>
+        element: <Teams />
       },
       {
         path: "teams/:teamId",
-        element: <TeamContext><Team /></TeamContext>
+        element: <TeamContext><Team /></TeamContext>,
+      },
+      {
+        path: "projects/:projectId",
+        element: <TeamContext><ProjectContext><TaskContext><Project /></TaskContext></ProjectContext></TeamContext>,
       }
     ]
   },
@@ -68,7 +75,7 @@ const route = createBrowserRouter([
   },
   {
     path: "/welcome",
-    element:<SetupNewUserContext><SetupNewUser /></SetupNewUserContext> ,
+    element: <SetupNewUserContext><SetupNewUser /></SetupNewUserContext>,
   }
 ])
 
