@@ -10,8 +10,7 @@ import {
   Alert,
 } from "@mui/material"
 import { styled, alpha } from '@mui/material/styles'
-import { Outlet, Link, NavLink, useLocation } from "react-router-dom"
-import { getMessages } from "../libs/data"
+import { Outlet } from "react-router-dom"
 import CssBaseline from '@mui/material/CssBaseline'
 import ChatNavDrawer from "src/modules/components/ChatNavDrawer"
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -19,10 +18,8 @@ import InfoIcon from '@mui/icons-material/Info'
 import { useInBox } from "src/contexts/InboxContext"
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
-import InboxService from "src/services/inbox.service"
-import { useAppSelector } from "src/app/hook"
-import { useNavigate } from "react-router-dom"
 import { useAppContext } from "src/contexts/AppContext"
+import GroupsIcon from '@mui/icons-material/Groups'
 
 const StyledAppNavDrawer = styled(ChatNavDrawer)(({ disablePermanent, theme }) => {
   if (disablePermanent) {
@@ -66,21 +63,8 @@ const Inbox = () => {
   const theme = useTheme()
   const mobile = useMediaQuery(theme.breakpoints.down('lg'))
   const [isDetailOpen, setIsDetailOpen] = React.useState(false)
-  const { selectedConversation, messages, setMessages, setConversations, conversations } = useInBox()
-  const { user } = useAppSelector(state => state.user)
+  const { selectedConversation } = useInBox()
   const { snackbarMessage, setOpenSnackbar, snackbarSeverity, openSnackbar } = useAppContext()
-
-  React.useEffect(() => {
-    InboxService.GetConversationsById(user.id)
-      .then((response) => {
-        setConversations(response.conversations)
-        setMessages([])
-        console.log('message', messages[0])
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
 
   return (
     <Box
@@ -95,7 +79,6 @@ const Inbox = () => {
       }}
     >
       <CssBaseline />
-
       <StyledAppNavDrawer
         disablePermanent={disablePermanent}
         onClose={() => setMobileOpen(false)}
@@ -145,15 +128,27 @@ const Inbox = () => {
                   >
                     <ArrowBackIcon />
                   </NavIconButton>
-
-                  <Avatar
-                    alt={selectedConversation?.conversation_name}
-                    src={`https://github.com/identicons/${selectedConversation?.users[0].username}.png`}
-                    sx={{ width: 32, height: 32, mr: 1, ml: 1 }}
-                  />
+                  {selectedConversation?.users.length === 1 ? (
+                    <Avatar
+                      alt={selectedConversation?.conversation_name}
+                      src={`https://github.com/identicons/${selectedConversation?.users[0].username}.png`}
+                      sx={{ width: 32, height: 32, mr: 1, ml: 1 }}
+                    />
+                  ) : (
+                    <Avatar
+                      alt={selectedConversation?.conversation_name}
+                      sx={{ width: 32, height: 32, mr: 1, ml: 1 }}
+                    >
+                      <GroupsIcon />
+                    </Avatar>
+                  )}
                   {selectedConversation ? (
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                      {selectedConversation?.conversation_name}
+                      {selectedConversation?.users.length === 1 ? (
+                        `${selectedConversation?.users[0].first_name} ${selectedConversation?.users[0].last_name}`
+                      ) : (
+                        selectedConversation?.conversation_name
+                      )}
                     </Typography>
 
                   ) : (

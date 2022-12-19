@@ -21,9 +21,9 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { CollapseTeamList } from './CollapseTeamList';
-import { createTeams } from '../../libs/data';
 import IconButton from '@mui/material/IconButton'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { useTeams } from 'src/contexts/TeamsContext';
 
 const savedScrollTop = {};
 
@@ -289,14 +289,12 @@ export default function AppNavDrawer(props) {
   const mobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
   let location = useLocation();
-  const teams = createTeams();
-
+  const { teams } = useTeams()
 
   const [openTeams, setOpenTeams] = React.useState(true);
 
   const handleClickTeams = () => {
     setOpenTeams(!openTeams);
-    console.log(teams[0].name)
   };
 
   const drawer = (
@@ -374,7 +372,13 @@ export default function AppNavDrawer(props) {
           <ListItemText primary="Teams"
             sx={{ marginLeft: '25px' }}
           />
-          <Link to="/teams" style={{ textDecoration: 'none' }}>
+          <Link to="/teams" style={{ textDecoration: 'none' }}
+            onClick={() => {
+              if (mobile) {
+                onClose();
+              }
+            }}
+          >
             <IconButton sx={{ marginLeft: 'auto' }} size="small">
               <MoreHorizIcon />
             </IconButton>
@@ -386,12 +390,12 @@ export default function AppNavDrawer(props) {
           </IconButton>
         </ListItemButton>
         <Collapse in={openTeams} timeout="auto" unmountOnExit>
-          {teams.map((team) => (
+          {teams?.map((team) => (
             <CollapseTeamList
-              key={team.name + '-key'}
+              key={`team-${team.id}`}
               id={team.id}
-              name={team.name}
-              teamMember={team.teamMember}
+              name={team.name.length > 20 ? team.name.slice(0, 15) + '...' : team.name}
+              teamMember={team.users}
               about={team.about}
             />
           ))}

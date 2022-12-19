@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import database from "../models/index.js"
+import database from "../models/data/index.js"
 import databaseConfig from "../configs/db.config.js"
 
 const User = database.user
@@ -8,7 +8,7 @@ const secret = databaseConfig.PM_SECRET
 const verifyToken = (req, res, next) => {
   let authorization = req.headers["authorization"]
   const token = authorization
-  console.log(token)
+  // console.log(token)
   if (!token) {
     return res.status(403).send({ message: "No token provided!" })
   }
@@ -17,7 +17,7 @@ const verifyToken = (req, res, next) => {
       return res.status(401).send({ message: "Unauthorized!" })
     }
     req.userId = decoded.id
-    console.log("req.userId: " + req.userId)
+    // console.log("req.userId: " + req.userId)
     next()
   })
 }

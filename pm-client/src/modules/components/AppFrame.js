@@ -21,13 +21,14 @@ import Avatar from '@mui/material/Avatar'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useAppSelector } from 'src/app/hook'
-import { NavLink } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import LogoutIcon from '@mui/icons-material/Logout'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import { SignOut } from 'src/auth/userAuth'
 import { useAppDispatch } from 'src/app/hook'
+import Notifications from './Notifications'
+import { useNavigate } from 'react-router-dom'
 
 const StyledAppNavDrawer = styled(AppNavDrawer)(({ disablePermanent, theme }) => {
   if (disablePermanent) {
@@ -89,26 +90,6 @@ const NavIconButton = styled(IconButton, {
   };
 });
 
-export function DeferredAppSearch() {
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  return (
-    <React.Fragment>
-      {/* Suspense isn't supported for SSR yet */}
-      {mounted ? (
-        <React.Suspense fallback={<Box sx={{ minWidth: { sm: 200 } }} />}>
-          {/* <AppSearch /> */}
-        </React.Suspense>
-      ) : (
-        <Box sx={{ minWidth: { sm: 200 } }} />
-      )}
-    </React.Fragment>
-  );
-}
-
 const RootDiv = styled('div')(({ theme }) => {
   return {
     display: 'flex',
@@ -119,7 +100,7 @@ const RootDiv = styled('div')(({ theme }) => {
 
 export default function AppFrame(props) {
   const { children, className } = props;
-
+  const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const disablePermanent = false;
@@ -198,7 +179,6 @@ export default function AppFrame(props) {
           </Link>
           <GrowingDiv />
           <Stack direction="row" spacing={1.3}>
-            <DeferredAppSearch />
             <Tooltip title={'Github'} enterDelay={300}>
               <IconButton
                 component="a"
@@ -210,6 +190,8 @@ export default function AppFrame(props) {
                 <GitHubIcon fontSize="small" />
               </IconButton>
             </Tooltip>
+            <Notifications />
+
             {mode !== null ? (
               <ThemeModeToggle
                 checked={mode === 'system' ? prefersDarkMode : mode === 'dark'}
@@ -242,7 +224,7 @@ export default function AppFrame(props) {
                 <MenuItem key="profile" onClick={handleCloseUserMenu}>
                   <Button variant="" color="primary" fullWidth
                     endIcon={<AccountCircleIcon />}
-                    href={`${user.id}`}
+                    onClick={() => navigate(`/profile/${user.id}`)}
                   >
                     Profile
                   </Button>
@@ -250,6 +232,7 @@ export default function AppFrame(props) {
                 <MenuItem key="account-setting" onClick={handleCloseUserMenu}>
                   <Button variant="" color="primary" fullWidth
                     endIcon={<ManageAccountsIcon />}
+                    onClick={() => navigate(`/account-settings/${user.id}`)}
                   >
                     Account setting
                   </Button>
@@ -266,7 +249,6 @@ export default function AppFrame(props) {
           </Stack>
         </Toolbar>
       </StyledAppBar>
-
       <StyledAppNavDrawer
         disablePermanent={disablePermanent}
         onClose={() => setMobileOpen(false)}

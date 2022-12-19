@@ -1,0 +1,55 @@
+GET http://localhost:5001/
+###
+POST http://w42g4.int3306.freeddns.org/auth/signup
+Content-Type: application/json
+
+{
+    "username": "hoangndst",
+    "email": "hoangndst@gmail.com",
+    "password": "Hoang2002"
+}
+###
+POST http://hoangndst.ddns.net:3000/auth/signup
+Content-Type: application/json
+
+{
+    "username": "hoangndst",
+    "email": "hoangndst@gmail.com",
+    "password": "Hoang2002"
+}
+
+###
+
+POST http://localhost:5001/auth/signup
+Content-Type: application/json
+
+{
+    "username": "kien",
+    "email": "kien@gmail.com",
+    "password": "Kien2002"
+}
+
+###
+
+POST http://localhost:5001/auth/signin
+Content-Type: application/json
+
+{
+    "username": "hoangndst",
+    "password": "Hoang2002"
+}
+
+###
+
+###
+POST http://w42g4.int3306.freeddns.org/auth/signin
+Content-Type: application/json
+
+{
+    "username": "hoangndst",
+    "password": "Hoang2002"
+}
+
+###
+
+POST http://w42g4.int3306.freeddns.org/

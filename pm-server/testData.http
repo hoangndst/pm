@@ -1,0 +1,223 @@
+POST http://localhost:5000/pm/create-user
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+{
+    "id": "1lvc0a60lb34lc5r",
+    "username": "test",
+    "email": "test@gmail.com",
+    "first_name": "This",
+    "last_name": "Is Test0",
+    "birthday": "1990-01-02"
+}
+
+### 
+
+POST http://localhost:5000/pm/create-user
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+{
+    "id": "1lvc0a60lb34uxyh",
+    "username": "test1",
+    "email": "test1@gmail.com",
+    "first_name": "This",
+    "last_name": "Is Test1",
+    "birthday": "1990-01-02"
+}
+
+###
+
+POST http://localhost:5000/pm/create-user
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+{
+    "id": "1lvc0a60lb3b1qow",
+    "username": "test2",
+    "email": "test2@gmail.com",
+    "first_name": "This",
+    "last_name": "Is Test2",
+    "birthday": "1990-01-02"
+}
+
+###
+POST http://localhost:5000/pm/create-user
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+
+{
+    "id": "1lvc0a60lb3b0n2m",
+    "username": "test3",
+    "email": "test3@gmail.com",
+    "first_name": "This",
+    "last_name": "Is Test3",
+    "birthday": "1990-01-02"
+}
+
+### 
+
+POST http://localhost:5000/pm/create-conversation
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+{
+    "users": [
+        "1lvc0msglblz299o",
+        "1lvc0msglblzb207"
+    ],
+    "conversationName": "Hoang, Binh"
+}
+
+
+### Create a message
+POST http://localhost:5000/pm/create-message
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+{
+    "messageContent": "Hello Mom, this is the lastest message",
+    "fromUserId": "1lvc0msglblz299o",
+    "conversationId": "1lvc0amglbmb223r",
+    "createdAt": "2021-10-10T10:10:10.000Z"
+}
+
+###
+
+GET http://localhost:5000/pm/get-conversations?userId=1lvc0msglblz299o
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+###
+
+GET http://localhost:5000/pm/get-messages?conversationId=1lvc0amglbmb2umt
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+###
+GET http://localhost:5000/pm/user?id=1lvc0a60lb34lc5r
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+###
+
+GET http://localhost:5000/pm/search-users?searchString=h
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+
+### create team
+POST http://localhost:5000/pm/create-team
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+{
+    "membersId": [
+        "1lvc0msglblz299o",
+        "1lvc0msglblzb207",
+        "1lvc0egklbm8h9hj",
+        "1lvc0egklbm8iii7",
+        "1lvc0egklbm8jq39"
+    ],
+    "teamName": "Team 1: (Hoang, Binh, Diep, Minh, Quang)"
+}
+
+### get teams by user id
+GET http://localhost:5000/pm/get-teams-by-userid?userId=1lvc0egklbm8iii7
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+### delete team by id
+POST http://localhost:5000/pm/delete-team-by-id
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+{
+    "teamId": "1lvc0dgwlbp0g2y9",
+    "userId": "1lvc0msglblz299o"
+}
+###
+GET http://localhost:5000/pm/get-notifications-by-userid?userId=3c4148glbqmga6i
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+### 
+
+PUT http://localhost:5000/pm/update-notification/9
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+###
+GET http://localhost:5000/pm/get-project?projectId=1lvc08wlbs4zk0e&userId=1lvc0cnolbrnzl5r
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+###
+GET http://localhost:5000/pm/get-tasks-by-userid?userId=1lvc0cnolbrnzl5r
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFsdmMwY25vbGJybnpsNXIiLCJpYXQiOjE2NzEyOTk4OTksImV4cCI6MTY3MTM4NjI5OX0.x0wxszKLILdng0oxn8Z7YAeul3kyva5Uj8h0QVJ90kE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###
+
+# "1lvc0msglblz299o"	"hoangndst"
+# "1lvc0msglblzb207"	"binhnd"
+# "1lvc0egklbm8h9hj"	"diepnt"
+# "1lvc0egklbm8iii7"	"minhnd"
+# "1lvc0egklbm8jq39"	"quangnd"
+
+# {
+#     "id": "1lvc0msglblz299o",
+#     "name": "team 1",
+#     "isAmin": true,
+#     "members": [
+#         {
+#             "id": "1lvc0msglblz299o",
+#             "username": "hoangndst",
+#             "first_name": "Hoang",
+#             "last_name": "Nguyen",
+#         },
+#         {
+#             "id": "1lvc0msglblzb207",
+#             "username": "binhnd",
+#             "first_name": "Binh",
+#             "last_name": "Nguyen",
+#         },
+#         {
+#             "id": "1lvc0egklbm8h9hj",
+#             "username": "diepnt",
+#             "first_name": "Diep",
+#             "last_name": "Nguyen",
+#         },
+#         {
+#             "id": "1lvc0egklbm8iii7",
+#             "username": "minhnd",
+#             "first_name": "Minh",
+#             "last_name": "Nguyen",
+#         }
+#     ]
+# }

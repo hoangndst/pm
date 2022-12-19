@@ -1,14 +1,15 @@
 import * as React from 'react'
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import { TextField, IconButton, Stack, Avatar, Tooltip } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import { getMessages2 } from 'src/libs/data';
 import { useInBox } from 'src/contexts/InboxContext';
 import { format } from 'date-fns'
+import { useAppContext } from 'src/contexts/AppContext';
+import { useLocation } from 'react-router-dom';
+import { useAppSelector } from 'src/app/hook';
+import InboxService from 'src/services/inbox.service';
+import { useNotification } from 'src/contexts/NotificationContex';
 
 interface Props {
   window?: () => Window;
@@ -19,28 +20,110 @@ interface Props {
 export default function ChatSpace(props: Props) {
 
   const [message, setMessage] = React.useState('')
-  const data = getMessages2()
+  const { messages, setMessages, selectedConversation, setConversations } = useInBox()
+  const [arrivedMessage, setArrivedMessage] = React.useState<any>(null)
+  const { notification } = useNotification()
+  const scrollRef = React.useRef<any>()
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity, socket } = useAppContext()
+  const location = useLocation()
+  const { user } = useAppSelector((state: { user: any }) => state.user)
 
-  const { messages } = useInBox()
+  React.useEffect(() => {
+    if (notification) {
+      if (notification.type === "message") {
+        InboxService.GetConversationsById(user.id)
+          .then((response) => {
+            setConversations(response.conversations)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
+    }
+  }, [notification, setConversations, user.id])
+
+  React.useEffect(() => {
+    socket.current.on('message', (message: any) => {
+      console.log('new message', message)
+      InboxService.GetConversationsById(user.id)
+        .then((response) => {
+          setConversations(response.conversations)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      setArrivedMessage(message)
+    })
+  }, [location.pathname, socket])
+
+
+
+  React.useEffect(() => {
+    if (arrivedMessage) {
+      console.log('arrivedMessage changed')
+      console.log(arrivedMessage)
+      const re = /\/inbox\/\d+/
+      if (re.test(location.pathname)) {
+        const conversationId = location.pathname.split('/')[2]
+        if (arrivedMessage.conversation_id === conversationId) {
+          setMessages((prevMessages: any) => [...prevMessages, arrivedMessage])
+        } else {
+          console.log(false)
+        }
+      }
+    }
+  }, [arrivedMessage, location.pathname, setMessages])
+
+  const handleSendMessage = (e: any) => {
+    e.preventDefault()
+    if (message) {
+      const userInfo = {
+        id: user.id,
+        username: user.username,
+        first_name: user.first_name,
+        last_name: user.last_name
+      }
+      socket.current.emit('sendMessage',
+        {
+          messageContent: message,
+          conversationId: selectedConversation.id,
+          userInfo: userInfo
+        }, (error: any) => {
+          if (error) {
+            console.log(error)
+          }
+        })
+      setMessage('')
+    } else {
+      setSnackbarMessage('Message cannot be empty')
+      setSnackbarSeverity('info')
+      setOpenSnackbar(true)
+    }
+  }
+
+  React.useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   return (
     <Box
       sx={{ height: 'calc(100vh - 150px)', width: '100%' }}
     >
       <Box
-        sx={{ flexGrow: 1, overflow: "auto", height: '97%', width: '100%', p: 1 }}
+        sx={{ flexGrow: 1, overflow: "auto", height: '94%', width: '100%', p: 1 }}
       >
         <Stack direction='column' sx={{ justifyContent: 'center' }} spacing={0}>
           {messages.map((item, index) => (
-            <Stack direction='row' 
+            <Stack direction='row'
               sx={{ justifyContent: 'flex-start', mt: index === 0 || messages[index - 1].user.id === item.user.id ? 0 : 1.5 }}
               key={`${item.user.id}-${index}`}
+              ref={scrollRef}
             >
-              <Avatar 
-                sx={{ 
-                  width: 40, height: 40, 
-                  visibility: index === 0 || messages[index - 1].user.id !== item.user.id ? 'visible' : 'hidden' 
-                }} 
+              <Avatar
+                sx={{
+                  width: 40, height: 40,
+                  visibility: index === 0 || messages[index - 1].user.id !== item.user.id ? 'visible' : 'hidden'
+                }}
                 alt={item.user.last_name} src={`https://github.com/identicons/${item.user.username}.png`}
               />
               <Stack direction='column' sx={{ justifyContent: 'center', ml: 1 }}>
@@ -58,7 +141,7 @@ export default function ChatSpace(props: Props) {
               </Stack>
             </Stack>
           ))}
-        </Stack> 
+        </Stack>
       </Box>
       <Box
         sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingButtom: '5px' }}
@@ -70,15 +153,21 @@ export default function ChatSpace(props: Props) {
           placeholder="Type a message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          maxRows={1}
+          rows={2}
           multiline
           size='small'
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              handleSendMessage(e)
+            }
+          }}
         />
         <IconButton
           sx={{ ml: 1 }}
           aria-label="send"
+          onClick={(e) => handleSendMessage(e)}
         >
-          {message ? <SendIcon /> : <ThumbUpIcon />}
+          <SendIcon />
         </IconButton>
       </Box>
     </Box >

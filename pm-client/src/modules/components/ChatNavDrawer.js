@@ -1,5 +1,5 @@
 import {
-  Container, Box, Grid, Typography, Paper,
+  Box, Grid, Typography,
   TextField,
   List,
   ListItem,
@@ -7,21 +7,21 @@ import {
   ListItemText,
   Divider,
   Avatar,
-  Drawer
 } from "@mui/material"
-import React, { useEffect } from "react"
+import React from "react"
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import { Outlet, Link, NavLink, useLocation } from "react-router-dom";
-import { getMessages } from "src/libs/data";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/utils';
 import PropTypes from 'prop-types'
 import { useInBox } from "src/contexts/InboxContext"
-import { useAppSelector } from "src/app/hook"
-import InboxService from "src/services/inbox.service";
+import AddIcon from '@mui/icons-material/Add'
+import IconButton from '@mui/material/IconButton'
+import Stack from '@mui/material/Stack'
+import GroupsIcon from '@mui/icons-material/Groups'
 
 const compactMessages = (messages) => {
   if (messages.length > 25) {
@@ -145,27 +145,7 @@ const ChatNavDrawer = (props) => {
   const location = useLocation();
   const mobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
   const { disablePermanent, mobileOpen, onClose, onOpen } = props;
-  const { conversations, setConversations, setSelectedConversation, setMessages } = useInBox()
-  const { user } = useAppSelector(state => state.user)
-
-  // useEffect(() => {
-  //   InboxService.GetConversationsById(user.id)
-  //     .then((response) => {
-  //       setConversations(response.conversations)
-  //       InboxService.GetMessagesByConversationId(response.conversations[0].id)
-  //         .then((response) => {
-  //           setMessages(response)
-  //           console.log(response)
-  //         })
-  //         .catch((err) => {
-  //           console.log(err)
-  //         })
-  //       console.log(response)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }, [])
+  const { conversations } = useInBox()
 
   const drawer = (
     <React.Fragment>
@@ -177,15 +157,25 @@ const ChatNavDrawer = (props) => {
             flexShrink: 0,
             alignItems: "center",
             alignContent: "center",
+            justifyContent: "space-between",
           }}
         >
-          <Grid container>
-            <Grid item xs={6}>
-              <Typography variant="h6" component="div" sx={{ p: 2 }}>
-                Inbox
-              </Typography>
-            </Grid>
-          </Grid>
+          <Stack direction="row" spacing={2} sx={{ p: 2, alignItems: "center", justifyContent: "space-between" }}>
+            <Typography variant="h6" component="div">
+              Inbox
+            </Typography>
+            <Link to="/inbox"
+              onClick={() => {
+                if (mobile) {
+                  onClose();
+                }
+              }}
+            >
+              <IconButton size="small">
+                <AddIcon />
+              </IconButton>
+            </Link>
+          </Stack>
         </Grid>
         <Grid item xs={12}>
           <Box sx={{
@@ -217,19 +207,8 @@ const ChatNavDrawer = (props) => {
                 style={{ textDecoration: 'none' }}
                 key={item.id}
                 onClick={() => {
-                  setSelectedConversation(item)
-                  InboxService.GetMessagesByConversationId(item.id)
-                    .then((response) => {
-                      setMessages(response)
-                      console.log(response)
-                    })
-                    .catch((err) => {
-                      console.log(err)
-                    })
-
-                  console.log(item)
                   if (mobile) {
-                    onClose();
+                    onClose()
                   }
                 }}
               >
@@ -237,10 +216,21 @@ const ChatNavDrawer = (props) => {
                   className={location.pathname === `/inbox/${item.id}` ? "app-drawer-active" : ""}
                 >
                   <ListItemAvatar>
-                    <Avatar alt={item.users[0].username} src={`https://github.com/identicons/${item.users[0].username}.png`} />
+                    {item?.users.length === 1 ? (
+                      <Avatar
+                        alt={item?.conversation_name}
+                        src={`https://github.com/identicons/${item?.users[0].username}.png`}
+                      />
+                    ) : (
+                      <Avatar
+                        alt={item?.conversation_name}
+                      >
+                        <GroupsIcon />
+                      </Avatar>
+                    )}
                   </ListItemAvatar>
                   <ListItemText
-                    primary={item.users[0].username}
+                    primary={item.users.length === 1 ? `${item.users[0].first_name} ${item.users[0].last_name}` : `${item.conversation_name}`}
                     secondary={
                       <React.Fragment>
                         {compactMessages(item.message[0].message_content)}

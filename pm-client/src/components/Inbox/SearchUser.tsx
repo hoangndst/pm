@@ -1,5 +1,4 @@
 import * as React from 'react'
-import Chip from '@mui/material/Chip'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 import { Button, Box } from '@mui/material'
@@ -10,6 +9,12 @@ import Avatar from '@mui/material/Avatar'
 import { useAppContext } from 'src/contexts/AppContext'
 import InboxService from 'src/services/inbox.service'
 import { useAppSelector } from 'src/app/hook'
+import Grid from '@mui/material/Grid'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import CloseIcon from '@mui/icons-material/Close'
+import IconButton from '@mui/material/IconButton'
+import { useNavigate } from 'react-router-dom'
 
 interface user {
   id: string,
@@ -20,7 +25,7 @@ interface user {
 
 export default function SearchUser() {
 
-  const { conversations } = useInBox()
+  const { setSelectedConversation, setMessages, setConversations } = useInBox()
   const [searchString, setSearchString] = React.useState('')
   const [users, setUsers] = React.useState<user[]>([])
   const [open, setOpen] = React.useState(false)
@@ -28,6 +33,7 @@ export default function SearchUser() {
   const loading = open && users.length === 0
   const { setSnackbarMessage, setOpenSnackbar, setSnackbarSeverity } = useAppContext()
   const { user } = useAppSelector((state) => state.user)
+  const navigate = useNavigate()
 
   const handleChatButton = () => {
     if (selectedUsers.length > 0) {
@@ -37,15 +43,45 @@ export default function SearchUser() {
       })
       console.log('selectedUserIds', selectedUserIds)
       let conversationName = '2 users'
-      if (selectedUsers.length > 2) {
-        conversationName = selectedUsers[0].last_name + ', ' + selectedUsers[1].last_name + ' and ' + (selectedUsers.length - 2) + ' others'
+      if (selectedUserIds.length > 2) {
+        conversationName = selectedUsers[0].last_name + ', ' + selectedUsers[1].last_name
+        if (selectedUserIds.length >= 3)
+          conversationName += ' and ' + (selectedUserIds.length - 2) + ' others'
       }
+      console.log('conversationName', conversationName)
       InboxService.createConversation(conversationName, selectedUserIds)
         .then((response) => {
           console.log(response)
-          setSnackbarMessage('Conversation created')
-          setSnackbarSeverity('success')
-          setOpenSnackbar(true)
+          const conversationId = response.conversationId
+          const isNewConversation = response.isNewConversation
+          InboxService.GetConversationsById(user.id)
+            .then((response) => {
+              setConversations(response.conversations)
+              const newSelectedConversation = response.conversations.find((conversation: { id: any }) => conversation.id === conversationId)
+              setSelectedConversation(newSelectedConversation)
+              InboxService.GetMessagesByConversationId(conversationId)
+                .then((response) => {
+                  setMessages(response)
+                  console.log(response)
+                  navigate(`/inbox/${conversationId}`)
+                })
+                .catch((err) => {
+                  console.log(err)
+                })
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+          if (isNewConversation) {
+            setSnackbarMessage('Conversation created')
+            setSnackbarSeverity('success')
+            setOpenSnackbar(true)
+          } else {
+            setSnackbarMessage('Conversation already exists')
+            setSnackbarSeverity('info')
+            setOpenSnackbar(true)
+            navigate(`/inbox/${conversationId}`)
+          }
         })
         .catch((error) => {
           console.log(error)
@@ -61,6 +97,10 @@ export default function SearchUser() {
   }
 
   React.useEffect(() => {
+    console.log(selectedUsers)
+  }, [selectedUsers])
+
+  React.useEffect(() => {
     let active = true
     if (!loading) {
       return undefined
@@ -68,16 +108,11 @@ export default function SearchUser() {
     const timer = setTimeout(async () => {
       const newUsers = await UserService.SearchUsers(searchString)
       if (active) {
-        // add all selected users to the list of users if they are not already in the list
-        console.log('selected user', selectedUsers)
-        const newUsersWithSelected = newUsers
-        selectedUsers.forEach((selectedUser) => {
-          if (!newUsers.find((user: user) => user.id === selectedUser.id)) {
-            newUsersWithSelected.push(selectedUser)
-          }
+        // filter out users that are already in a selectedUsers
+        const filteredUsers = newUsers.filter((usr: user) => {
+          return !selectedUsers.find((selectedUser) => selectedUser.id === usr.id) && usr.id !== user.id
         })
-        console.log('call API', newUsersWithSelected)
-        setUsers(newUsersWithSelected)
+        setUsers(filteredUsers)
       }
     }, 1000)
     return () => {
@@ -95,23 +130,18 @@ export default function SearchUser() {
   return (
     <Box sx={{ width: '100%', p: 2 }}>
       <Autocomplete
-        multiple
         id="tags-filled"
         options={users.map((user) => user.username)}
-        defaultValue={[]}
-        disableClearable
+        getOptionLabel={(option) => option}
+        freeSolo
         onChange={(event, newValue, reason) => {
-          // if (reason !== "removeOption") {
-            let newSelectedUsers: user[] = []
-            users.forEach((user) => {
-              if (newValue.includes(user.username)) {
-                newSelectedUsers.push(user)
-              }
-            })
-            setSelectedUsers(newSelectedUsers)
-            console.log('selected user', selectedUsers)
-          // }
+          const selectedUser = users.find((user) => user.username === newValue)
+          if (selectedUser) {
+            setSelectedUsers([...selectedUsers, selectedUser])
+          }
+          setSearchString('')
         }}
+        value={searchString}
         filterSelectedOptions
         onOpen={() => {
           setOpen(true)
@@ -119,18 +149,10 @@ export default function SearchUser() {
         onClose={() => {
           setOpen(false)
         }}
-        renderTags={(value: readonly string[], getTagProps) =>
-          value.map((username: string, index: number) => (
-            <Chip variant="filled" label={username} {...getTagProps({ index })}
-              avatar={<Avatar alt={username} src={`https://github.com/identicons/${username}.png`} />}
-            />
-          ))
-        }
         renderInput={(params) => (
           <TextField
             {...params}
             onChange={(e) => setSearchString(e.target.value)}
-            // label="find user"
             placeholder="Find User"
             InputProps={{
               ...params.InputProps,
@@ -144,6 +166,29 @@ export default function SearchUser() {
           />
         )}
       />
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 10px' }}>
+        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+          {selectedUsers?.map((user, index) => (
+            <Grid item xs={6} sm={4} md={3} lg={2} key={`member-${index}`}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Avatar src={`https://github.com/identicons/${user.username}.png`} sx={{ width: 40, height: 40 }} />
+                <Typography component="div" sx={{ fontWeight: 600 }}>
+                  {user?.username}
+                </Typography>
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    const newSelectedUsers = selectedUsers.filter((selectedUser) => selectedUser.id !== user.id)
+                    setSelectedUsers(newSelectedUsers)
+                  }}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </Stack>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
       <Box sx={{ margin: '20px auto', width: '30%' }}>
         <Button variant='contained' sx={{ width: '100%' }} onClick={handleChatButton}>Chat</Button>
       </Box>

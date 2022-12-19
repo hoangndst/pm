@@ -3,28 +3,58 @@ import cors from 'cors'
 const app = express()
 import bodyParser from 'body-parser'
 import env from 'dotenv'
-import database from './models/index.js'
-import userRoutes from './routes/user.routes.js'
+import { Server } from 'socket.io'
+import databaseData from './models/data/index.js'
+import databaseAuth from './models/auth/index.js'
+import routes from './routes/index.js'
+import socketEvent from './socketEvent.js'
 
 env.config()
 app.use(cors())
 app.use(bodyParser.json())
 
 const port = process.env.PORT || 5000
+const Role = databaseAuth.roles
 
-app.get('/', (req, res) => {
-  res.status(200).json({ message: process.env.DB_HOST })
-})
-
-database.sequelize.sync({ force: true }).then(() => {
-  console.log('Synced with database')
+databaseData.sequelize.sync({ }).then(() => {
+  console.log('Synced with database data')
 }).catch((err) => {
-  console.log('Error syncing with database', err)
+  console.log('Error syncing with database data', err)
 })
 
-userRoutes(app)
-// teamRoutes(app)
+databaseAuth.sequelize.sync({ }).then(() => {
+  console.log('Synced with database auth')
+  //initial()
+}).catch((err) => {
+  console.log('Error syncing with database auth', err)
+})
 
-app.listen(port, () => {
+const initial = () => {
+  Role.create({
+    id: 1,
+    name: 'user'
+  })
+  Role.create({
+    id: 2,
+    name: 'moderator'
+  })
+  Role.create({
+    id: 3,
+    name: 'admin'
+  })
+}
+
+// routes
+routes(app)
+
+const server = app.listen(port, () => {
   console.log(`Server is listening on port ${port}`)
 })
+
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+  }
+})
+
+socketEvent(io)
