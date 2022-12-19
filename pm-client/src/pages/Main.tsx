@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'
 import { AppLayout } from "../modules/components/AppLayout"
 import { Outlet } from "react-router-dom"
 import { useAppSelector } from "../app/hook"

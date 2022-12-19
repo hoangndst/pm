@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useTeams } from 'src/contexts/TeamContext'
+import { useTeams } from 'src/contexts/TeamsContext'
 import Autocomplete from '@mui/material/Autocomplete'
 import UserService from 'src/services/user.service'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -83,6 +83,7 @@ export default function AddTeamMemberDialog() {
     selectedUsers.forEach((user) => {
       selectedUserIds.push(user.id)
     })
+    setOpenAddMemberDialog(false)
     TeamsService.AddTeamMembers(selectedUserIds.slice(1), selectedTeam.id)
       .then((res) => {
         socket.current.emit('inviteToTeam', { listMembersId: selectedUserIds.slice(1), teamInfo: selectedTeam, userInfo: user }, (error: any) => {
@@ -97,10 +98,12 @@ export default function AddTeamMemberDialog() {
           setSnackbarSeverity('success')
           setSnackbarMessage('Members added successfully')
           setOpenSnackbar(true)
-          setOpenAddMemberDialog(false)
           setSelectedUsers([])
         }).catch((err) => {
           console.log(err)
+          setSnackbarSeverity('error')
+          setSnackbarMessage('Error adding members')
+          setOpenSnackbar(true)
         })
       })
       .catch((err) => {

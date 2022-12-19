@@ -18,7 +18,7 @@ import AddIcon from '@mui/icons-material/Add'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { Link, useNavigate } from 'react-router-dom'
 import { IconButton } from '@mui/material'
-import { useTeams } from 'src/contexts/TeamContext'
+import { useTeams } from 'src/contexts/TeamsContext'
 import CreateTeamDialog from 'src/components/Teams/CreateTeamDialog'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DeleteTeamDialog from 'src/components/Teams/DeleteTeamDialog'
@@ -203,13 +203,6 @@ export default function Teams() {
                         )}
                       </Stack>
                     ) : null}
-                    <Button variant="text" color="primary" size="small" startIcon={<AddIcon />}
-                      sx={{
-                        height: '24px',
-                      }}
-                    >
-                      Invite Member
-                    </Button>
                     {team.permissions.is_admin ? (
                       // delete team
                       <IconButton size="small"

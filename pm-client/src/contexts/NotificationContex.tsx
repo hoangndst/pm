@@ -35,19 +35,17 @@ export default function NotificationContext({ children }: { children: React.Reac
       setNotification(notification)
       setOpenNotificationSnackbar(true)
       NotificationService.getNotificationsByUserId(user.id).then((res: React.SetStateAction<any[]>) => {
-        console.log(user.id, res)
         setNotifications(res)
       })
       console.log('new notification', notification)
     })
-  }, [])
+  }, [socket, user.id])
 
   React.useEffect(() => {
     // regex to check if the path is /*/*
     if (location.pathname.match(/\/\w+\/\w+/)) {
       NotificationService.updateNotificationByRoute(location.pathname, user.id).then((res) => {
         NotificationService.getNotificationsByUserId(user.id).then((res) => {
-          console.log(user.id, res)
           setNotifications(res)
         })
       }).catch((err) => {

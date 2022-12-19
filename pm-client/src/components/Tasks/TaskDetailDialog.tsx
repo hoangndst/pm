@@ -4,9 +4,7 @@ import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import UserCard from './AssignedToCard'
 import DateTime from './DateTime'
 import Stack from '@mui/material/Stack'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -26,6 +24,7 @@ import AssignedToCard from './AssignedToCard'
 import { useAppSelector } from 'src/app/hook'
 import { useProjects } from 'src/contexts/ProjectContext'
 import { useAppContext } from 'src/contexts/AppContext'
+import ProjectService from 'src/services/project.service'
 
 export default function TaskDetailDialog() {
   const theme = useTheme()
@@ -38,6 +37,37 @@ export default function TaskDetailDialog() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity, socket } = useAppContext()
+
+  React.useEffect(() => {
+    if (task) {
+      setTaskName(task.task_name)
+    }
+  }, [task])
+
+  React.useEffect(() => {
+    // delay to update the task name
+    const timer = setTimeout(() => {
+      // ignore if the task name has new spaces at start or end
+      if (taskName.trim() !== task?.task_name && task) {
+        const updateTask = {
+          task_name: taskName,
+        }
+        ProjectService.UpdateTaskByTaskId(user.id, task.id, updateTask)
+          .then((res) => {
+            setOpenSnackbar(true)
+            setSnackbarMessage('Task name updated successfully')
+            setSnackbarSeverity('success')
+            task.task_name = taskName
+          })
+          .catch((err) => {
+            setOpenSnackbar(true)
+            setSnackbarMessage('Failed to update task name')
+            setSnackbarSeverity('error')
+          })
+      }
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [taskName])
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -100,7 +130,8 @@ export default function TaskDetailDialog() {
               label="Task Name"
               disabled={task?.canEdit ? false : true}
               type="text"
-              defaultValue={task?.task_name}
+              value={taskName}
+              onChange={(e) => setTaskName(e.target.value)}
               fullWidth
               variant="outlined"
             />

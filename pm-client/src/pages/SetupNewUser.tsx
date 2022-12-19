@@ -47,7 +47,7 @@ const SetupNewUser = () => {
       setActiveStep((prevActiveStep) => prevActiveStep + 1)
       return
     }
-    if(activeStep === steps.length - 1) {
+    if (activeStep === steps.length - 1) {
       navigate('/login', { replace: true })
     }
     if (finishedSteps.includes(activeStep)) {
@@ -69,7 +69,7 @@ const SetupNewUser = () => {
       newSkipped.add(activeStep)
       return newSkipped
     })
-    
+
   }
 
 

@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles'
 import { useAppSelector } from "src/app/hook"
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
-import { useTeams } from 'src/contexts/TeamContext'
+import { useTeams } from 'src/contexts/TeamsContext'
 import { styled } from '@mui/material/styles'
 import Divider from '@mui/material/Divider'
 import TextField from '@mui/material/TextField'
@@ -32,6 +32,7 @@ import AddTeamMemberDialog from 'src/components/Teams/AddTeamMemberDialog'
 import Badge from '@mui/material/Badge'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { format } from 'date-fns'
 
 export const PaperComponent = styled(Paper)(({ theme }) => ({
   p: 2,
@@ -301,7 +302,7 @@ export default function Team() {
                   <Stack direction="row" spacing={1} alignItems="center">
                     <AddIcon sx={{ width: 40, height: 40 }} />
                     <Typography component="div" sx={{ fontWeight: 600 }}>
-                      Add member
+                      Invite Member
                     </Typography>
                   </Stack>
                 </Button>
@@ -413,7 +414,7 @@ export default function Team() {
                       <FormatListBulletedOutlinedIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText secondary="Jan 9, 2014">
+                  <ListItemText secondary={format(new Date(prj?.createdAt), 'dd/MM/yyyy')}>
                     <Link
                       style={{
                         textDecoration: 'none',

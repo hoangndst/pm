@@ -31,7 +31,7 @@ export const getTasksByProjectId = async (req, res) => {
         "id",
         "task_name",
         "due_date",
-        "creator_id",
+        "created_by",
         "project_id",
         "assigned_to",
         "task_id",
@@ -71,16 +71,16 @@ export const updateTask = async (req, res) => {
 export const deleteTask = async (req, res) => {
   try {
     await database.task
-      .findOne({ where: { creator_id: req.body.userId, id: req.body.taskId } })
+      .findOne({ where: { id: req.body.taskId } })
       .then(async (task) => {
         if (!task) {
           res.status(200).send({
-            message: "User don't create this task",
+            message: "Task not found",
           });
         } else {
           await task.destroy().then(() => {
             res.status(200).send({
-              message: "task delete successfully",
+              message: "Task delete successfully",
             });
           });
         }
@@ -109,7 +109,7 @@ export const createSubTask = async (req, res) => {
           const subtask = {
             ...req.body.subtask,
             id: taskId,
-            creator_id: userId,
+            created_by: userId,
             project_id: projectId,
             task_name: taskName,
             createdAt: new Date(),
@@ -150,7 +150,7 @@ export const getSubTasksByTaskId = async (req, res) => {
         "id",
         "task_name",
         "due_date",
-        "creator_id",
+        "created_by",
         "project_id",
         "assigned_to",
         "status",
@@ -168,7 +168,7 @@ export const getSubTasksByTaskId = async (req, res) => {
 export const updateSubTask = async (req, res) => {
   try {
     await database.task
-      .findOne({ where: { creator_id: req.body.userId, id: req.body.taskId } })
+      .findOne({ where: { created_by: req.body.userId, id: req.body.taskId } })
       .then(async (subtask) => {
         if (!subtask) {
           res.status(200).send({
@@ -201,7 +201,7 @@ export const updateSubTask = async (req, res) => {
 export const deleteSubTask = async (req, res) => {
   try {
     await database.task
-      .findOne({ where: { creator_id: req.body.userId, id: req.body.taskId } })
+      .findOne({ where: { created_by: req.body.userId, id: req.body.taskId } })
       .then(async (task) => {
         if (!task) {
           res.status(200).send({
@@ -259,6 +259,7 @@ export const getTasksByUserId = async (req, res) => {
       where: {
         assigned_to: userId,
       },
+      order: [["due_date", "ASC"]],
       attributes: [
         "id",
         "task_name",

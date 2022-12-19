@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TeamsService from 'src/services/team.service';
-import { useTeams } from 'src/contexts/TeamContext';
+import { useTeams } from 'src/contexts/TeamsContext';
 import { useAppContext } from 'src/contexts/AppContext';
 
 interface DeleteTeamDialogProps {
@@ -26,6 +26,7 @@ export default function DeleteTeamDialog({ open, setOpen, team, userId }: Delete
   };
 
   const handleDelete = () => {
+    setOpen(false)
     TeamsService.DeleteTeamByTeamId(userId, team.id)
       .then((res) => {
         console.log(res);
@@ -35,12 +36,17 @@ export default function DeleteTeamDialog({ open, setOpen, team, userId }: Delete
           setSnackbarSeverity('success')
           setSnackbarMessage('Team deleted successfully!')
           setOpenSnackbar(true)
-          setOpen(false)
         }).catch((err) => {
           console.log(err)
+          setSnackbarSeverity('error')
+          setSnackbarMessage('Error deleting team')
+          setOpenSnackbar(true)
         })
       })
       .catch((err) => {
+        setSnackbarSeverity('error')
+        setSnackbarMessage('Error deleting team')
+        setOpenSnackbar(true)
         console.log(err);
       });
   }

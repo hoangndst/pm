@@ -1,8 +1,5 @@
 import { createCtx } from "./CreateCtx"
 import React from 'react'
-import ProjectService from "src/services/project.service"
-import { useAppSelector } from "src/app/hook"
-
 interface TaskContextType {
   openDialog: boolean,
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>,
@@ -10,30 +7,17 @@ interface TaskContextType {
   setOpenTaskDetailDialog: React.Dispatch<React.SetStateAction<boolean>>,
   task: any,
   setTask: React.Dispatch<React.SetStateAction<any>>,
-  myTasks: any,
-  setMyTasks: React.Dispatch<React.SetStateAction<any>>
+  openDeleteTaskDialog: boolean,
+  setOpenDeleteTaskDialog: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const [useTask, TaskProvider] = createCtx<TaskContextType>()
 
-export default function UserContext({ children }: { children: React.ReactNode }) {
+export default function TaskContext({ children }: { children: React.ReactNode }) {
   const [openDialog, setOpenDialog] = React.useState(false)
   const [openTaskDetailDialog, setOpenTaskDetailDialog] = React.useState(false)
   const [task, setTask] = React.useState<any>(null)
-  const [myTasks, setMyTasks] = React.useState<any>(null)
-  const { user } = useAppSelector((state) => state.user)
-
-  React.useEffect(() => {
-    ProjectService.GetTasksByUserId(user.id)
-      .then((res) => {
-        setMyTasks(res)
-        console.log('my task:', res)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
-
+  const [openDeleteTaskDialog, setOpenDeleteTaskDialog] = React.useState(false)
   return (
     <TaskProvider
       value={{
@@ -43,8 +27,8 @@ export default function UserContext({ children }: { children: React.ReactNode })
         setOpenTaskDetailDialog,
         task,
         setTask,
-        myTasks,
-        setMyTasks
+        openDeleteTaskDialog,
+        setOpenDeleteTaskDialog
       }}
     >
       {children}

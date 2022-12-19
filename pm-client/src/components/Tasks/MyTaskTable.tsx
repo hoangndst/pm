@@ -14,19 +14,19 @@ import TablePagination from '@mui/material/TablePagination';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Chip from '@mui/material/Chip';
 import Avatar from '@mui/material/Avatar';
-import { useTask } from 'src/contexts/TaskContext';
 import { format } from 'date-fns';
 import { useAppSelector } from 'src/app/hook';
 import { useNavigate } from 'react-router-dom';
 import ProjectService from 'src/services/project.service';
 import { useAppContext } from 'src/contexts/AppContext';
+import { useMyTask } from 'src/contexts/MyTaskContext';
 
 export function Row(props: { row: any }) {
   const { row } = props;
   const { user } = useAppSelector(state => state.user)
   const navigate = useNavigate()
   const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity, socket } = useAppContext()
-  const { setMyTasks } = useTask()
+  const { setMyTasks } = useMyTask()
 
   const handleCompleteTask = (task: any) => {
     const upDateTask = {
@@ -135,7 +135,7 @@ export function Row(props: { row: any }) {
 export default function MyTaskTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const { myTasks } = useTask()
+  const { myTasks } = useMyTask()
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);

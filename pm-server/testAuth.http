@@ -4,7 +4,16 @@ POST http://w42g4.int3306.freeddns.org/auth/signup
 Content-Type: application/json
 
 {
-    "username": "test",
+    "username": "hoangndst",
+    "email": "hoangndst@gmail.com",
+    "password": "Hoang2002"
+}
+###
+POST http://hoangndst.ddns.net:3000/auth/signup
+Content-Type: application/json
+
+{
+    "username": "hoangndst",
     "email": "hoangndst@gmail.com",
     "password": "Hoang2002"
 }
@@ -37,7 +46,7 @@ POST http://w42g4.int3306.freeddns.org/auth/signin
 Content-Type: application/json
 
 {
-    "username": "test",
+    "username": "hoangndst",
     "password": "Hoang2002"
 }
 
