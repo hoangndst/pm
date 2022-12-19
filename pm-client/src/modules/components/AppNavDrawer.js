@@ -297,6 +297,7 @@ export default function AppNavDrawer(props) {
     setOpenTeams(!openTeams);
   };
 
+
   const drawer = (
     <React.Fragment>
       <ToolbarDiv>

@@ -8,7 +8,7 @@ export const getNotifications = async (req, res) => {
         to_user_id: userId
       },
       attributes: ["id", "type", "route", "is_read", "to_user_id", "from_user_id", "notification_content", "createdAt", "updatedAt"],
-      order: [["updatedAt", "DESC"]]
+      order: [["createdAt", "DESC"]]
     })
     // get from_user info
     try {

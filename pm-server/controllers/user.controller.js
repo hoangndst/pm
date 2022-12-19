@@ -1,4 +1,5 @@
 import database from "../models/data/index.js"
+import databaseAuth from "../models/auth/index.js"
 import { Op } from "sequelize"
 
 // insert new user
@@ -75,5 +76,27 @@ export const searchUsers = (req, res) => {
     })
   } else {
     res.status(200).send([])
+  }
+}
+
+export const updateUser = async (req, res) => {
+  const user = req.body.user
+  try {
+    await database.user.update(user, {
+      where: {
+        id: user.id
+      }
+    })
+    await databaseAuth.users.update(user, {
+      where: {
+        id: user.id
+      }
+    }).then((user) => {
+      res.status(200).send(user)
+    }).catch((err) => {
+      res.status(500).send({ message: err.message })
+    })
+  } catch (error) {
+    res.status(500).send({ message: error.message })
   }
 }

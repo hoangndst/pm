@@ -9,13 +9,36 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
+import { useNavigate } from 'react-router-dom'
+import UserService from 'src/services/user.service'
+import { useLocation } from 'react-router-dom'
+import React from 'react'
 
 export default function Profile() {
 
   const theme = useTheme()
   const mobile = useMediaQuery(theme.breakpoints.down('lg'))
   const { user } = useAppSelector(state => state.user)
+  const navigate = useNavigate()
+  const [userInfo, setUserInfo] = React.useState<any>({})
+  const location = useLocation()
 
+  React.useEffect(() => {
+    if (location.pathname) {
+      // profile/*
+      const re = /\/profile\/\d+/
+      if (re.test(location.pathname)) {
+        const userId = location.pathname.split("/")[2]
+        UserService.GetUserInfoById(userId)
+          .then((response) => {
+            setUserInfo(response)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
+    }
+  }, [location.pathname])
   return (
     <Box
       sx={{
@@ -30,41 +53,35 @@ export default function Profile() {
     >
       <Grid container spacing={2} columns={{ xs: 12, sm: 12, md: 12 }} sx={{ padding: 2 }}>
         <Grid item xs={12} sm={12}>
-          <Stack spacing={1} direction="row" alignItems="center"
-            sx={{
-              position: 'sticky',
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Stack spacing={1} direction="row" alignItems="center">
-              <StyledBadge
-                overlap="circular"
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                variant="dot"
-              >
-                <Avatar alt="Hoang Nguyen Dinh" src={`https://github.com/identicons/${user.username}.png`}
-                  sx={{
-                    minWidth: 100,
-                    minHeight: 100,
-                    fontSize: 80,
-                  }}
-                />
-              </StyledBadge>
-              <Stack spacing={0} direction="column" alignItems="left">
-                <Typography variant="h5" component="div" sx={{ fontWeight: 600 }}>
-                  {user.username}
-                </Typography>
-                <Typography variant="body2" component="div" sx={{ fontWeight: 400 }}>
-                  {user.email}
-                </Typography>
-              </Stack>
+          <Stack spacing={1} direction="row" alignItems="center">
+            <StyledBadge
+              overlap="circular"
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              variant="dot"
+            >
+              <Avatar alt="Hoang Nguyen Dinh" src={`https://github.com/identicons/${userInfo.username}.png`}
+                sx={{
+                  minWidth: 100,
+                  minHeight: 100,
+                  fontSize: 80,
+                }}
+              />
+            </StyledBadge>
+            <Stack spacing={0} direction="column" alignItems="left">
+              <Typography variant="h5" component="div" sx={{ fontWeight: 600 }}>
+                {userInfo.first_name} {userInfo.last_name}
+              </Typography>
+              <Typography variant="body2" component="div" sx={{ fontWeight: 400 }}>
+                {userInfo.email}
+              </Typography>
             </Stack>
-            <Stack spacing={0} direction="column" alignItems="right">
-              <Button variant="outlined" color="primary" startIcon={<ManageAccountsIcon />}>
-                Manage Accounts
-              </Button>
-            </Stack>
+            { userInfo.id === user.id && (
+            <Button variant="outlined" color="primary" startIcon={<ManageAccountsIcon />}
+              onClick={() => navigate(`/account-settings/${user.id}`)}
+            >
+              Manage Accounts
+            </Button>
+            )}
           </Stack>
         </Grid>
       </Grid>

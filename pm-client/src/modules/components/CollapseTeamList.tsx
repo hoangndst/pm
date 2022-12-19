@@ -10,12 +10,16 @@ import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import { Team } from '../../libs/type';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
+import { useNavigate } from 'react-router-dom';
+
 
 export function CollapseTeamList(props: Team) {
 
   const { id, name, teamMember } = props;
 
   const [open, setOpen] = React.useState(true);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setOpen(!open);
@@ -32,10 +36,15 @@ export function CollapseTeamList(props: Team) {
         <ListItemText primary={name}
           sx={{ marginLeft: '30px' }}
         />
+        <IconButton sx={{ marginLeft: 'auto' }} size="small"
+          onClick={() => navigate(`/teams/${id}`)}
+        >
+          <ReadMoreIcon />
+        </IconButton>
         <IconButton size="small" sx={{ ml: 1 }}
           onClick={handleClick}
         >
-        {open ? <ExpandLess /> : <ExpandMore />}
+          {open ? <ExpandLess /> : <ExpandMore />}
         </IconButton>
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>

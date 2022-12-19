@@ -1,28 +1,11 @@
-import * as React from 'react'
-import { Grid, Button, Menu, MenuItem, Typography, Box } from "@mui/material"
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { Box } from "@mui/material"
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import MyTaskTable from 'src/components/Tasks/MyTaskTable'
 
-const options = ['Incomplete tasks', 'Completed tasks', 'All tasks']
-
 export const MyTasks = () => {
-
   const theme = useTheme()
   const mobile = useMediaQuery(theme.breakpoints.down('lg'))
-  const [option, setOption] = React.useState<string | null>(options[0])
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
-
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget)
-  }
-
-  const handleCloseUserMenu = (option: string) => {
-    setOption(option)
-    setAnchorElUser(null)
-  }
-
   return (
     <Box
       sx={{
@@ -35,58 +18,7 @@ export const MyTasks = () => {
         height: 'calc(100vh - 120px)'
       }}
     >
-
-      <Grid container spacing={2}>
-        <Grid item xs={12}
-          sx={{
-            position: 'sticky',
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div>
-            <Button
-              sx={{
-                ml: '5px',
-              }}
-              onClick={handleOpenUserMenu} variant="text" size='small' startIcon={<CheckCircleIcon fontSize='small' />}
-
-            >
-              {option}
-            </Button>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="options-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-            >
-              {options.map((option) => (
-                <MenuItem key={option} onClick={() => handleCloseUserMenu(option.toString())}>
-                  <Typography textAlign="center">{option}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </div>
-        </Grid>
-        <Grid item xs={12}
-          sx={{
-            height: '100%',
-          }}
-        >
-          <MyTaskTable />
-        </Grid>
-      </Grid>
-      {/* <AddTaskDialog /> */}
-      {/* <TaskDetailDialog /> */}
+      <MyTaskTable />
     </Box>
   )
 }

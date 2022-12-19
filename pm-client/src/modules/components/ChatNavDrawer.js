@@ -146,6 +146,27 @@ const ChatNavDrawer = (props) => {
   const mobile = useMediaQuery((theme) => theme.breakpoints.down('lg'));
   const { disablePermanent, mobileOpen, onClose, onOpen } = props;
   const { conversations } = useInBox()
+  const [filterConversations, setFilterConversations] = React.useState([])
+
+  React.useEffect(() => {
+    setFilterConversations(conversations)
+  }, [conversations])
+
+  const handleSearch = (value) => {
+    if (value && value !== '') {
+      const filtered = conversations.filter((conversation) => {
+        if (conversation.users.length < 2) {
+          return `${conversation.users[0].first_name} ${conversation.users[0].last_name}`.toLowerCase().includes(value.toLowerCase())
+        } else {
+          return conversation.conversation_name.toLowerCase().includes(value.toLowerCase())
+        }
+      })
+      setFilterConversations(filtered)
+    } else {
+      setFilterConversations(conversations)
+    }
+  }
+
 
   const drawer = (
     <React.Fragment>
@@ -194,6 +215,7 @@ const ChatNavDrawer = (props) => {
                   </InputAdornment>
                 ),
               }}
+              onChange={(e) => handleSearch(e.target.value)}
             />
           </Box>
         </Grid>
@@ -201,7 +223,7 @@ const ChatNavDrawer = (props) => {
           sx={{ flexGrow: 1, overflow: "auto", mt: 1, height: mobile ? "calc(100vh - 170px)" : "calc(100vh - 190px)" }}
         >
           <List sx={{ width: '100%', maxWidth: 300, bgcolor: 'background.paper' }}>
-            {conversations.map((item) => (
+            {filterConversations.map((item) => (
               <NavLink
                 to={`/inbox/${item.id}`}
                 style={{ textDecoration: 'none' }}

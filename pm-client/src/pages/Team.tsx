@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography'
 import { useTeams } from 'src/contexts/TeamsContext'
 import { styled } from '@mui/material/styles'
 import Divider from '@mui/material/Divider'
-import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar'
@@ -33,6 +32,11 @@ import Badge from '@mui/material/Badge'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { format } from 'date-fns'
+import { useNavigate } from 'react-router-dom'
+import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import SaveIcon from '@mui/icons-material/Save';
+
 
 export const PaperComponent = styled(Paper)(({ theme }) => ({
   p: 2,
@@ -75,6 +79,7 @@ export default function Team() {
   const [promoteMember, setPromoteMember] = React.useState<any>(null)
   const { setOpenSnackbar, setSnackbarSeverity, setSnackbarMessage, socket } = useAppContext()
   const [teamName, setTeamName] = React.useState<string>('')
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     if (selectedTeam) {
@@ -82,30 +87,30 @@ export default function Team() {
     }
   }, [selectedTeam])
 
-  React.useEffect(() => {
-    // delay to update the project name
-    const timer = setTimeout(() => {
-      // ignore if the project name has new spaces at start or end
-      if (teamName.trim() !== selectedTeam?.name && selectedTeam) {
-        const project = {
-          name: teamName
-        }
-        TeamsService.UpdateTeam(selectedTeam.id, project)
-          .then((res) => {
-            setOpenSnackbar(true)
-            setSnackbarMessage('Team name updated')
-            setSnackbarSeverity('success')
-            selectedTeam.name = teamName
-          })
-          .catch((err) => {
-            setOpenSnackbar(true)
-            setSnackbarMessage('Error updating team name')
-            setSnackbarSeverity('error')
-          })
+  const handleChangeTeamName = () => {
+    if (teamName.trim() !== selectedTeam?.name && selectedTeam && teamName.trim() !== '') {
+      const project = {
+        name: teamName
       }
-    }, 1000)
-    return () => clearTimeout(timer)
-  }, [teamName])
+      TeamsService.UpdateTeam(selectedTeam.id, project)
+        .then((res) => {
+          setOpenSnackbar(true)
+          setSnackbarMessage('Team name updated')
+          setSnackbarSeverity('success')
+          selectedTeam.name = teamName
+        })
+        .catch((err) => {
+          setOpenSnackbar(true)
+          setSnackbarMessage('Error updating team name')
+          setSnackbarSeverity('error')
+        })
+    } else {
+      setTeamName(selectedTeam?.name)
+      setSnackbarSeverity('error')
+      setSnackbarMessage('Team name cannot be empty')
+      setOpenSnackbar(true)
+    }
+  }
 
   const handleOpenDeleteProject = () => {
     ProjectService.DeleteProject(user.id, deleteProject.id)
@@ -239,6 +244,10 @@ export default function Team() {
       })
   }
 
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   return (
     <Box
       sx={{
@@ -277,15 +286,23 @@ export default function Team() {
             </Typography>
           </Divider>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 10px' }}>
-            <TextField
-              id="outlined-multiline-static"
-              multiline
-              maxRows={5}
-              disabled={selectedTeam?.permissions.is_admin ? false : true}
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={'text'}
+              fullWidth
               value={teamName}
-              variant="filled"
               onChange={(e) => setTeamName(e.target.value)}
-              sx={{ width: '100%' }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleChangeTeamName}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    <SaveIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
             />
           </Box>
           <Divider textAlign='center'>
@@ -311,7 +328,11 @@ export default function Team() {
                 member.is_joined ? (
                   <Grid item xs={6} sm={4} md={3} lg={2} key={`member-${index}`}>
                     <Stack direction="row" spacing={1} alignItems="center">
-                      <Button variant="text" color={theme.palette.mode === 'dark' ? 'inherit' : 'primary'}>
+                      <Button variant="text" color={theme.palette.mode === 'dark' ? 'inherit' : 'primary'}
+                        onClick={() => {
+                          navigate(`/profile/${member.id}`)
+                        }}
+                      >
                         <Badge badgeContent={'admin'} color="primary"
                           invisible={!member.is_admin}
                         >
@@ -360,7 +381,11 @@ export default function Team() {
               {selectedTeam?.users?.map((member: any, index: number) => (
                 !member.is_joined ? (
                   <Grid item xs={6} sm={4} md={3} lg={2} key={`member-${index}`}>
-                    <Button variant="text" color={theme.palette.mode === 'dark' ? 'inherit' : 'primary'}>
+                    <Button variant="text" color={theme.palette.mode === 'dark' ? 'inherit' : 'primary'}
+                      onClick={() => {
+                        navigate(`/profile/${member.id}`)
+                      }}
+                    >
                       <Stack direction="row" spacing={1} alignItems="center">
                         <Avatar src={`https://github.com/identicons/${member.username}.png`} sx={{ width: 40, height: 40 }} />
                         <Typography component="div" sx={{ fontWeight: 600 }}>
@@ -476,7 +501,7 @@ export default function Team() {
           contentText={promoteMember?.is_admin ? `Are you sure you want to demote ${promoteMember?.username} from admin? This action cannot be undone.` : `Are you sure you want to promote ${promoteMember?.username} to admin? This action cannot be undone.`}
         />
         <AddTeamMemberDialog />
-      </Box>
-    </Box>
+      </Box >
+    </Box >
   )
 }

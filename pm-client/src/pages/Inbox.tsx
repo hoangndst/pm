@@ -8,6 +8,8 @@ import {
   Grid,
   Snackbar,
   Alert,
+  Stack,
+  Button
 } from "@mui/material"
 import { styled, alpha } from '@mui/material/styles'
 import { Outlet } from "react-router-dom"
@@ -20,6 +22,8 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import { useAppContext } from "src/contexts/AppContext"
 import GroupsIcon from '@mui/icons-material/Groups'
+import { useNavigate } from "react-router-dom"
+
 
 const StyledAppNavDrawer = styled(ChatNavDrawer)(({ disablePermanent, theme }) => {
   if (disablePermanent) {
@@ -65,6 +69,7 @@ const Inbox = () => {
   const [isDetailOpen, setIsDetailOpen] = React.useState(false)
   const { selectedConversation } = useInBox()
   const { snackbarMessage, setOpenSnackbar, snackbarSeverity, openSnackbar } = useAppContext()
+  const navigate = useNavigate()
 
   return (
     <Box
@@ -194,23 +199,31 @@ const Inbox = () => {
                   </IconButton>
                 </Grid>
                 <Grid item xs={12}>
-                  <Avatar
-                    alt={selectedConversation?.conversation_name}
-                    src={`https://github.com/identicons/${selectedConversation?.users[0].username}.png`}
-                    sx={{ width: 50, height: 50, m: '0 auto', mt: 2 }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography
-                    sx={{ m: '10px auto', width: 'fit-content' }}
-                  >
-                    {selectedConversation?.conversation_name}
-                  </Typography>
-                  <Typography
-                    sx={{ m: '10px auto', width: 'fit-content' }}
-                  >
-                    {selectedConversation?.users[0].email}
-                  </Typography>
+                  <Stack direction="column" spacing={1} sx={{ m: '10px auto', width: 'fit-content' }}>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                      Other users in this conversation
+                    </Typography>
+                    {selectedConversation?.users.map((user: any) => (
+                      <Stack direction="row" spacing={2} sx={{ m: '10px auto' }}
+                        alignItems="center"
+                        key={user.id}
+                      >
+                        <Button
+                          onClick={() => {
+                            navigate(`/profile/${user.id}`)
+                          }}
+                        >
+                          <Avatar
+                            alt={user?.first_name}
+                            src={`https://github.com/identicons/${user.username}.png`}
+                          />
+                        </Button>
+                        <Typography>
+                          {user.first_name} {user.last_name}
+                        </Typography>
+                      </Stack>
+                    ))}
+                  </Stack>
                 </Grid>
               </Grid>
             </Box>
