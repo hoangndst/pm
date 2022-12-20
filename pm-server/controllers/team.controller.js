@@ -2,11 +2,11 @@ import database from "../models/data/index.js"
 import uniqid from "uniqid"
 import { Op } from "sequelize"
 
+// create new team
 export const createTeam = async (req, res) => {
   const listMembers = req.body.membersId;
   const team_id = uniqid();
   const team_name = req.body.teamName;
-
   const team = {
     id: team_id,
     name: team_name,
@@ -35,7 +35,6 @@ export const createTeam = async (req, res) => {
 export const addTeamMembers = async (req, res) => {
   const listNewMembers = req.body.newMembers;
   const team_id = req.body.team_id;
-
   const new_members = listNewMembers.map((id) => {
     return {
       user_id: id,
@@ -107,7 +106,6 @@ export const demoteToMember = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
-
 
 export const getTeamsByUserId = async (req, res) => {
   const userId = req.query.userId;
