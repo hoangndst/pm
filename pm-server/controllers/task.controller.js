@@ -251,4 +251,50 @@ export const deleteSubTask = async (req, res) => {
 //   }
 // }
 
-
+export const getTasksByUserId = async (req, res) => {
+  const userId = req.query.userId;
+  try {
+    const tasks = await database.task.findAll({
+      where: {
+        assigned_to: userId,
+      },
+      order: [["due_date", "ASC"]],
+      attributes: [
+        "id",
+        "task_name",
+        "due_date",
+        "created_by",
+        "project_id",
+        "task_id",
+        "completed_on",
+      ],
+    });
+    await Promise.all(
+      tasks.map(async (task) => {
+        const createdTaskUser = await database.user.findOne({
+          where: {
+            id: task.created_by,
+          },
+          attributes: ["id", "username", "email", "first_name", "last_name"],
+        });
+        task.created_by = createdTaskUser;
+        const project = await database.project.findOne({
+          where: {
+            id: task.dataValues.project_id
+          },
+          attributes: ["team_id"]
+        })
+        const teamId = project.dataValues.team_id
+        const user = await database.teamMember.findOne({
+          where: { user_id: userId, team_id: teamId },
+          attributes: ["is_admin"],
+        });
+        task.dataValues.is_admin = user.dataValues.is_admin;
+        return task;
+      })
+    );
+    res.status(200).send(tasks);
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
