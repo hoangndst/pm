@@ -31,6 +31,7 @@ export const createTask = async (req, res) => {
 };
 export const updateTask = async (req, res) => {
   try {
+    task
     await database.task
       .findOne({ where: { creator_id: req.body.userId, id: req.body.taskId } })
       .then(async (task) => {
@@ -209,7 +210,6 @@ export const getTasksByUserId = async (req, res) => {
         "due_date",
         "creator_id",
         "project_id",
-        "assigned_to",
         "task_id",
         "completedAt",
       ],
@@ -221,19 +221,23 @@ export const getTasksByUserId = async (req, res) => {
             id: task.creator_id,
           },
           attributes: ["id", "username", "email", "first_name", "last_name"],
-        });
-        const assignedTaskUser = await database.user.findOne({
-          where: {
-            id: task.assigned_to,
-          },
-          attributes: ["id", "username", "email", "first_name", "last_name"],
-        });
+        });       
         task.creator_id = createdTaskUser;
-        task.assigned_to = assignedTaskUser;
+        const project = await database.project.findOne({
+          where: {
+            id: task.dataValues.project_id
+          },
+          attributes: ["team_id"]
+        })
+        const teamId = project.dataValues.team_id
+        const user = await database.teamMember.findOne({
+          where: { user_id: userId, team_id: teamId },
+          attributes: ["is_admin"],
+        });
+        task.dataValues.is_admin = user.dataValues.is_admin;
         return task;
       })
     );
-    console.log(tasks.length);
     res.status(200).send(tasks);
   } catch (error) {
     res.status(500).send({ message: error.message });

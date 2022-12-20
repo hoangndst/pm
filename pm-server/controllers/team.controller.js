@@ -78,7 +78,7 @@ export const leaveTeam = async (req,res) => {
   }
 }
 
-export const deleteTeamMember = async (req, res) => {
+export const removeTeamMembers = async (req, res) => {
   try {
     await database.teamMember
       .findOne({
@@ -178,7 +178,7 @@ export const getTeamsByUserId = async (req, res) => {
                   model: database.team,
                   as: "teams",
                   atrributes: [],
-                  through: { attributes: ["joined_at"], as: "is_joined" },
+                  through: { attributes: ["joined_at","is_admin"], as: "permissions" },
                 },
               ],
             },
@@ -204,17 +204,22 @@ export const getTeamsByUserId = async (req, res) => {
       userTeams.teams.map((team) => {
         team.users.map((user) => {
           let teamId = team.dataValues.id;
+          let is_admin = false;
           let is_joined = false;
           user.dataValues.teams.forEach((team2) => {
             if (
               team2.id === teamId &&
-              team2.dataValues.is_joined.joined_at !== null
+              team2.dataValues.permissions.joined_at !== null
             ) {
               is_joined = true;
+              if(team2.dataValues.permissions.is_admin) {
+                is_admin =true
+              }
             }
           });
           delete user.dataValues.teams;
           user.dataValues.is_joined = is_joined;
+          user.dataValues.is_admin = is_admin;
           return user;
         });
         return team;

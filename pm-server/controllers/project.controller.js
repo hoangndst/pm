@@ -164,6 +164,7 @@ export const deleteProject = async (req, res) => {
   }
 };
 export const getProjectByProjectId = async (req, res) => {
+  const userId = req.query.userId;
   const projectId = req.query.projectId;
   try {
     let project = await database.project.findOne({
@@ -211,11 +212,37 @@ export const getProjectByProjectId = async (req, res) => {
                 "completedAt",
                 "task_id",
               ],
+              required: false,
             },
           ],
+          required: false,
+        },
+        
+      ],
+    });
+    console.log(project)
+    const teamId = project.dataValues.team_id;
+    console.log(teamId);
+    let user = await database.teamMember.findOne({
+      where: { user_id: userId, team_id: teamId },
+      attributes: ["is_admin"],
+    });
+    let is_admin = user.dataValues.is_admin;
+    const listMembers = await database.team.findOne({
+      where: { id: teamId },
+      attributes:[],
+      include: [
+        {
+          model: database.user,
+          as: "users",
+          attributes: ["id", "username", "email", "first_name", "last_name"],
+          through: {
+            attributes: [],
+          },
         },
       ],
     });
+    project.dataValues.listMembers = listMembers.dataValues.users;
     const createdProjUser = await database.user.findOne({
       where: {
         id: project.owner_id,
@@ -237,6 +264,13 @@ export const getProjectByProjectId = async (req, res) => {
           },
           attributes: ["id", "username", "email", "first_name", "last_name"],
         });
+        if (is_admin) {
+          task.dataValues.canEdit = true;
+        } else if (task.dataValues.creator_id === userId) {
+          task.dataValues.canEdit = true;
+        } else {
+          task.dataValues.canEdit = false;
+        }
         task.creator_id = createdTaskUser;
         task.assigned_to = assignedTaskUser;
         await Promise.all(
@@ -265,6 +299,16 @@ export const getProjectByProjectId = async (req, res) => {
                 "last_name",
               ],
             });
+            if (is_admin) {
+              subtask.dataValues.canEdit = true;
+            } else if (
+              subtask.dataValues.creator_id === userId ||
+              task.dataValues.creator_id === userId
+            ) {
+              subtask.dataValues.canEdit = true;
+            } else {
+              subtask.dataValues.canEdit = false;
+            }
             subtask.creator_id = createdSubTaskUser;
             subtask.assigned_to = assignedSubTaskUser;
             return subtask;
