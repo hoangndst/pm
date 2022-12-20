@@ -88,7 +88,6 @@ const SignUp = (req, res) => {
         email: req.body.email,
         password: bycrypt.hashSync(req.body.password, 8)
       }).then((user) => {
-        // EmailService.sendVerificationEmail(user.email, user.username)
         user.setRoles([1]).then(() => {
           res.send({ message: "User was registered successfully!" })
         }).catch((err) => {
