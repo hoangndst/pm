@@ -20,17 +20,18 @@ export const SignIn = createAsyncThunk<
   {
     rejectValue: string
   }
->('auth/signin', async ( { username, password }, thunkAPI ) => {
+>('auth/signin', async ({ username, password }, thunkAPI) => {
   try {
-    const response = await AuthService.SignIn( username, password )
+    const response = await AuthService.SignIn(username, password)
+    thunkAPI.dispatch(setMessage("Sign in successful"))
     return response
-  } catch ( error: any | AxiosError ) {
-    if ( error.response ) {
-      thunkAPI.dispatch( setMessage( error.response.data.message ) )
+  } catch (error: any | AxiosError) {
+    if (error.response) {
+      thunkAPI.dispatch(setMessage(error.response.data.message))
     } else {
-      thunkAPI.dispatch( setMessage( error.message ) )
+      thunkAPI.dispatch(setMessage(error.message))
     }
-    return thunkAPI.rejectWithValue( error.response.data.message )
+    return thunkAPI.rejectWithValue(error.response.data.message)
   }
 })
 
@@ -48,28 +49,29 @@ export const SignUp = createAsyncThunk<
   {
     rejectValue: string
   }
->('auth/signup', async ( { username, email, password }, thunkAPI ) => {
+>('auth/signup', async ({ username, email, password }, thunkAPI) => {
   try {
-    const response = await AuthService.SignUp( username, email, password )
+    const response = await AuthService.SignUp(username, email, password)
+    thunkAPI.dispatch(setMessage("Sign up successful"))
     return response
-  } catch ( error: any | AxiosError ) {
-    if ( error.response ) {
-      thunkAPI.dispatch( setMessage( error.response.data.message ) )
+  } catch (error: any | AxiosError) {
+    if (error.response) {
+      thunkAPI.dispatch(setMessage(error.response.data.message))
     } else {
-      thunkAPI.dispatch( setMessage( error.message ) )
+      thunkAPI.dispatch(setMessage(error.message))
     }
-    return thunkAPI.rejectWithValue( error.response.data.message )
+    return thunkAPI.rejectWithValue(error.response.data.message)
   }
 })
 
 export const SignOut = createAsyncThunk(
   "auth/signout",
-  async() => {
+  async () => {
     AuthService.SignOut()
   }
 )
 
-const userAuth = JSON.parse( localStorage.getItem( "userAuth" ) as string )
+const userAuth = JSON.parse(localStorage.getItem("userAuth") as string)
 
 const initialState = userAuth === null ? { isLoggedIn: false, userAuth: null } : { isLoggedIn: true, userAuth: userAuth }
 

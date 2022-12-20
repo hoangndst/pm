@@ -4,14 +4,15 @@ import bycrypt from "bcryptjs"
 import dotenv from "dotenv"
 import uniqid from "uniqid"
 import { Op } from "sequelize"
+import databaseConfig from "../configs/db.config.js"
 
 dotenv.config()
 
 const User = database.users
 const Role = database.roles
 const RefreshTokens = database.refreshTokens
-const secret = process.env.PM_SECRET
-const refreshSecret = process.env.PM_REFRESH_SECRET
+const secret = databaseConfig.PM_SECRET
+const refreshSecret = databaseConfig.PM_REFRESH_SECRET
 
 export const changePassword = (req, res) => {
   User.findOne({
