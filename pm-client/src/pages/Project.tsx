@@ -113,10 +113,12 @@ export const Project = () => {
             type={'text'}
             size="small"
             value={projectName}
+            readOnly={!isAdmin}
             onChange={(e) => setProjectName(e.target.value)}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
+                  disabled={!isAdmin}
                   onClick={handleChangeProjectName}
                   onMouseDown={handleMouseDownPassword}
                   edge="end"
