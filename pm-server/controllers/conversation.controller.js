@@ -28,6 +28,7 @@ export const insertConversationToDatabase = async (users, conversationName) => {
   return conversationId
 }
 
+// create conversation
 export const createConversation = async (req, res) => {
   const users = req.body.users
   const conversationName = req.body.conversationName
