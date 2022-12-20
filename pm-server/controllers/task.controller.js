@@ -19,6 +19,49 @@ export const createTask = async (req, res) => {
     });
   }
 };
+// get all task of a project
+export const getTasksByProjectId = async (req, res) => {
+  const projectId = req.query.projectId;
+  try {
+    const tasks = await database.task.findAll({
+      where: {
+        project_id: projectId,
+      },
+      attributes: [
+        "id",
+        "task_name",
+        "due_date",
+        "created_by",
+        "project_id",
+        "assigned_to",
+        "task_id",
+        "completeAt",
+      ],
+    });
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+    });
+  }
+};
+export const updateTask = async (req, res) => {
+  try {
+    await database.task
+      .findOne({ where: { id: req.body.taskId } })
+      .then(async (task) => {
+        if (!task) {
+          res.status(200).send({
+            message: "Task not found",
+          });
+        } else {
+          await task.update(req.body.task).then(() => {
+            res.status(200).send({
+              message: "Task update successfully",
+            });
+          });
+        }
+      });
   } catch (error) {
     res.status(500).send({
       message: error.message,
