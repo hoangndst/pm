@@ -55,7 +55,6 @@ export const getUser = (req, res) => {
 }
 
 // search users by search string username, name or email
-
 export const searchUsers = (req, res) => {
   const searchString = req.query.searchString
   if (searchString) {

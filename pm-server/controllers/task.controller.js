@@ -19,6 +19,7 @@ export const createTask = async (req, res) => {
     });
   }
 };
+
 // get all task of a project
 export const getTasksByProjectId = async (req, res) => {
   const projectId = req.query.projectId;
@@ -45,6 +46,7 @@ export const getTasksByProjectId = async (req, res) => {
     });
   }
 };
+
 export const updateTask = async (req, res) => {
   try {
     await database.task
@@ -68,6 +70,7 @@ export const updateTask = async (req, res) => {
     });
   }
 };
+
 export const deleteTask = async (req, res) => {
   try {
     await database.task
@@ -165,6 +168,7 @@ export const getSubTasksByTaskId = async (req, res) => {
     });
   }
 };
+
 export const updateSubTask = async (req, res) => {
   try {
     await database.task
@@ -221,36 +225,6 @@ export const deleteSubTask = async (req, res) => {
     });
   }
 };
-
-// export const getTasksByUserId = async (req,res) => {
-//   const userId = req.query.userId;
-//   try {
-//     const tasks = await database.task.findAll({
-//       where: {
-//         assigned_to: userId,
-//       },
-//       attributes: ["id", "task_name", "task_description", "due_date", "created_by", "assigned_to", "completed_on", "project_id", "task_id"],
-//     });
-
-//     const user = await database.user.findOne({
-//       where: {
-//         id: userId,
-//       },
-//       attributes: ["id", "username", "first_name", "last_name"],
-//     });
-
-//     const tasksWithUser = tasks.map((task) => {
-//       return {
-//         ...task,
-//         user,
-//       };
-//     });
-
-//     res.status(200).send(tasksWithUser);
-//   } catch (error) {
-//     res.status(500).send({ message: error.message });
-//   }
-// }
 
 export const getTasksByUserId = async (req, res) => {
   const userId = req.query.userId;

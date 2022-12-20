@@ -90,15 +90,6 @@ export const updateNotificationByRoute = async (req, res) => {
   }
 }
 
-// const notificationToSave = {
-//   notification_content: `You have a new message from ${userInfo.first_name} ${userInfo.last_name}`,
-//   type: 'message',
-//   to_user_id: user.userId,
-//   from_user_id: userInfo.id,
-//   route: `/inbox/${conversationId}`,
-//   is_read: false,
-// }
-
 export const createNotification = async (notification) => {
   try {
     const checkNotificationExist = await database.notification.findOne({
