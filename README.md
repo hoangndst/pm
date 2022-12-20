@@ -53,4 +53,4 @@ chạy lệnh `npm install` xong `npm start`.
 - Gõ "localhost:3000" trong browser để được đưa tới trang web sản phẩm.
 
 ## Tài khoản
- - Sau khi cài đặt thì hãy đăng ký một tài khoản theo ý bạn.noce
+ - Sau khi cài đặt thì hãy đăng ký một tài khoản theo ý bạn
