@@ -71,6 +71,7 @@ export default function Teams() {
 
   const handleAccept = () => {
     // /teams/*
+    setOpenInviteDialog(false)
     const re = /\/teams\/\d+/
     if (re.test(selectedNotification.route)) {
       const teamId = selectedNotification.route.split("/")[2]
@@ -80,7 +81,6 @@ export default function Teams() {
         TeamsService.GetTeamsByUserId(user.id).then((res) => {
           setTeams(res.teams)
           setSelectedTeam(res.teams.find((team: any) => team.id === teamId))
-          setOpenInviteDialog(false)
           setSnackbarMessage("You have joined the team")
           setSnackbarSeverity("success")
           setOpenSnackbar(true)
@@ -88,14 +88,12 @@ export default function Teams() {
         })
           .catch((err) => {
             console.log(err)
-            setOpenInviteDialog(false)
             setSnackbarMessage(err.response.data.message)
             setSnackbarSeverity("info")
             setOpenSnackbar(true)
           })
       }).catch((err) => {
         console.log(err)
-        setOpenInviteDialog(false)
         setSnackbarMessage(err.response.data.message)
         setSnackbarSeverity("info")
         setOpenSnackbar(true)

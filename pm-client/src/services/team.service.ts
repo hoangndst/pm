@@ -6,8 +6,8 @@ const CreateTeam = async (teamName: string, membersId: any[]) => {
   return response.data
 }
 
-const UpdateTeam = async (teamId: string, team: any) => {
-  const response = await pmServer.put(`pm/update-team`, { teamId: teamId, team: team }, { headers: AuthHeader() })
+const UpdateTeam = async (userId: string, teamId: string, team: any) => {
+  const response = await pmServer.put(`pm/update-team`, { userId: userId, teamId: teamId, team: team }, { headers: AuthHeader() })
   return response.data
 }
 

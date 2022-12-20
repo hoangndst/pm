@@ -6,13 +6,13 @@ const CreateProject = async (project: any) => {
   return response.data
 }
 
-const DeleteProject = async (userId: string, projectId: string) => {
-  const response = await pmServer.post(`/pm/delete-project`, { userId: userId, projectId: projectId }, { headers: AuthHeader() })
+const DeleteProject = async (userId: string, projectId: string, teamId: string) => {
+  const response = await pmServer.post(`/pm/delete-project`, { userId: userId, projectId: projectId, teamId: teamId }, { headers: AuthHeader() })
   return response.data
 }
 
-const UpdateProject = async (projectId: string, project: any) => {
-  const response = await pmServer.put(`/pm/update-project`, { projectId: projectId, project: project }, { headers: AuthHeader() })
+const UpdateProject = async (teamId: string, userId: string, projectId: string, project: any) => {
+  const response = await pmServer.put(`/pm/update-project`, {teamId: teamId, userId:userId,projectId: projectId, project: project }, { headers: AuthHeader() })
   return response.data
 }
 

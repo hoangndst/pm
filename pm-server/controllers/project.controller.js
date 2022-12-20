@@ -6,12 +6,12 @@ export const createProject = async (req, res) => {
   try {
     await database.teamMember
       .findOne({
-        where: { user_id: req.body.userId },
+        where: { team_id: req.body.teamId, user_id: req.body.userId },
         attributes: ["is_admin"],
       })
       .then(async (user) => {
         if (!user.is_admin) {
-          res.status(200).send({
+          res.status(500).send({
             message: "User isn't admin",
           });
         } else {
@@ -75,18 +75,37 @@ export const updateProject = async (req, res) => {
   const projectId = req.body.projectId;
   const updateProject = req.body.project;
   try {
-    await database.project
-      .findOne({ where: { id: projectId } })
-      .then(async (project) => {
-        if (project) {
-          await project.update(updateProject);
-          res.status(200).send({
-            message: "Project update successfully",
+    await database.teamMember
+      .findOne({
+        where: { team_id: req.body.teamId, user_id: req.body.userId },
+        attributes: ["is_admin"],
+      })
+      .then(async (user) => {
+        if (!user.is_admin) {
+          res.status(500).send({
+            message: "User isn't admin",
           });
         } else {
-          res.status(500).send({
-            message: error.message,
-          });
+          try {
+            await database.project
+              .findOne({ where: { id: projectId } })
+              .then(async (project) => {
+                if (project) {
+                  await project.update(updateProject);
+                  res.status(200).send({
+                    message: "Project update successfully",
+                  });
+                } else {
+                  res.status(500).send({
+                    message: error.message,
+                  });
+                }
+              });
+          } catch (error) {
+            res.status(500).send({
+              message: error.message,
+            });
+          }
         }
       });
   } catch (error) {
@@ -99,12 +118,12 @@ export const deleteProject = async (req, res) => {
   try {
     await database.teamMember
       .findOne({
-        where: { user_id: req.body.userId },
+        where: { team_id: req.body.teamId, user_id: req.body.userId },
         attributes: ["is_admin"],
       })
       .then(async (user) => {
         if (!user.is_admin) {
-          res.status(200).send({
+          res.status(500).send({
             message: "User isn't admin",
           });
         } else {
@@ -337,7 +356,7 @@ export const getProjectByProjectId = async (req, res) => {
           required: false,
         },
       ],
-      order: [[database.task,"due_date", "ASC"]],
+      order: [[database.task, "due_date", "ASC"]],
     })
     const teamId = project.dataValues.team_id;
     console.log(teamId);

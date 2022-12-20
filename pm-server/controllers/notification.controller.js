@@ -113,9 +113,11 @@ export const createNotification = async (notification) => {
       const newNotification = await database.notification.create(notification)
       return newNotification
     } else {
-      checkNotificationExist.is_read = false
-      await checkNotificationExist.save()
-      return checkNotificationExist
+      // delete old notification
+      await checkNotificationExist.destroy()
+      // create new notification
+      const newNotification = await database.notification.create(notification)
+      return newNotification
     }
   } catch (error) {
     console.log(error)
