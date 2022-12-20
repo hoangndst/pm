@@ -54,7 +54,7 @@ const Login = () => {
           dispatch(GetUser({ id: userAuth.id }))
             .unwrap()
             .then(() => {
-              const user = JSON.parse(localStorage.getItem('user') || '{}') 
+              const user = JSON.parse(localStorage.getItem('user') || '{}')
               if (user.id !== userAuth.id) {
                 navigate('/welcome', { replace: true })
               } else {
@@ -64,7 +64,7 @@ const Login = () => {
             .catch((error) => {
               console.log('error', error)
             })
-        }  
+        }
       })
       .catch((error) => {
         setLoading(false)
@@ -73,7 +73,7 @@ const Login = () => {
         console.log('error', error)
       })
   }
-    
+
   return (
     <Box
       sx={{
