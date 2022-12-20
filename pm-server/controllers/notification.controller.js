@@ -10,8 +10,7 @@ export const getNotifications = async (req, res) => {
       attributes: ["id", "type", "route", "is_read", "to_user_id", "from_user_id", "notification_content", "createdAt", "updatedAt"],
       order: [["updatedAt", "DESC"]]
     })
-    
-    // get from_user info
+
     try {
       const fromUsers = await database.user.findAll({
         where: {
