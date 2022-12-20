@@ -1,5 +1,4 @@
 import axios from "axios"
-// env
 
 const pmAuthorization = axios.create({
   baseURL: "http://hoangndst.ddns.net:3000",
