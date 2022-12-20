@@ -4,12 +4,12 @@
 
 ## Thành viên:
 
-- Nguyễn Đình Hoàng: 
-- Lê Trung Hiếu
-- Lương Trung Kiên
-- Nguyễn Đức Chính
-- Hoàng Thu Giang
-- Lê Thị Cẩm Nhung
+- Nguyễn Đình Hoàng: frontend, backend, deploy
+- Lê Trung Hiếu: backend
+- Lương Trung Kiên: frontend, backend
+- Nguyễn Đức Chính: backend
+- Hoàng Thu Giang: frontend
+- Lê Thị Cẩm Nhung: frontend
 
 ## Đề tài nhóm
 
@@ -32,9 +32,30 @@ Từ 1 task có thể tạo nhiều task con. Sau khi hoàn thành thì tích đ
 
 ### Frontend
 - React
-- 
+- Material UI
 ### Backend
 - NodeJs
 - ExpressJs
 - Postgresql Database
-### Kiến trúc tổng quát
+
+## Hướng dẫn cài đặt và sử dụng sản phẩm đối với môi trường development
+
+- Clone mã nguồn về.
+- Tạo Database với tên w42g4_lms trong Postgresql
+- Trước tên tại file pm, mở terminal lên và chạy lệnh 
+`npm install @mui/material @emotion/react @emotion/styled`
+- Tạo một terminal mới, `cd` vào thư mực pm-server,
+chạy lệnh `npm install`
+- Tạo một terminal mới, `cd` vào thư mục pm-client, 
+chạy lệnh `npm install` xong `npm start`
+- Gõ "localhost:3000" trong browser để được đưa tới trang web sản phẩm
+
+## Hướng dẫn build cho môi trường production
+
+- Clone mã nguồn về.
+- Tạo Database với tên w42g4_lms trong Postgresql và import data từ
+- Trước tên tại file pm, mở terminal lên và chạy lệnh 
+`npm install @mui/material @emotion/react @emotion/styled`
+- Tạo một terminal mới, `cd` vào thư mực pm-server,
+chạy lệnh `npm install` rồi `npm run build`
+- 
