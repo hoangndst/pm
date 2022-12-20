@@ -38,24 +38,19 @@ Từ 1 task có thể tạo nhiều task con. Sau khi hoàn thành thì tích đ
 - ExpressJs
 - Postgresql Database
 
-## Hướng dẫn cài đặt và sử dụng sản phẩm đối với môi trường development
+## Hướng dẫn cài đặt và sử dụng chung
 
 - Clone mã nguồn về.
-- Tạo Database với tên w42g4_lms trong Postgresql
-- Trước tên tại file pm, mở terminal lên và chạy lệnh 
-`npm install @mui/material @emotion/react @emotion/styled`
+- Cần tạo Database trong Postgresql.
+- Trước tên tại file pm, mở terminal lên và chạy lệnh .
+`npm install @mui/material @emotion/react @emotion/styled`.
+- Cài đặt NodeJs. Sau đó, chạy câu lệnh `node -v`
+để kiểm tra phiên bản của Node cũng như đã cài đặt thành công chưa.
 - Tạo một terminal mới, `cd` vào thư mực pm-server,
-chạy lệnh `npm install`
+chạy lệnh `npm install`.
 - Tạo một terminal mới, `cd` vào thư mục pm-client, 
-chạy lệnh `npm install` xong `npm start`
-- Gõ "localhost:3000" trong browser để được đưa tới trang web sản phẩm
+chạy lệnh `npm install` xong `npm start`.
+- Gõ "localhost:3000" trong browser để được đưa tới trang web sản phẩm.
 
-## Hướng dẫn build cho môi trường production
-
-- Clone mã nguồn về.
-- Tạo Database với tên w42g4_lms trong Postgresql và import data từ
-- Trước tên tại file pm, mở terminal lên và chạy lệnh 
-`npm install @mui/material @emotion/react @emotion/styled`
-- Tạo một terminal mới, `cd` vào thư mực pm-server,
-chạy lệnh `npm install` rồi `npm run build`
-- 
+## Tài khoản
+ - Sau khi cài đặt thì hãy đăng ký một tài khoản theo ý bạn.noce
