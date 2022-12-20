@@ -288,6 +288,7 @@ export default function Team() {
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 10px' }}>
             <OutlinedInput
               id="outlined-adornment-password"
+              readOnly={selectedTeam?.permissions.is_admin ? false : true}
               type={'text'}
               fullWidth
               value={teamName}
@@ -295,6 +296,7 @@ export default function Team() {
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
+                    disabled={selectedTeam?.permissions.is_admin ? false : true}
                     onClick={handleChangeTeamName}
                     onMouseDown={handleMouseDownPassword}
                     edge="end"
