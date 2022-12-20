@@ -383,7 +383,7 @@ export const deleteTeam = async (req, res) => {
       })
       .then(async (user) => {
         if (!user.is_admin) {
-          res.status(200).send({
+          res.status(500).send({
             message: "User isn't admin",
           });
         } else {
@@ -421,19 +421,38 @@ export const updateTeam = async (req, res) => {
   const teamId = req.body.teamId;
   const updateTeam = req.body.team;
   try {
-    await database.team
-      .findOne({ where: { id: teamId } })
-      .then(async (team) => {
-        if (team) {
-          await team.update(updateTeam).then(() => {
-            res.status(200).send({
-              message: "team update successfully",
-            });
+    await database.teamMember
+      .findOne({
+        where: { team_id: req.body.teamId, user_id: req.body.userId },
+        attributes: ["is_admin"],
+      })
+      .then(async (user) => {
+        if (!user.is_admin) {
+          res.status(500).send({
+            message: "User isn't admin",
           });
         } else {
-          res.status(500).send({
-            message: "team not found",
-          });
+          try {
+            await database.team
+              .findOne({ where: { id: teamId } })
+              .then(async (team) => {
+                if (team) {
+                  await team.update(updateTeam).then(() => {
+                    res.status(200).send({
+                      message: "team update successfully",
+                    });
+                  });
+                } else {
+                  res.status(500).send({
+                    message: "team not found",
+                  });
+                }
+              });
+          } catch (error) {
+            res.status(500).send({
+              message: error.message,
+            });
+          }
         }
       });
   } catch (error) {

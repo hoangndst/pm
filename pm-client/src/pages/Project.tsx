@@ -15,6 +15,7 @@ import { useTask } from 'src/contexts/TaskContext'
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import SaveIcon from '@mui/icons-material/Save';
+import { useAppSelector } from 'src/app/hook'
 
 export const Project = () => {
 
@@ -25,7 +26,8 @@ export const Project = () => {
   const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useAppContext()
   const { teams } = useTeams()
   const [isAdmin, setIsAdmin] = React.useState(false)
-  const { openDeleteTaskDialog, setOpenDeleteTaskDialog, task } = useTask()
+  const { openDeleteTaskDialog, setOpenDeleteTaskDialog, task, taskToDelete } = useTask()
+  const { user } = useAppSelector(state => state.user)
 
   React.useEffect(() => {
     if (selectedProject) {
@@ -42,7 +44,7 @@ export const Project = () => {
       const project = {
         name: projectName
       }
-      ProjectService.UpdateProject(selectedProject.id, project)
+      ProjectService.UpdateProject(selectedProject.team_id, user.id, selectedProject.id, project)
         .then((res) => {
           setOpenSnackbar(true)
           setSnackbarMessage('Project name updated')
@@ -56,7 +58,7 @@ export const Project = () => {
         })
     } else {
       setProjectName(selectedProject?.name)
-      setSnackbarMessage('Project name cannot be empty')
+      setSnackbarMessage('Project name is invalid')
       setSnackbarSeverity('error')
       setOpenSnackbar(true)
     }
@@ -64,9 +66,13 @@ export const Project = () => {
 
   const handleDeleteTask = () => {
     setOpenDeleteTaskDialog(false)
-    ProjectService.DeleteTaskByTaskId(task.id)
+    ProjectService.DeleteTaskByTaskId(taskToDelete.id)
       .then((res) => {
-        selectedProject.task = selectedProject.task.filter((t: any) => t.id !== task.id)
+        selectedProject.task = selectedProject.task.filter((t: any) => t.id !== taskToDelete.id)
+        // filter subtasks
+        selectedProject.task.forEach((t: any) => {
+          t.subtask = t.subtask.filter((st: any) => st.id !== taskToDelete.id)
+        })
         setOpenSnackbar(true)
         setSnackbarMessage('Task deleted')
         setSnackbarSeverity('success')

@@ -92,7 +92,7 @@ export default function Team() {
       const project = {
         name: teamName
       }
-      TeamsService.UpdateTeam(selectedTeam.id, project)
+      TeamsService.UpdateTeam(user.id, selectedTeam.id, project)
         .then((res) => {
           setOpenSnackbar(true)
           setSnackbarMessage('Team name updated')
@@ -107,22 +107,22 @@ export default function Team() {
     } else {
       setTeamName(selectedTeam?.name)
       setSnackbarSeverity('error')
-      setSnackbarMessage('Team name cannot be empty')
+      setSnackbarMessage('Team name is invalid')
       setOpenSnackbar(true)
     }
   }
 
   const handleOpenDeleteProject = () => {
-    ProjectService.DeleteProject(user.id, deleteProject.id)
+    setOpenDeleteProjectDialog(false)
+    ProjectService.DeleteProject(user.id, deleteProject.id, selectedTeam.id)
       .then(() => {
         TeamsService.GetTeamsByUserId(user.id).then((res) => {
           console.log(res.teams)
           setTeams(res.teams)
           setSelectedTeam(res.teams.find((team: any) => team.id === selectedTeam.id))
           setSnackbarSeverity('success')
-          setSnackbarMessage('Project deleted successfully')
+          setSnackbarMessage("Delete project successfully")
           setOpenSnackbar(true)
-          setOpenDeleteProjectDialog(false)
         }).catch((err) => {
           console.log(err)
           setSnackbarSeverity('error')
@@ -139,6 +139,7 @@ export default function Team() {
   }
 
   const handleRemoveUserFromTeam = () => {
+    setOpenRemoveMemberDialog(false)
     TeamsService.RemoveTeamMember(removeMember.id, selectedTeam.id)
       .then((res) => {
         if (removeMember.is_joined) {
@@ -154,7 +155,7 @@ export default function Team() {
           setSnackbarSeverity('success')
           setSnackbarMessage('Member removed successfully')
           setOpenSnackbar(true)
-          setOpenRemoveMemberDialog(false)
+
         }).catch((err) => {
           console.log(err)
           setSnackbarSeverity('error')
@@ -170,6 +171,7 @@ export default function Team() {
   }
 
   const handlePromoteUser = () => {
+    setOpenPromoteMemberDialog(false)
     TeamsService.PromoteTeamMember(promoteMember.id, selectedTeam.id)
       .then((res) => {
         socket.current.emit('sendNotificationtoMember',
@@ -191,7 +193,7 @@ export default function Team() {
           setSnackbarSeverity('success')
           setSnackbarMessage('Member promoted successfully')
           setOpenSnackbar(true)
-          setOpenPromoteMemberDialog(false)
+
         }).catch((err) => {
           console.log(err)
           setSnackbarSeverity('error')
@@ -207,6 +209,7 @@ export default function Team() {
   }
 
   const handleDemoteUser = () => {
+    setOpenPromoteMemberDialog(false)
     //  socket.on('sendNotificationtoMember', async ({ userInfo, to_user_id, route, notification_content, type }, callback) => {
     TeamsService.DemoteTeamMember(promoteMember.id, selectedTeam.id)
       .then((res) => {
@@ -229,7 +232,7 @@ export default function Team() {
           setSnackbarSeverity('success')
           setSnackbarMessage('Member demoted successfully')
           setOpenSnackbar(true)
-          setOpenPromoteMemberDialog(false)
+
         }).catch((err) => {
           console.log(err)
           setSnackbarSeverity('error')

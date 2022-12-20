@@ -8,7 +8,9 @@ interface TaskContextType {
   task: any,
   setTask: React.Dispatch<React.SetStateAction<any>>,
   openDeleteTaskDialog: boolean,
-  setOpenDeleteTaskDialog: React.Dispatch<React.SetStateAction<boolean>>
+  setOpenDeleteTaskDialog: React.Dispatch<React.SetStateAction<boolean>>,
+  taskToDelete: any,
+  setTaskToDelete: React.Dispatch<React.SetStateAction<any>>
 }
 
 export const [useTask, TaskProvider] = createCtx<TaskContextType>()
@@ -17,6 +19,7 @@ export default function TaskContext({ children }: { children: React.ReactNode })
   const [openDialog, setOpenDialog] = React.useState(false)
   const [openTaskDetailDialog, setOpenTaskDetailDialog] = React.useState(false)
   const [task, setTask] = React.useState<any>(null)
+  const [taskToDelete, setTaskToDelete] = React.useState<any>(null)
   const [openDeleteTaskDialog, setOpenDeleteTaskDialog] = React.useState(false)
   return (
     <TaskProvider
@@ -28,7 +31,9 @@ export default function TaskContext({ children }: { children: React.ReactNode })
         task,
         setTask,
         openDeleteTaskDialog,
-        setOpenDeleteTaskDialog
+        setOpenDeleteTaskDialog,
+        taskToDelete,
+        setTaskToDelete
       }}
     >
       {children}

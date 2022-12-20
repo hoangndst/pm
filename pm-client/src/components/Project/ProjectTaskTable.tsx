@@ -75,7 +75,7 @@ export interface RowTask {
 export function Row(props: { row: any, isSubTask?: boolean }) {
   const { row, isSubTask } = props;
   const [open, setOpen] = React.useState(false)
-  const { setTask, setOpenTaskDetailDialog, task: selectedTask, setOpenDeleteTaskDialog } = useTask()
+  const { setTask, setOpenTaskDetailDialog, task: selectedTask, setOpenDeleteTaskDialog, setTaskToDelete } = useTask()
   const { selectedProject, setSelectedProject, setListMembers } = useProjects()
   const { user } = useAppSelector((state: { user: { user: any; }; }) => state.user)
   const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity, socket } = useAppContext()
@@ -201,7 +201,7 @@ export function Row(props: { row: any, isSubTask?: boolean }) {
                 size="small"
                 disabled={row.canEdit ? false : true}
                 onClick={() => {
-                  setTask(row)
+                  setTaskToDelete(row)
                   setOpenDeleteTaskDialog(true)
                 }}
               >
@@ -269,6 +269,22 @@ export function Row(props: { row: any, isSubTask?: boolean }) {
                                 }}
                               >
                                 <MoreHorizIcon
+                                  sx={{
+                                    width: '20px',
+                                    height: '20px',
+                                  }}
+                                />
+                              </IconButton>
+                              <IconButton
+                                aria-label="delete sub task"
+                                size="small"
+                                disabled={task.canEdit ? false : true}
+                                onClick={() => {
+                                  setTaskToDelete(task)
+                                  setOpenDeleteTaskDialog(true)
+                                }}
+                              >
+                                <ClearIcon
                                   sx={{
                                     width: '20px',
                                     height: '20px',
