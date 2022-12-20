@@ -145,6 +145,7 @@ export const getProjectByProjectId = async (req, res) => {
   const userId = req.query.userId;
   const projectId = req.query.projectId
   console.log('🤖🤖🤖🤖🤖🤖🤖🤖📬📬📬📬📬', userId, projectId)
+  
   try {
     let project = await database.project.findOne({
       where: {
@@ -199,6 +200,7 @@ export const getProjectByProjectId = async (req, res) => {
       ],
       order: [[database.task,"due_date", "ASC"]],
     })
+
     const teamId = project.dataValues.team_id;
     console.log(teamId);
     let user = await database.teamMember.findOne({

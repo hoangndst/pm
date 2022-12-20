@@ -69,6 +69,7 @@ export const createConversation = async (req, res) => {
   }
 }
 
+// get Conversation by user id
 const getConversationByUserId = async (userId) => {
   const userConversations = await database.user.findOne({
     where: {
