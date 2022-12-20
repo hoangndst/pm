@@ -10,18 +10,6 @@ const initUser = async ({ userId, id }, callback) => {
   return { user };
 }
 
-// {
-//   id: 'LWePlD2YRwPqsoCpAAAP', socket
-//   userId: '1lvc0egklbm8jq39',
-//   userInfo: {
-//     id: '1lvc0egklbm8jq39',
-//     username: 'quangnd',
-//     first_name: 'Nguyễn',
-//     last_name: 'Quang'
-//   },
-//   conversationId: 'asdadsasasdas'
-// }
-
 const addUser = async ({ id, userInfo, conversationId }) => {
   if (!userInfo || !conversationId) return { error: "userInfo and conversationId are required." };
   const check = await checkConversationExistByUserId(userInfo.id, conversationId);
