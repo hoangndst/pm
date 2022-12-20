@@ -45,6 +45,7 @@ export const createProject = async (req, res) => {
     });
   }
 };
+
 // get all proj of a team user joined
 export const getProjectsByTeamId = async (req, res) => {
   const teamId = req.query.teamId;
@@ -71,6 +72,7 @@ export const getProjectsByTeamId = async (req, res) => {
     });
   }
 };
+
 export const updateProject = async (req, res) => {
   const projectId = req.body.projectId;
   const updateProject = req.body.project;
@@ -95,6 +97,7 @@ export const updateProject = async (req, res) => {
     });
   }
 };
+
 export const deleteProject = async (req, res) => {
   try {
     await database.teamMember

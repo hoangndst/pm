@@ -202,6 +202,7 @@ export const updateSubTask = async (req, res) => {
     });
   }
 };
+
 export const deleteSubTask = async (req, res) => {
   try {
     await database.task

@@ -154,7 +154,6 @@ export const getTeamsByUserId = async (req, res) => {
             {
               model: database.project,
               as: "project",
-              // order: [["createdAt", "DESC"]],
               attributes: [
                 "id",
                 "name",

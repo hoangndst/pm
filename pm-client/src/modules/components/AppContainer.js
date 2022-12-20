@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 const StyledAppContainer = styled(Box)(({ theme }) => {
   return {
     paddingTop: 'calc(var(--MuiDocs-header-height))',
-    fontFamily: 'Arial',
+    // fontFamily: 'Arial',
     minWidth: '100%',
     minHeight: '100vh',
   };
