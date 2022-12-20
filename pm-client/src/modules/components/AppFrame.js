@@ -94,7 +94,6 @@ const RootDiv = styled('div')(({ theme }) => {
   return {
     display: 'flex',
     background: theme.palette.mode === 'dark' && theme.palette.primaryDark[900],
-    // TODO: Should be handled by the main component
   };
 });
 

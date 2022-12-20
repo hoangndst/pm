@@ -14,7 +14,6 @@ const AuthVerify = (props) => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userAuth"))
-
     if (user) {
       const decodedJwt = parseJwt(user.accessToken);
 
