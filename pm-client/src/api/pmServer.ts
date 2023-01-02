@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const pmServer = axios.create({
-  baseURL: "http://hoangndst.ddns.net:3000",
+  baseURL: "http://pm.hoangndst.freeddns.org",
   headers: {
     "Content-Type": "application/json",
   }

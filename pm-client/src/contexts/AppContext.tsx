@@ -25,7 +25,7 @@ export default function AppContext({ children }: { children: React.ReactNode }) 
   const [openInviteDialog, setOpenInviteDialog] = React.useState<boolean>(false)
   const { user } = useAppSelector((state) => state.user)
   const [snackbarSeverity, setSnackbarSeverity] = React.useState<"success" | "info" | "warning" | "error" | undefined>(undefined)
-  const socket = React.useRef(io("http://hoangndst.ddns.net:3000", { transports: ["websocket"], withCredentials: true }))
+  const socket = React.useRef(io("http://pm.hoangndst.freeddns.org", { transports: ["websocket"], withCredentials: true }))
 
   React.useEffect(() => {
     socket.current.emit('initUser', { userId: user.id }, (error: any) => {
