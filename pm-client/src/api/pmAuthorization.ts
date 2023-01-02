@@ -2,7 +2,7 @@ import axios from "axios"
 // env
 
 const pmAuthorization = axios.create({
-  baseURL: "http://192.168.43.101:5000",
+  baseURL: "http://pm.hoangndst.freeddns.org",
   headers: {
     "Content-Type": "application/json",
   }
