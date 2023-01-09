@@ -9,7 +9,7 @@ Content-Type: application/json
     "password": "Hoang2002"
 }
 ###
-POST http://hoangndst.ddns.net:3000/auth/signup
+POST https://pm.hoangndst.freeddns.org/auth/signup
 Content-Type: application/json
 
 {
