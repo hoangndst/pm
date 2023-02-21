@@ -26,4 +26,6 @@ const authJWT = {
   verifyToken: verifyToken
 }
 
+// 
+
 export default authJWT
